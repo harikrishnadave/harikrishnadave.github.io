@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Harikrishna Dave – Sr. Product Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f9f9f7;
+      --surface: #ffffff;
+      --border: #e8e8e4;
+      --text: #1a1a18;
+      --text-secondary: #5a5a56;
+      --accent: #2e6af0;
+      --accent-light: #eef3fe;
+      --tag-bg: #f0f0ec;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* ─── NAV ─────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(249,249,247,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 960px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 58px;
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 17px; color: var(--text);
+      text-decoration: none; letter-spacing: -0.3px;
+    }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-secondary);
+      font-size: 13.5px; font-weight: 500;
+      padding: 6px 12px; border-radius: 8px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover { background: var(--accent-light); color: var(--accent); }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 2px;
+      padding: 12px 24px 16px; border-bottom: 1px solid var(--border);
+      background: rgba(249,249,247,0.98);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none; color: var(--text);
+      font-size: 15px; font-weight: 500; padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ─── SECTIONS ────────────────────────────────── */
+    section { padding: 72px 24px; }
+    .container { max-width: 960px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 1.4px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+    }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 30px; font-weight: 700; letter-spacing: -0.5px;
+      color: var(--text); margin-bottom: 32px;
+    }
+
+    /* ─── HERO ────────────────────────────────────── */
+    #about {
+      padding-top: 90px; padding-bottom: 80px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 48px; align-items: center;
+    }
+    .hero-eyebrow {
+      font-size: 13px; font-weight: 500; color: var(--accent);
+      letter-spacing: 0.5px; margin-bottom: 12px;
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(34px, 5vw, 52px);
+      font-weight: 700; letter-spacing: -1.5px;
+      line-height: 1.1; color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-tagline {
+      font-size: 16px; color: var(--text-secondary);
+      max-width: 520px; margin-bottom: 28px;
+    }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .badge {
+      background: var(--tag-bg); color: var(--text-secondary);
+      font-size: 12.5px; font-weight: 500; padding: 5px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 8px;
+      font-size: 14px; font-weight: 600; text-decoration: none;
+      transition: all 0.15s; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #1e56d0; }
+    .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+    .hero-avatar {
+      width: 160px; height: 160px; border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 8px 32px rgba(46,106,240,0.18);
+      border: 4px solid var(--border);
+      overflow: hidden;
+      background: var(--tag-bg);
+    }
+    .hero-avatar img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+
+    /* ─── EXPERIENCE ──────────────────────────────── */
+    #experience { background: var(--bg); }
+    .timeline { position: relative; }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 7px; top: 8px; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .job {
+      position: relative; padding-left: 36px;
+      margin-bottom: 40px;
+    }
+    .job::before {
+      content: ''; position: absolute;
+      left: 0; top: 8px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--surface); border: 2px solid var(--accent);
+    }
+    .job:first-child::before { background: var(--accent); }
+    .job-header { margin-bottom: 6px; }
+    .job-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px; font-weight: 600; color: var(--text);
+    }
+    .job-company {
+      font-size: 14px; font-weight: 500; color: var(--accent); margin-top: 1px;
+    }
+    .job-meta {
+      display: flex; gap: 12px; align-items: center;
+      font-size: 12.5px; color: var(--text-secondary); margin: 6px 0 12px;
+      flex-wrap: wrap;
+    }
+    .job-meta span { display: flex; align-items: center; gap: 4px; }
+    .job-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+      box-shadow: var(--shadow);
+    }
+    .job-card h4 {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--text-secondary);
+      margin-bottom: 10px; margin-top: 14px;
+    }
+    .job-card h4:first-child { margin-top: 0; }
+    .job-card ul { padding-left: 18px; }
+    .job-card li {
+      font-size: 14px; color: var(--text-secondary);
+      margin-bottom: 6px; line-height: 1.55;
+    }
+    .job-card li strong { color: var(--text); font-weight: 600; }
+    .current-tag {
+      display: inline-block; background: #dcfce7; color: #166534;
+      font-size: 11px; font-weight: 600; padding: 2px 9px;
+      border-radius: 999px; margin-left: 8px; vertical-align: middle;
+    }
+
+    /* ─── SKILLS ──────────────────────────────────── */
+    #skills { background: var(--surface); border-top: 1px solid var(--border); }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .skill-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .skill-card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--accent-light); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 14px;
+    }
+    .skill-card h3 {
+      font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text);
+    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tag {
+      background: var(--surface); color: var(--text-secondary);
+      font-size: 12.5px; font-weight: 500;
+      padding: 4px 11px; border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* ─── EDUCATION ───────────────────────────────── */
+    #education { background: var(--bg); }
+    .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .edu-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .edu-degree {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 600; margin-bottom: 6px;
+    }
+    .edu-school { font-size: 14px; color: var(--accent); font-weight: 500; }
+    .edu-detail { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+    /* ─── PERSONAL ────────────────────────────────── */
+    #personal { background: var(--surface); border-top: 1px solid var(--border); }
+    .personal-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .personal-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; text-align: center;
+    }
+    .personal-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .personal-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .personal-card p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; }
+    .coming-soon {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      color: #92400e; background: #fef3c7; padding: 2px 8px;
+      border-radius: 999px; margin-top: 10px;
+    }
+
+    /* ─── PROJECTS ────────────────────────────────── */
+    #projects { background: var(--bg); }
+    .projects-placeholder {
+      background: var(--surface); border: 2px dashed var(--border);
+      border-radius: var(--radius); padding: 56px 32px;
+      text-align: center; color: var(--text-secondary);
+    }
+    .projects-placeholder .big-icon { font-size: 40px; margin-bottom: 16px; }
+    .projects-placeholder h3 { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .projects-placeholder p { font-size: 14px; max-width: 420px; margin: 0 auto; }
+    .projects-placeholder .badge-ai {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light); color: var(--accent);
+      font-size: 12px; font-weight: 600; padding: 5px 14px;
+      border-radius: 999px; margin-top: 20px;
+    }
+
+    /* ─── CONTACT ─────────────────────────────────── */
+    #contact { background: var(--text); padding: 72px 24px; }
+    #contact h2 { color: #fff; }
+    #contact .section-label { color: rgba(255,255,255,0.45); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+    }
+    .contact-info p { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 28px; }
+    .contact-links { display: flex; flex-direction: column; gap: 14px; }
+    .contact-link {
+      display: flex; align-items: center; gap: 14px;
+      color: rgba(255,255,255,0.85); text-decoration: none;
+      font-size: 14.5px; transition: color 0.15s;
+    }
+    .contact-link:hover { color: #fff; }
+    .contact-link-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .contact-link:hover .contact-link-icon { background: rgba(255,255,255,0.15); }
+    .contact-card {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 32px;
+    }
+    .contact-card h3 { color: #fff; font-size: 18px; margin-bottom: 8px; font-family: 'Space Grotesk', sans-serif; }
+    .contact-card p { color: rgba(255,255,255,0.55); font-size: 14px; margin-bottom: 20px; }
+    .contact-card .btn-white {
+      background: #fff; color: var(--text);
+      padding: 10px 22px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      text-decoration: none; display: inline-block;
+      transition: opacity 0.15s;
+    }
+    .contact-card .btn-white:hover { opacity: 0.9; }
+
+    /* ─── FOOTER ──────────────────────────────────── */
+    footer {
+      background: #111; padding: 24px;
+      text-align: center; color: rgba(255,255,255,0.3);
+      font-size: 13px;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-avatar { width: 100px; height: 100px; order: -1; }
+      .contact-grid { grid-template-columns: 1fr; }
+      section { padding: 52px 20px; }
+      h2 { font-size: 24px; }
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────── */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#about" class="nav-logo">Harikrishna Dave</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#personal">Personal</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#experience" onclick="closeMenu()">Experience</a>
+  <a href="#skills" onclick="closeMenu()">Skills</a>
+  <a href="#education" onclick="closeMenu()">Education</a>
+  <a href="#personal" onclick="closeMenu()">Personal</a>
+  <a href="#projects" onclick="closeMenu()">Projects</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="about">
+  <div class="container">
+    <div class="hero-grid fade-in">
+      <div>
+        <p class="hero-eyebrow">📍 San Diego, CA</p>
+        <h1>Harikrishna<br>Dave</h1>
+        <p class="hero-tagline">
+          Senior Product Manager with 15+ years building fintech and SaaS products—
+          from KYC identity verification to AML watchlist screening and digital identity wallets.
+          Driving roadmaps from 0→1 across global markets.
+        </p>
+        <div class="hero-badges">
+          <span class="badge">Product Strategy</span>
+          <span class="badge">KYC / Identity</span>
+          <span class="badge">AML / Compliance</span>
+          <span class="badge">Fintech</span>
+          <span class="badge">Agile</span>
+          <span class="badge">SaaS</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#experience" class="btn btn-primary">View Experience</a>
+          <a href="#contact" class="btn btn-outline">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-avatar">
+        <img src="profile.jpg" alt="Harikrishna Dave" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label fade-in">Career</p>
+    <h2 class="fade-in">Work Experience</h2>
+    <div class="timeline">
+
+      <!-- Trulioo -->
+      <div class="job fade-in">
+        <div class="job-header">
+          <div class="job-title">Senior Product Manager <span class="current-tag">Current</span></div>
+          <div class="job-company">Trulioo Inc</div>
+        </div>
+        <div class="job-meta">
+          <span>📅 Feb 2022 – Present</span>
+          <span>📍 Remote</span>
+        </div>
+        <div class="job-card">
+          <h4>Product Strategy & Expansion</h4>
+          <ul>
+            <li>Spearheading development of an <strong>in-house address validation product</strong>, projected to decrease latency by 33%.</li>
+            <li>Drove product expansion by collaborating with data partners to onboard over <strong>450 data sources</strong>, targeting 70% of the global population.</li>
+            <li>Scaled product reach from <strong>70 → 110+ countries</strong> through continuous market engagement.</li>
+          </ul>
+          <h4>Product Innovation</h4>
+          <ul>
+            <li>Spearheaded 0→1 <strong>electronic identification product</strong> scaling across 20+ countries (eIDAS, mDL, BankIDs, Government ID Wallets).</li>
+            <li>Launched <strong>AML Watchlist product</strong> monitoring individuals and businesses via 6,000+ watchlist and 20,000+ Adverse Media sources.</li>
+            <li>Led migration of KYC product 'Person Match' to <strong>OAuth 2.0</strong>, increasing enterprise customer adoption by 15%.</li>
+            <li>Led post-acquisition onboarding for 'Hello-flow', driving a <strong>24% growth</strong> in transaction volume (55M → 68M transactions).</li>
+            <li>Built in-house data hosting solution reducing operational costs from <strong>$2.5M → $600K</strong>.</li>
+          </ul>
+          <h4>Compliance & Cross-Functional Leadership</h4>
+          <ul>
+            <li>Ensured compliance with international regulations including <strong>FinTRAC, FCA, GDPR, and FINRA</strong>.</li>
+            <li>Collaborated cross-functionally to relay PII from KYC to document verification and KYB products seamlessly.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Alpha Ori -->
+      <div class="job fade-in">
+        <div class="job-header">
+          <div class="job-title">Senior Product Manager</div>
+          <div class="job-company">Alpha Ori Technologies</div>
+        </div>
+        <div class="job-meta">
+          <span>📅 Nov 2020 – Feb 2022</span>
+          <span>📍 Maritime / SaaS</span>
+        </div>
+        <div class="job-card">
+          <ul>
+            <li>Led onboarding of one of the largest ship owners in the Middle East (Bahri), end-to-end requirements to delivery.</li>
+            <li>Defined, built, and measured <strong>Product Engagement KPIs</strong> (User Retention, Adoption, Stickiness) in Google Analytics.</li>
+            <li>Owned the successful launch of <strong>SMARTShip Go mobile application</strong> on iOS and Android.</li>
+            <li>Led migration of user management to <strong>Keycloak</strong> (IAM) with custom APIs for SSO, MFA, and permissions management.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Cisco -->
+      <div class="job fade-in">
+        <div class="job-header">
+          <div class="job-title">Technical Product Manager</div>
+          <div class="job-company">Cisco Inc &nbsp;·&nbsp; <span style="font-weight:400;font-size:13px;">Formerly MaintenanceNet (Acquired 2015)</span></div>
+        </div>
+        <div class="job-meta">
+          <span>📅 Aug 2012 – Nov 2020</span>
+          <span>📍 San Diego, CA</span>
+        </div>
+        <div class="job-card">
+          <ul>
+            <li>Defined the product roadmap for <strong>Cisco Impact®</strong>—the primary platform transforming customer data into actionable business intelligence.</li>
+            <li>Primary POC for client onboarding, providing 360° visibility into customer lifecycle and install base.</li>
+            <li>Managed UAT, product release communications, and end-to-end technical support across the full value chain (Distributors, Resellers, End-clients).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Esurance -->
+      <div class="job fade-in">
+        <div class="job-header">
+          <div class="job-title">Senior QA Analyst</div>
+          <div class="job-company">Esurance Inc</div>
+        </div>
+        <div class="job-meta">
+          <span>📅 Dec 2011 – Aug 2012</span>
+        </div>
+        <div class="job-card">
+          <ul>
+            <li>Led QA team on functional test plans for billing department applications, managing interns through requirement reviews, risk assessments, and post-release support.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Progressive -->
+      <div class="job fade-in">
+        <div class="job-header">
+          <div class="job-title">QA Analyst</div>
+          <div class="job-company">Progressive Insurance</div>
+        </div>
+        <div class="job-meta">
+          <span>📅 Mar 2009 – Dec 2011</span>
+        </div>
+        <div class="job-card">
+          <ul>
+            <li>Worked on the "Integrated Product" initiative—merging Agency and Direct business units for real-time speed-to-market delivery.</li>
+            <li>Provided UI design recommendations for <strong>Usage Based Insurance</strong>, a mobile-driven insurance rate platform.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- VMware -->
+      <div class="job fade-in">
+        <div class="job-header">
+          <div class="job-title">Intern</div>
+          <div class="job-company">VMware Inc</div>
+        </div>
+        <div class="job-meta">
+          <span>📅 May 2008 – Sep 2008</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label fade-in">Expertise</p>
+    <h2 class="fade-in">Areas of Skill</h2>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon">🗺️</div>
+        <h3>Product & Strategy</h3>
+        <div class="tag-list">
+          <span class="tag">Product Roadmap</span>
+          <span class="tag">Go-to-Market Strategy</span>
+          <span class="tag">Agile / Scrum</span>
+          <span class="tag">0→1 Product Development</span>
+          <span class="tag">Thinking at Scale</span>
+          <span class="tag">SDLC</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon">🔐</div>
+        <h3>Domain Expertise</h3>
+        <div class="tag-list">
+          <span class="tag">KYC / Identity Verification</span>
+          <span class="tag">AML Watchlist</span>
+          <span class="tag">eIDAS / mDL</span>
+          <span class="tag">Digital Wallets</span>
+          <span class="tag">IAM / OAuth 2.0</span>
+          <span class="tag">KYB</span>
+          <span class="tag">Document Verification</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon">⚖️</div>
+        <h3>Compliance & Regulation</h3>
+        <div class="tag-list">
+          <span class="tag">GDPR</span>
+          <span class="tag">FinTRAC</span>
+          <span class="tag">FCA</span>
+          <span class="tag">FINRA</span>
+          <span class="tag">PII Handling</span>
+          <span class="tag">Data Security</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon">📊</div>
+        <h3>Customer & Business</h3>
+        <div class="tag-list">
+          <span class="tag">Value Optimization (VOPs)</span>
+          <span class="tag">Customer Onboarding</span>
+          <span class="tag">KPI Tracking</span>
+          <span class="tag">Cross-functional Collab</span>
+          <span class="tag">Data-Driven Decisions</span>
+          <span class="tag">UAT</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon">🛠️</div>
+        <h3>Technical</h3>
+        <div class="tag-list">
+          <span class="tag">API Integration</span>
+          <span class="tag">Low-code / No-code</span>
+          <span class="tag">Keycloak / SSO / MFA</span>
+          <span class="tag">Google Analytics</span>
+          <span class="tag">Mobile (iOS & Android)</span>
+          <span class="tag">MS Computer Science</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="container">
+    <p class="section-label fade-in">Academic</p>
+    <h2 class="fade-in">Education</h2>
+    <div class="edu-grid">
+      <div class="edu-card fade-in">
+        <div class="edu-degree">Master of Science — Computer Science</div>
+        <div class="edu-school">SUNY Binghamton, New York</div>
+        <div class="edu-detail">Foundation in software systems and engineering principles</div>
+      </div>
+      <div class="edu-card fade-in">
+        <div class="edu-degree">MBA — Operations Management</div>
+        <div class="edu-school">CSUSM, San Marcos</div>
+        <div class="edu-detail">Business strategy, operations, and leadership</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAL -->
+<section id="personal">
+  <div class="container">
+    <p class="section-label fade-in">Beyond Work</p>
+    <h2 class="fade-in">Personal Life</h2>
+    <div class="personal-grid">
+      <div class="personal-card fade-in">
+        <div class="icon">🏡</div>
+        <h3>Family</h3>
+        <p>Proud family person based in sunny San Diego, CA. Life outside of product is about quality time and making memories.</p>
+        <span class="coming-soon">More soon</span>
+      </div>
+      <div class="personal-card fade-in">
+        <div class="icon">🌍</div>
+        <h3>Community Service</h3>
+        <p>Giving back to the community is important. Stay tuned for updates on volunteering and local initiatives.</p>
+        <span class="coming-soon">Coming soon</span>
+      </div>
+      <div class="personal-card fade-in">
+        <div class="icon">💡</div>
+        <h3>Interests</h3>
+        <p>Deeply curious about fintech, digital identity, AI, and the intersection of technology and everyday human experience.</p>
+        <span class="coming-soon">More soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label fade-in">Side Work</p>
+    <h2 class="fade-in">Projects</h2>
+    <div class="projects-placeholder fade-in">
+      <div class="big-icon">🚀</div>
+      <h3>Projects Coming Soon</h3>
+      <p>Side projects built with curiosity and Claude AI will be showcased here as they come to life.</p>
+      <div class="badge-ai">
+        <span>⚡</span> Powered by Claude
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label fade-in">Get In Touch</p>
+    <h2 class="fade-in">Contact</h2>
+    <div class="contact-grid fade-in">
+      <div class="contact-info">
+        <p>Open to conversations about product strategy, identity tech, fintech, or just connecting with fellow builders.</p>
+        <div class="contact-links">
+          <a href="mailto:harikrishnadave@gmail.com" class="contact-link">
+            <div class="contact-link-icon">✉️</div>
+            harikrishnadave@gmail.com
+          </a>
+<a href="https://www.linkedin.com/in/harikrishnadave/" target="_blank" rel="noopener" class="contact-link">
+            <div class="contact-link-icon">💼</div>
+            <span style="text-decoration: underline; text-underline-offset: 3px;">linkedin.com/in/harikrishnadave</span>
+          </a>
+          <span class="contact-link">
+            <div class="contact-link-icon">📍</div>
+            San Diego, CA
+          </span>
+        </div>
+      </div>
+      <div class="contact-card">
+        <h3>Let's Connect</h3>
+        <p>Whether it's a product challenge, an identity/fintech discussion, or a new opportunity — I'd love to hear from you.</p>
+        <a href="mailto:harikrishnadave@gmail.com" class="btn-white">Send a Message →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Harikrishna Dave · Built with Claude · San Diego, CA</p>
+</footer>
+
+<script>
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navLinks.forEach(a => {
+      a.style.background = a.getAttribute('href') === '#' + current ? 'var(--accent-light)' : '';
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : '';
+    });
+  });
+</script>
+</body>
+</html>
