@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -131,15 +131,18 @@
     .sidebar-link:hover { color: var(--accent); }
     .sidebar-link svg { width: 15px; height: 15px; flex-shrink: 0; }
     .theme-toggle {
-      display: flex; align-items: center; gap: 9px;
-      background: none; border: 1px solid var(--border);
-      border-radius: 8px; padding: 8px 12px; cursor: pointer;
-      color: var(--text-muted); font-size: 12.5px; font-weight: 500;
-      font-family: 'Inter', sans-serif; width: 100%;
-      transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 8px 16px; cursor: pointer;
+      color: var(--text-muted); font-size: 12.5px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     .theme-toggle:hover { border-color: var(--border-hover); color: var(--text-strong); }
     .theme-toggle svg { width: 15px; height: 15px; }
+    .theme-toggle-fixed {
+      position: fixed; top: 18px; right: 24px; z-index: 500;
+    }
 
     /* ── MAIN ──────────────────────────────────── */
     .main-content {
@@ -516,12 +519,14 @@
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
       LinkedIn Profile
     </a>
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="themeIcon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <span id="themeLabel">Light Mode</span>
-    </button>
   </div>
 </aside>
+
+<!-- Fixed top-right theme toggle -->
+<button class="theme-toggle theme-toggle-fixed" onclick="toggleTheme()" id="themeBtn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="themeIcon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <span id="themeLabel">Dark Mode</span>
+</button>
 
 <!-- ── MOBILE BAR ──────────────────────────────── -->
 <div class="mobile-bar">
@@ -552,7 +557,7 @@
         <span>$</span> role="Senior Product Manager" · domain=<span>Fintech + Identity + SaaS + B2B + B2C</span>
       </p>
       <p class="hero-bio fade-up stagger-2">
-        10+ years building fintech and SaaS products — from KYC identity verification and AML watchlist screening to digital identity wallets and low-code orchestration platforms. Driving roadmaps from 0→1 across global markets.
+        15+ years building fintech and SaaS products — from KYC identity verification and AML watchlist screening to digital identity wallets and low-code orchestration platforms. Driving roadmaps from 0→1 across global markets.
       </p>
       <div class="hero-tags fade-up stagger-3">
         <span class="hero-tag">Product Strategy</span>
@@ -625,7 +630,7 @@
         </div>
 
         <!-- Alpha Ori -->
-        <div class="job fade-up">
+        <div class="job open fade-up">
           <button class="job-trigger" onclick="toggleJob(this)">
             <div class="job-left">
               <div class="job-top-row"><span class="job-title">Senior Product Manager</span></div>
@@ -650,7 +655,7 @@
         </div>
 
         <!-- Cisco -->
-        <div class="job fade-up">
+        <div class="job open fade-up">
           <button class="job-trigger" onclick="toggleJob(this)">
             <div class="job-left">
               <div class="job-top-row"><span class="job-title">Technical Product Manager</span></div>
@@ -674,7 +679,7 @@
         </div>
 
         <!-- Esurance -->
-        <div class="job fade-up">
+        <div class="job open fade-up">
           <button class="job-trigger" onclick="toggleJob(this)">
             <div class="job-left">
               <div class="job-top-row"><span class="job-title">Senior QA Analyst</span></div>
@@ -696,7 +701,7 @@
         </div>
 
         <!-- Progressive -->
-        <div class="job fade-up">
+        <div class="job open fade-up">
           <button class="job-trigger" onclick="toggleJob(this)">
             <div class="job-left">
               <div class="job-top-row"><span class="job-title">QA Analyst</span></div>
@@ -719,7 +724,7 @@
         </div>
 
         <!-- VMware -->
-        <div class="job fade-up">
+        <div class="job open fade-up">
           <button class="job-trigger" onclick="toggleJob(this)">
             <div class="job-left">
               <div class="job-top-row"><span class="job-title">Intern</span></div>
@@ -931,15 +936,14 @@
 
 <script>
   /* ── Theme toggle ── */
+  const sunSVG = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
   function toggleTheme() {
     const html = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';
     html.setAttribute('data-theme', isDark ? 'light' : 'dark');
     document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
-    const icon = document.getElementById('themeIcon');
-    icon.innerHTML = isDark
-      ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
-      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
   }
 
   /* ── Mobile drawer ── */
