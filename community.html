@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community Service – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg:           #06090f;
+      --bg2:          #0b1018;
+      --surface:      #101620;
+      --surface2:     #161e2e;
+      --border:       rgba(0, 212, 255, 0.12);
+      --border-hover: rgba(0, 212, 255, 0.35);
+      --text:         #dde6f0;
+      --text-strong:  #f0f6ff;
+      --text-muted:   #7a90a8;
+      --text-dim:     #3d5060;
+      --accent:       #00d4ff;
+      --accent-dim:   rgba(0, 212, 255, 0.10);
+      --accent-glow:  rgba(0, 212, 255, 0.20);
+      --green:        #00e5a0;
+      --green-dim:    rgba(0, 229, 160, 0.10);
+      --dot-color:    rgba(0, 212, 255, 0.06);
+      --sidebar-bg:   #080d14;
+      --sidebar-border: rgba(0,212,255,0.10);
+      --overlay:      rgba(6,9,15,0.96);
+    }
+    [data-theme="light"] {
+      --bg:           #f2f4f8;
+      --bg2:          #eaecf2;
+      --surface:      #ffffff;
+      --surface2:     #f0f2f7;
+      --border:       rgba(30, 80, 200, 0.14);
+      --border-hover: rgba(30, 80, 200, 0.40);
+      --text:         #1a2030;
+      --text-strong:  #0a0f1a;
+      --text-muted:   #3e5070;
+      --text-dim:     #8a9ab8;
+      --accent:       #1060e0;
+      --accent-dim:   rgba(16, 96, 224, 0.09);
+      --accent-glow:  rgba(16, 96, 224, 0.15);
+      --green:        #059669;
+      --green-dim:    rgba(5,150,105,0.10);
+      --dot-color:    rgba(16, 96, 224, 0.06);
+      --sidebar-bg:   #ffffff;
+      --sidebar-border: rgba(30,80,200,0.10);
+      --overlay:      rgba(242,244,248,0.97);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Sidebar ─────────────────────────────────── */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 0 24px;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      padding: 0 24px 28px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 24px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link {
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+
+    .sidebar-bottom {
+      padding: 16px 24px 0;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-bottom .status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ── Main ─────────────────────────────────────── */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 56px 56px 80px;
+      max-width: 1100px;
+    }
+
+    /* ── Theme toggle ─────────────────────────────── */
+    .theme-toggle {
+      position: fixed;
+      top: 18px; right: 24px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 6px 14px 6px 10px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Page header ──────────────────────────────── */
+    .page-header {
+      margin-bottom: 48px;
+    }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .page-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ── Gallery grid ─────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .gallery-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .gallery-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover img { transform: scale(1.03); }
+    .gallery-caption {
+      padding: 12px 16px 14px;
+    }
+    .gallery-caption .event-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .gallery-caption h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+
+    /* ── Lightbox ─────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .lightbox-inner img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 8px;
+      object-fit: contain;
+      display: block;
+    }
+    .lightbox-caption {
+      color: #fff;
+      font-size: 0.9rem;
+      margin-top: 14px;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      opacity: 0.8;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 20px; right: 24px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-counter {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.5);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    /* ── Fade-up animation ────────────────────────── */
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="#gallery" class="nav-link"><span class="nav-num">01</span> Gallery</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>community_service.html</div>
+    </div>
+  </aside>
+
+  <!-- Theme toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <section class="page-header fade-up">
+      <div class="label">// community_service</div>
+      <h1>Giving Back</h1>
+      <p>Active member of BAPS Charities San Diego — participating in walk/run events, health awareness programs, donation drives, and cultural celebrations that strengthen community bonds.</p>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section id="gallery">
+      <div class="gallery-grid">
+
+        <div class="gallery-item fade-up" onclick="openLightbox(0)">
+          <img src="images/community/selected/WalkRun2022.png" alt="Joy Walk & Run 2022" loading="lazy" />
+          <div class="gallery-caption">
+            <div class="event-tag">Walk &amp; Run</div>
+            <h3>Joy Walk &amp; Run 2022</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" onclick="openLightbox(1)">
+          <img src="images/community/selected/WalkRun2024_A.jpg" alt="Joy Walk & Run 2024" loading="lazy" />
+          <div class="gallery-caption">
+            <div class="event-tag">Walk &amp; Run</div>
+            <h3>Joy Walk &amp; Run 2024</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" onclick="openLightbox(2)">
+          <img src="images/community/selected/WalkRun2024_B.jpg" alt="Joy Walk & Run 2024" loading="lazy" />
+          <div class="gallery-caption">
+            <div class="event-tag">Walk &amp; Run</div>
+            <h3>Joy Walk &amp; Run 2024</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" onclick="openLightbox(3)">
+          <img src="images/community/selected/WalkRun2025.jpg" alt="Joy Walk & Run 2025" loading="lazy" />
+          <div class="gallery-caption">
+            <div class="event-tag">Walk &amp; Run</div>
+            <h3>Joy Walk &amp; Run 2025</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" onclick="openLightbox(4)">
+          <img src="images/community/selected/CovidDonation.jpg" alt="Covid-19 Donation Drive 2022" loading="lazy" />
+          <div class="gallery-caption">
+            <div class="event-tag">Outreach</div>
+            <h3>Covid-19 Donation Drive 2022 with Escondido Community Foundation</h3>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" onclick="openLightbox(5)">
+          <img src="images/community/selected/ToyDrive.jpg" alt="Toy Donation Drive" loading="lazy" />
+          <div class="gallery-caption">
+            <div class="event-tag">Outreach</div>
+            <h3>Toy Donation Drive with Assembly Member Dr. Darshana Patel (76th District)</h3>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lbNav(-1)">&#8249;</button>
+    <div class="lightbox-inner">
+      <img id="lb-img" src="" alt="" />
+      <div class="lightbox-caption" id="lb-caption"></div>
+    </div>
+    <button class="lightbox-nav lightbox-next" onclick="lbNav(1)">&#8250;</button>
+    <div class="lightbox-counter" id="lb-counter"></div>
+  </div>
+
+  <script>
+    // ── Theme ──────────────────────────────────────
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+
+    // ── Lightbox ───────────────────────────────────
+    const photos = [
+      { src: 'images/community/selected/WalkRun2022.png',   caption: 'Joy Walk & Run 2022' },
+      { src: 'images/community/selected/WalkRun2024_A.jpg', caption: 'Joy Walk & Run 2024' },
+      { src: 'images/community/selected/WalkRun2024_B.jpg', caption: 'Joy Walk & Run 2024' },
+      { src: 'images/community/selected/WalkRun2025.jpg',   caption: 'Joy Walk & Run 2025' },
+      { src: 'images/community/selected/CovidDonation.jpg', caption: 'Covid-19 Donation Drive 2022 with Escondido Community Foundation' },
+      { src: 'images/community/selected/ToyDrive.jpg',      caption: 'Toy Donation Drive with Assembly Member Dr. Darshana Patel (76th District)' }
+    ];
+    let currentIdx = 0;
+
+    function openLightbox(idx) {
+      currentIdx = idx;
+      showImage();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeLightboxOnBg(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+    function lbNav(dir) {
+      currentIdx = (currentIdx + dir + photos.length) % photos.length;
+      showImage();
+    }
+    function showImage() {
+      const p = photos[currentIdx];
+      document.getElementById('lb-img').src = p.src;
+      document.getElementById('lb-img').alt = p.caption;
+      document.getElementById('lb-caption').textContent = p.caption;
+      document.getElementById('lb-counter').textContent = (currentIdx + 1) + ' / ' + photos.length;
+    }
+
+    document.addEventListener('keydown', e => {
+      const lb = document.getElementById('lightbox');
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft')  lbNav(-1);
+      if (e.key === 'ArrowRight') lbNav(1);
+    });
+
+    // ── Fade-up on scroll ──────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
