@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finance Projects – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #06090f; --bg2: #0b1018; --surface: #101620; --surface2: #161e2e;
+      --border: rgba(0,212,255,0.12); --border-hover: rgba(0,212,255,0.35);
+      --text: #dde6f0; --text-strong: #f0f6ff; --text-muted: #7a90a8; --text-dim: #3d5060;
+      --accent: #00d4ff; --accent-dim: rgba(0,212,255,0.10); --accent-glow: rgba(0,212,255,0.20);
+      --green: #00e5a0; --green-dim: rgba(0,229,160,0.10);
+      --gold: #fbbf24; --gold-dim: rgba(251,191,36,0.10);
+      --dot-color: rgba(0,212,255,0.06); --sidebar-bg: #080d14; --sidebar-border: rgba(0,212,255,0.10);
+    }
+    [data-theme="light"] {
+      --bg: #f2f4f8; --bg2: #eaecf2; --surface: #ffffff; --surface2: #f0f2f7;
+      --border: rgba(30,80,200,0.14); --border-hover: rgba(30,80,200,0.40);
+      --text: #1a2030; --text-strong: #0a0f1a; --text-muted: #3e5070; --text-dim: #8a9ab8;
+      --accent: #1060e0; --accent-dim: rgba(16,96,224,0.09); --accent-glow: rgba(16,96,224,0.15);
+      --green: #059669; --green-dim: rgba(5,150,105,0.10);
+      --gold: #d97706; --gold-dim: rgba(217,119,6,0.10);
+      --dot-color: rgba(16,96,224,0.06); --sidebar-bg: #ffffff; --sidebar-border: rgba(30,80,200,0.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+      display: flex; min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px; transition: background 0.3s, color 0.3s;
+    }
+
+    .sidebar {
+      width: 240px; min-height: 100vh; background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex; flex-direction: column; padding: 32px 0 24px;
+      position: fixed; top: 0; left: 0; z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800;
+      color: var(--text-strong); padding: 0 24px 28px; border-bottom: 1px solid var(--border); letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 10px 24px;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted); text-decoration: none;
+      transition: all 0.2s; font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link { color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+    .sidebar-bottom { padding: 16px 24px 0; border-top: 1px solid var(--border); }
+    .status { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+    .theme-toggle {
+      position: fixed; top: 18px; right: 24px; z-index: 200;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+      padding: 6px 14px 6px 10px; cursor: pointer;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .main { margin-left: 240px; flex: 1; padding: 56px 56px 80px; max-width: 1100px; }
+
+    .page-header { margin-bottom: 52px; }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.4rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px;
+    }
+    .page-header p { font-size: 1rem; color: var(--text-muted); max-width: 600px; line-height: 1.7; }
+
+    /* ── Project cards ─────────────────────────────── */
+    .project-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;
+    }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px; text-decoration: none; color: inherit; display: block;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .project-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 12px 32px var(--accent-glow); }
+    .project-card:hover::before { opacity: 1; }
+    .card-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+      color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .project-card h3 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -0.3px; margin-bottom: 12px;
+    }
+    .project-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+    .card-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+    .card-badge {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border);
+      color: var(--text-muted); background: var(--bg2);
+    }
+    .card-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); background: var(--accent-dim);
+      border: 1px solid var(--border-hover); padding: 6px 16px; border-radius: 999px;
+      transition: background 0.2s;
+    }
+    .project-card:hover .card-link { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .locked-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600;
+      color: var(--gold); background: var(--gold-dim);
+      border: 1px solid rgba(217,119,6,0.25); padding: 3px 9px; border-radius: 999px;
+      margin-left: 8px; vertical-align: middle;
+    }
+
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="#projects" class="nav-link"><span class="nav-num">01</span> Projects</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>finance-projects.html</div>
+    </div>
+  </aside>
+
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <main class="main">
+
+    <section class="page-header fade-up">
+      <div class="label">// projects · finance</div>
+      <h1>Finance<br>Projects</h1>
+      <p>Custom trading tools, screeners, and indicators built to support smarter options and equity trading decisions.</p>
+    </section>
+
+    <div class="project-grid" id="projects">
+
+      <a href="indicator.html" class="project-card fade-up">
+        <span class="card-icon">📈</span>
+        <div class="card-tag">Pine Script · TradingView</div>
+        <h3>Elite Trader Indicator <span class="locked-badge">🔒 Private</span></h3>
+        <p>A custom TradingView indicator combining market bias trend analysis, mode detection, and BX Trender buy/sell pressure signals to identify high-probability A+ options trade setups.</p>
+        <div class="card-badges">
+          <span class="card-badge">Pine Script v5</span>
+          <span class="card-badge">TradingView</span>
+          <span class="card-badge">Options</span>
+          <span class="card-badge">Position Sizing</span>
+        </div>
+        <span class="card-link">View Project →</span>
+      </a>
+
+      <a href="squeeze.html" class="project-card fade-up">
+        <span class="card-icon">🩳</span>
+        <div class="card-tag">Finviz · Momentum</div>
+        <h3>Short Squeeze Screener</h3>
+        <p>A custom Finviz screener that surfaces stocks with the highest short squeeze potential — filtering by short float, days to cover, low float, and relative volume.</p>
+        <div class="card-badges">
+          <span class="card-badge">Finviz</span>
+          <span class="card-badge">Short Squeeze</span>
+          <span class="card-badge">Momentum</span>
+          <span class="card-badge">Pre-configured</span>
+        </div>
+        <span class="card-link">View Project →</span>
+      </a>
+
+    </div>
+
+  </main>
+
+  <script>
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

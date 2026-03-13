@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Tools – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #06090f; --bg2: #0b1018; --surface: #101620; --surface2: #161e2e;
+      --border: rgba(0,212,255,0.12); --border-hover: rgba(0,212,255,0.35);
+      --text: #dde6f0; --text-strong: #f0f6ff; --text-muted: #7a90a8; --text-dim: #3d5060;
+      --accent: #00d4ff; --accent-dim: rgba(0,212,255,0.10); --accent-glow: rgba(0,212,255,0.20);
+      --green: #00e5a0; --green-dim: rgba(0,229,160,0.10);
+      --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.10);
+      --dot-color: rgba(0,212,255,0.06); --sidebar-bg: #080d14; --sidebar-border: rgba(0,212,255,0.10);
+    }
+    [data-theme="light"] {
+      --bg: #f2f4f8; --bg2: #eaecf2; --surface: #ffffff; --surface2: #f0f2f7;
+      --border: rgba(30,80,200,0.14); --border-hover: rgba(30,80,200,0.40);
+      --text: #1a2030; --text-strong: #0a0f1a; --text-muted: #3e5070; --text-dim: #8a9ab8;
+      --accent: #1060e0; --accent-dim: rgba(16,96,224,0.09); --accent-glow: rgba(16,96,224,0.15);
+      --green: #059669; --green-dim: rgba(5,150,105,0.10);
+      --amber: #d97706; --amber-dim: rgba(217,119,6,0.10);
+      --dot-color: rgba(16,96,224,0.06); --sidebar-bg: #ffffff; --sidebar-border: rgba(30,80,200,0.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+      display: flex; min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px; transition: background 0.3s, color 0.3s;
+    }
+
+    .sidebar {
+      width: 240px; min-height: 100vh; background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex; flex-direction: column; padding: 32px 0 24px;
+      position: fixed; top: 0; left: 0; z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800;
+      color: var(--text-strong); padding: 0 24px 28px; border-bottom: 1px solid var(--border); letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 10px 24px;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted); text-decoration: none;
+      transition: all 0.2s; font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link { color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+    .sidebar-bottom { padding: 16px 24px 0; border-top: 1px solid var(--border); }
+    .status { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+
+    .theme-toggle {
+      position: fixed; top: 18px; right: 24px; z-index: 200;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+      padding: 6px 14px 6px 10px; cursor: pointer;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .main { margin-left: 240px; flex: 1; padding: 56px 56px 80px; max-width: 1100px; }
+
+    .page-header { margin-bottom: 52px; }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.4rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px;
+    }
+    .page-header p { font-size: 1rem; color: var(--text-muted); max-width: 600px; line-height: 1.7; }
+
+    /* ── Coming soon area ─────────────────────────── */
+    .coming-soon-area {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;
+    }
+    .idea-card {
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: 16px; padding: 28px; text-align: center;
+      transition: border-color 0.2s;
+    }
+    .idea-card:hover { border-color: var(--border-hover); }
+    .idea-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .idea-card h3 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.98rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 8px;
+    }
+    .idea-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+    .pill-soon {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--amber); background: var(--amber-dim);
+      border: 1px solid rgba(217,119,6,0.25); padding: 3px 12px; border-radius: 999px;
+    }
+
+    .section-note {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 24px;
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .section-note span { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .section-note p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+    .section-note strong { color: var(--text-strong); }
+
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="#ideas" class="nav-link"><span class="nav-num">01</span> Coming Soon</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>shopping-tools.html</div>
+    </div>
+  </aside>
+
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <main class="main">
+
+    <section class="page-header fade-up">
+      <div class="label">// projects · shopping</div>
+      <h1>Shopping<br>Tools</h1>
+      <p>Tools and automations built around smarter shopping — deal tracking, price alerts, and comparison utilities powered by Claude AI.</p>
+    </section>
+
+    <div class="section-note fade-up">
+      <span>🚧</span>
+      <p><strong>Projects in progress.</strong> This category is actively being built. Check back soon — shopping tools powered by Claude AI are on the way.</p>
+    </div>
+
+    <div class="coming-soon-area" id="ideas">
+
+      <div class="idea-card fade-up">
+        <span class="idea-icon">🏷️</span>
+        <h3>Deal Alert Tracker</h3>
+        <p>Auto-track Slickdeals threads for specific products and get notified when prices drop below a target threshold.</p>
+        <span class="pill-soon">Coming Soon</span>
+      </div>
+
+      <div class="idea-card fade-up">
+        <span class="idea-icon">📊</span>
+        <h3>Price History Analyzer</h3>
+        <p>Visualize historical price trends for products across major retailers to know if a "deal" is actually a deal.</p>
+        <span class="pill-soon">Coming Soon</span>
+      </div>
+
+      <div class="idea-card fade-up">
+        <span class="idea-icon">⚡</span>
+        <h3>Lightning Deal Scanner</h3>
+        <p>Surface time-sensitive lightning deals from major retailers filtered by category and minimum discount percentage.</p>
+        <span class="pill-soon">Coming Soon</span>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
