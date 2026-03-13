@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elite Trader Indicator – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg:           #06090f;
+      --bg2:          #0b1018;
+      --surface:      #101620;
+      --surface2:     #161e2e;
+      --border:       rgba(0, 212, 255, 0.12);
+      --border-hover: rgba(0, 212, 255, 0.35);
+      --text:         #dde6f0;
+      --text-strong:  #f0f6ff;
+      --text-muted:   #7a90a8;
+      --text-dim:     #3d5060;
+      --accent:       #00d4ff;
+      --accent-dim:   rgba(0, 212, 255, 0.10);
+      --accent-glow:  rgba(0, 212, 255, 0.20);
+      --green:        #00e5a0;
+      --green-dim:    rgba(0, 229, 160, 0.10);
+      --red:          #ff4d6a;
+      --red-dim:      rgba(255, 77, 106, 0.10);
+      --gold:         #fbbf24;
+      --gold-dim:     rgba(251, 191, 36, 0.10);
+      --dot-color:    rgba(0, 212, 255, 0.06);
+      --sidebar-bg:   #080d14;
+      --sidebar-border: rgba(0,212,255,0.10);
+    }
+    [data-theme="light"] {
+      --bg:           #f2f4f8;
+      --bg2:          #eaecf2;
+      --surface:      #ffffff;
+      --surface2:     #f0f2f7;
+      --border:       rgba(30, 80, 200, 0.14);
+      --border-hover: rgba(30, 80, 200, 0.40);
+      --text:         #1a2030;
+      --text-strong:  #0a0f1a;
+      --text-muted:   #3e5070;
+      --text-dim:     #8a9ab8;
+      --accent:       #1060e0;
+      --accent-dim:   rgba(16, 96, 224, 0.09);
+      --accent-glow:  rgba(16, 96, 224, 0.15);
+      --green:        #059669;
+      --green-dim:    rgba(5, 150, 105, 0.10);
+      --red:          #dc2626;
+      --red-dim:      rgba(220, 38, 38, 0.09);
+      --gold:         #d97706;
+      --gold-dim:     rgba(217, 119, 6, 0.10);
+      --dot-color:    rgba(16, 96, 224, 0.06);
+      --sidebar-bg:   #ffffff;
+      --sidebar-border: rgba(30,80,200,0.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Sidebar ─────────────────────────────────── */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 0 24px;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      padding: 0 24px 28px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 24px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link { color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+    .sidebar-bottom {
+      padding: 16px 24px 0;
+      border-top: 1px solid var(--border);
+    }
+    .status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ── Theme toggle ─────────────────────────────── */
+    .theme-toggle {
+      position: fixed;
+      top: 18px; right: 24px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 6px 14px 6px 10px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Main ─────────────────────────────────────── */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 56px 56px 80px;
+      max-width: 1100px;
+    }
+
+    /* ── Page header ──────────────────────────────── */
+    .page-header { margin-bottom: 52px; }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .page-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .badge-blue  { color: var(--accent); background: var(--accent-dim); border-color: var(--border-hover); }
+    .badge-green { color: var(--green);  background: var(--green-dim);  border-color: rgba(5,150,105,0.3); }
+    .badge-gold  { color: var(--gold);   background: var(--gold-dim);   border-color: rgba(217,119,6,0.3); }
+
+    /* ── Section headers ──────────────────────────── */
+    .sec-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .sec-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      letter-spacing: -0.5px;
+      margin-bottom: 24px;
+    }
+    section { margin-bottom: 64px; }
+
+    /* ── Strategy overview cards ──────────────────── */
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .strategy-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .strategy-card:hover { border-color: var(--border-hover); box-shadow: 0 4px 20px var(--accent-glow); }
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .strategy-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 10px;
+    }
+    .strategy-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; }
+    .mode-row { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+    .mode-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .mode-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+    /* ── TradingView chart ────────────────────────── */
+    .chart-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .chart-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chart-header-left { display: flex; align-items: center; gap: 10px; }
+    .chart-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .chart-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .tv-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: border-color 0.2s;
+    }
+    .tv-link:hover { border-color: var(--accent); }
+
+    /* ── Two-column layout ────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    /* ── Position Size Calculator ─────────────────── */
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .calc-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 6px;
+    }
+    .calc-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .input-group { margin-bottom: 14px; }
+    .input-group label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-strong);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-group input:focus, .input-group select:focus { border-color: var(--accent); }
+    .calc-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.2s;
+    }
+    .calc-btn:hover { opacity: 0.88; }
+    .calc-results {
+      margin-top: 16px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: var(--bg2);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+    }
+    .result-row.green { border-left-color: var(--green); }
+    .result-row.red   { border-left-color: var(--red); }
+    .result-row.gold  { border-left-color: var(--gold); }
+    .result-label { font-size: 0.78rem; color: var(--text-muted); }
+    .result-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .disclaimer-tiny {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-top: 14px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* ── Pre-trade checklist ──────────────────────── */
+    .checklist-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .checklist-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 6px;
+    }
+    .checklist-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .checklist { display: flex; flex-direction: column; gap: 8px; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--bg2);
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .check-item:hover { border-color: var(--border); }
+    .check-item.checked {
+      background: var(--green-dim);
+      border-color: rgba(5,150,105,0.25);
+    }
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border-hover);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .check-item.checked .check-box {
+      background: var(--green);
+      border-color: var(--green);
+    }
+    .check-box svg { display: none; width: 10px; height: 10px; stroke: #fff; stroke-width: 3; fill: none; }
+    .check-item.checked .check-box svg { display: block; }
+    .check-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      transition: color 0.2s;
+    }
+    .check-item.checked .check-text { color: var(--text-strong); text-decoration: line-through; opacity: 0.7; }
+    .check-counter {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .check-count-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .check-progress {
+      height: 4px;
+      background: var(--border);
+      border-radius: 999px;
+      flex: 1;
+      margin: 0 12px;
+      overflow: hidden;
+    }
+    .check-progress-bar {
+      height: 100%;
+      background: var(--green);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+    .reset-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .reset-btn:hover { color: var(--accent); }
+
+    /* ── Pine Script section ──────────────────────── */
+    .pine-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .pine-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pine-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .pine-subtitle { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+    .pine-actions { display: flex; gap: 8px; }
+    .pine-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg2);
+      color: var(--text-muted);
+    }
+    .pine-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .pine-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .pine-btn.primary:hover { opacity: 0.88; }
+    .pine-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+    }
+    .pine-tab {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 10px 16px 10px 0;
+      margin-right: 16px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s;
+    }
+    .pine-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .pine-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.7;
+      padding: 24px;
+      overflow-x: auto;
+      max-height: 400px;
+      overflow-y: auto;
+      color: var(--text);
+      display: none;
+    }
+    .pine-code.active { display: block; }
+    /* Syntax colors */
+    .kw  { color: #00d4ff; }
+    .fn  { color: #c792ea; }
+    .str { color: #c3e88d; }
+    .num { color: #f78c6c; }
+    .cmt { color: #546e7a; font-style: italic; }
+    .var { color: #82aaff; }
+
+    /* ── Fade-up ───────────────────────────────────── */
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .strategy-grid { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+    }
+
+    /* ── Password Gate ────────────────────────────── */
+    #pw-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pw-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 36px;
+      width: 360px;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+    }
+    .pw-icon { font-size: 2rem; margin-bottom: 14px; }
+    .pw-box h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .pw-box p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .pw-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text-strong);
+      outline: none;
+      text-align: center;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .pw-input:focus { border-color: var(--accent); }
+    .pw-input.error { border-color: var(--red); animation: shake 0.3s ease; }
+    .pw-submit {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .pw-submit:hover { opacity: 0.88; }
+    .pw-error {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--red);
+      margin-top: 10px;
+      min-height: 18px;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password Gate -->
+  <div id="pw-gate">
+    <div class="pw-box">
+      <div class="pw-icon">🔒</div>
+      <h2>Private Page</h2>
+      <p>This project page is password protected.<br>Enter the password to continue.</p>
+      <input type="password" id="pw-input" class="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()" />
+      <button class="pw-submit" onclick="checkPassword()">Unlock →</button>
+      <div class="pw-error" id="pw-error"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="#overview"   class="nav-link"><span class="nav-num">01</span> Overview</a>
+      <a href="#chart"      class="nav-link"><span class="nav-num">02</span> Live Chart</a>
+      <a href="#calculator" class="nav-link"><span class="nav-num">03</span> Position Calc</a>
+      <a href="#checklist"  class="nav-link"><span class="nav-num">04</span> Checklist</a>
+      <a href="#pinescript" class="nav-link"><span class="nav-num">05</span> Pine Script</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>indicator.html</div>
+    </div>
+  </aside>
+
+  <!-- Theme toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Header -->
+    <section class="page-header fade-up">
+      <div class="label">// projects · trading</div>
+      <h1>Elite Trader<br>Indicator</h1>
+      <p>A custom TradingView indicator combining market bias trend analysis, mode detection, and buy/sell pressure signals to identify high-probability options trade setups.</p>
+      <div class="badge-row">
+        <span class="badge badge-blue">Pine Script v5</span>
+        <span class="badge badge-green">TradingView</span>
+        <span class="badge badge-gold">Options Trading</span>
+        <span class="badge badge-blue">70% Win Rate Strategy</span>
+      </div>
+    </section>
+
+    <!-- Strategy Overview -->
+    <section id="overview">
+      <p class="sec-label fade-up">// strategy</p>
+      <h2 class="sec-title fade-up">How It Works</h2>
+      <div class="strategy-grid">
+
+        <div class="strategy-card fade-up">
+          <div class="step-num">Step 01 · Weekly Analysis</div>
+          <h3>Market Bias Trend</h3>
+          <p>Identify the macro trend using the Market Bias Ribbon — a dual EMA fill that turns green in bull trends and red in bear trends. Only trade in the direction of the bias.</p>
+          <div class="mode-row" style="margin-top:12px;">
+            <div class="mode-item"><div class="mode-dot" style="background:#059669;"></div> Bull Trend — price above ribbon</div>
+            <div class="mode-item"><div class="mode-dot" style="background:#dc2626;"></div> Bear Trend — price below ribbon</div>
+          </div>
+        </div>
+
+        <div class="strategy-card fade-up">
+          <div class="step-num">Step 02 · Mode Detection</div>
+          <h3>Market Mode</h3>
+          <p>Dictate which "mode" the market is in before entering. Only enter trades during Compression or pullbacks — never chase Expansion moves.</p>
+          <div class="mode-row" style="margin-top:12px;">
+            <div class="mode-item"><div class="mode-dot" style="background:#059669;"></div> Expansion — trending impulse</div>
+            <div class="mode-item"><div class="mode-dot" style="background:#dc2626;"></div> Capitulation — sell-off pressure</div>
+            <div class="mode-item"><div class="mode-dot" style="background:#1060e0;"></div> Compression — consolidation ✅ Enter</div>
+          </div>
+        </div>
+
+        <div class="strategy-card fade-up">
+          <div class="step-num">Step 03 · Confirmation</div>
+          <h3>BX Trender Signal</h3>
+          <p>Confirm bullish accumulation on the BX Trender oscillator. Look for Higher Highs (HH) or Higher Lows (HL) on the histogram before entering. This is the final gate.</p>
+          <div class="mode-row" style="margin-top:12px;">
+            <div class="mode-item"><div class="mode-dot" style="background:#059669;"></div> HH / HL = Bullish Accumulation ✅</div>
+            <div class="mode-item"><div class="mode-dot" style="background:#dc2626;"></div> LH / LL = Bearish Re-Distribution ❌</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Live Chart -->
+    <section id="chart">
+      <p class="sec-label fade-up">// live chart</p>
+      <h2 class="sec-title fade-up">Market Viewer</h2>
+      <div class="chart-container fade-up">
+        <div class="chart-header">
+          <div class="chart-header-left">
+            <div>
+              <div class="chart-title">TradingView — Interactive Chart</div>
+              <div class="chart-sub">Change ticker to analyze any stock or ETF</div>
+            </div>
+          </div>
+          <a href="https://www.tradingview.com" target="_blank" class="tv-link">Open TradingView ↗</a>
+        </div>
+        <!-- TradingView Widget -->
+        <div class="tradingview-widget-container" style="height:520px;">
+          <div id="tradingview_chart" style="height:100%;"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+          <script type="text/javascript">
+            new TradingView.widget({
+              "autosize": true,
+              "symbol": "NASDAQ:QQQ",
+              "interval": "W",
+              "timezone": "America/New_York",
+              "theme": document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
+              "style": "1",
+              "locale": "en",
+              "enable_publishing": false,
+              "allow_symbol_change": true,
+              "studies": ["STD;EMA"],
+              "container_id": "tradingview_chart",
+              "hide_top_toolbar": false,
+              "hide_legend": false,
+              "save_image": false
+            });
+          </script>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator + Checklist -->
+    <section id="calculator">
+      <p class="sec-label fade-up">// tools</p>
+      <h2 class="sec-title fade-up">Trade Tools</h2>
+      <div class="two-col">
+
+        <!-- Position Size Calculator -->
+        <div class="calc-card fade-up" id="calculator-card">
+          <h3>📐 Position Size Calculator</h3>
+          <p class="calc-desc">Golden Rules: max 5% per options trade, never exceed 40% total fund exposure.</p>
+          <div class="input-group">
+            <label>Account Size ($)</label>
+            <input type="number" id="accountSize" placeholder="e.g. 10000" min="100" />
+          </div>
+          <div class="input-group">
+            <label>Trade Type</label>
+            <select id="tradeType">
+              <option value="options">Options</option>
+              <option value="shares">Shares</option>
+            </select>
+          </div>
+          <div class="input-group" id="currentExposureGroup">
+            <label>Current Capital at Risk ($)</label>
+            <input type="number" id="currentExposure" placeholder="e.g. 2000" min="0" value="0" />
+          </div>
+          <button class="calc-btn" onclick="calculate()">Calculate Position Size</button>
+          <div class="calc-results" id="calcResults">
+            <div class="result-row green">
+              <span class="result-label">Max Per Trade</span>
+              <span class="result-value" id="maxPerTrade">—</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Max Total Exposure</span>
+              <span class="result-value" id="maxExposure">—</span>
+            </div>
+            <div class="result-row gold">
+              <span class="result-label">Remaining Exposure Available</span>
+              <span class="result-value" id="remainingExposure">—</span>
+            </div>
+            <div class="result-row" id="statusRow">
+              <span class="result-label">Status</span>
+              <span class="result-value" id="tradeStatus">—</span>
+            </div>
+          </div>
+          <p class="disclaimer-tiny">These are personal trading rules. Not financial advice. Always manage your own risk.</p>
+        </div>
+
+        <!-- Pre-Trade Checklist -->
+        <div class="checklist-card fade-up" id="checklist">
+          <h3>✅ Pre-Trade Checklist</h3>
+          <p class="checklist-desc">Run through all 8 steps before every trade. Only enter when all boxes are checked.</p>
+          <div class="checklist" id="checklistItems">
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">📊 Pre-define the trend (bullish or bearish market bias)</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">🔍 Pre-define the mode (Expansion / Capitulation / Compression)</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">✅ Confirm bullish accumulation (HH or HL on BX Trender)</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">💰 Confirm you have capital to trade (under 40% exposure)</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">⚖️ Pre-plan position size (max 5% of account per trade)</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">🎯 Take 50% profit at EQ (equal) high</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">🛑 Set stop loss — close below market bias on candle close</span>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+              <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg></div>
+              <span class="check-text">🕐 Monitor from 3:30 PM – 4:00 PM daily</span>
+            </div>
+          </div>
+          <div class="check-counter">
+            <span class="check-count-text" id="checkCount">0 / 8</span>
+            <div class="check-progress"><div class="check-progress-bar" id="progressBar"></div></div>
+            <button class="reset-btn" onclick="resetChecklist()">reset</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Pine Script -->
+    <section id="pinescript">
+      <p class="sec-label fade-up">// source code</p>
+      <h2 class="sec-title fade-up">Pine Script — TradingView Indicator</h2>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:20px;max-width:620px;line-height:1.7;" class="fade-up">Two scripts to add to TradingView. Add the <strong style="color:var(--text-strong);">Market Bias Ribbon</strong> as an overlay on your price chart, and the <strong style="color:var(--text-strong);">BX Trender Oscillator</strong> in a separate pane below.</p>
+
+      <div class="pine-card fade-up">
+        <div class="pine-header">
+          <div>
+            <div class="pine-title">Indicator Scripts</div>
+            <div class="pine-subtitle">Pine Script v5 · Copy & paste into TradingView Pine Editor</div>
+          </div>
+          <div class="pine-actions">
+            <button class="pine-btn" onclick="copyActiveScript()">⎘ Copy</button>
+            <a href="https://www.tradingview.com/pine-editor/" target="_blank" class="pine-btn primary">Open Pine Editor ↗</a>
+          </div>
+        </div>
+        <div class="pine-tabs">
+          <div class="pine-tab active" onclick="switchTab('ribbon', this)">Market Bias Ribbon</div>
+          <div class="pine-tab" onclick="switchTab('bxtrender', this)">BX Trender Oscillator</div>
+        </div>
+        <pre class="pine-code active" id="code-ribbon"><span class="cmt">// ═══════════════════════════════════════════════════════════
+// Market Bias Ribbon
+// Based on the Elite Trader Playbook
+// Add this as an overlay on your price chart
+// ═══════════════════════════════════════════════════════════</span>
+<span class="kw">//@version=5</span>
+<span class="fn">indicator</span>(<span class="str">"Market Bias Ribbon"</span>, shorttitle=<span class="str">"MBR"</span>, overlay=<span class="kw">true</span>)
+
+<span class="cmt">// ─── Inputs ────────────────────────────────────────────────</span>
+<span class="kw">var</span> <span class="var">GRP</span> = <span class="str">"Ribbon Settings"</span>
+<span class="var">fast_len</span> = <span class="fn">input.int</span>(<span class="num">8</span>,  title=<span class="str">"Fast EMA"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP</span>)
+<span class="var">slow_len</span> = <span class="fn">input.int</span>(<span class="num">21</span>, title=<span class="str">"Slow EMA"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP</span>)
+<span class="var">show_signals</span> = <span class="fn">input.bool</span>(<span class="kw">true</span>, <span class="str">"Show Trend Change Signals"</span>, group=<span class="var">GRP</span>)
+
+<span class="cmt">// ─── EMAs ───────────────────────────────────────────────────</span>
+<span class="var">ema_fast</span> = <span class="fn">ta.ema</span>(close, <span class="var">fast_len</span>)
+<span class="var">ema_slow</span> = <span class="fn">ta.ema</span>(close, <span class="var">slow_len</span>)
+<span class="var">is_bull</span>  = <span class="var">ema_fast</span> > <span class="var">ema_slow</span>
+
+<span class="cmt">// ─── Ribbon Fill ────────────────────────────────────────────</span>
+<span class="var">bull_col</span> = <span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">70</span>)
+<span class="var">bear_col</span> = <span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">70</span>)
+
+<span class="var">p1</span> = <span class="fn">plot</span>(<span class="var">ema_fast</span>, <span class="str">"Fast EMA"</span>, color=<span class="fn">color.new</span>(color.gray, <span class="num">100</span>))
+<span class="var">p2</span> = <span class="fn">plot</span>(<span class="var">ema_slow</span>, <span class="str">"Slow EMA"</span>, color=<span class="fn">color.new</span>(color.gray, <span class="num">100</span>))
+<span class="fn">fill</span>(<span class="var">p1</span>, <span class="var">p2</span>, color=<span class="var">is_bull</span> ? <span class="var">bull_col</span> : <span class="var">bear_col</span>, title=<span class="str">"Market Bias Ribbon"</span>)
+
+<span class="cmt">// ─── EMA Lines ──────────────────────────────────────────────</span>
+<span class="fn">plot</span>(<span class="var">ema_fast</span>, <span class="str">"Fast EMA"</span>,
+     color=<span class="var">is_bull</span> ? <span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">0</span>) : <span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">0</span>),
+     linewidth=<span class="num">1</span>)
+<span class="fn">plot</span>(<span class="var">ema_slow</span>, <span class="str">"Slow EMA"</span>,
+     color=<span class="var">is_bull</span> ? <span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">30</span>) : <span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">30</span>),
+     linewidth=<span class="num">2</span>)
+
+<span class="cmt">// ─── Trend Change Signals ───────────────────────────────────</span>
+<span class="var">bull_cross</span> = <span class="var">is_bull</span> <span class="kw">and not</span> <span class="var">is_bull</span>[<span class="num">1</span>]
+<span class="var">bear_cross</span> = <span class="kw">not</span> <span class="var">is_bull</span> <span class="kw">and</span> <span class="var">is_bull</span>[<span class="num">1</span>]
+
+<span class="fn">plotshape</span>(<span class="var">show_signals</span> <span class="kw">and</span> <span class="var">bull_cross</span>,
+          title=<span class="str">"Bull Signal"</span>,
+          location=location.belowbar,
+          style=shape.triangleup,
+          size=size.small,
+          color=#<span class="num">00c87a</span>)
+<span class="fn">plotshape</span>(<span class="var">show_signals</span> <span class="kw">and</span> <span class="var">bear_cross</span>,
+          title=<span class="str">"Bear Signal"</span>,
+          location=location.abovebar,
+          style=shape.triangledown,
+          size=size.small,
+          color=#<span class="num">ff4d6a</span>)</pre>
+
+        <pre class="pine-code" id="code-bxtrender"><span class="cmt">// ═══════════════════════════════════════════════════════════
+// BX Trender Oscillator
+// Based on the Elite Trader Playbook
+// Add this as a NEW PANE below your price chart
+// ═══════════════════════════════════════════════════════════</span>
+<span class="kw">//@version=5</span>
+<span class="fn">indicator</span>(<span class="str">"BX Trender Oscillator"</span>, shorttitle=<span class="str">"BX-OSC"</span>, overlay=<span class="kw">false</span>)
+
+<span class="cmt">// ─── Inputs ────────────────────────────────────────────────</span>
+<span class="kw">var</span> <span class="var">GRP1</span> = <span class="str">"BX Trender Settings"</span>
+<span class="var">short_l1</span> = <span class="fn">input.int</span>(<span class="num">5</span>,  title=<span class="str">"Short - L1"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP1</span>)
+<span class="var">short_l2</span> = <span class="fn">input.int</span>(<span class="num">20</span>, title=<span class="str">"Short - L2"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP1</span>)
+<span class="var">short_l3</span> = <span class="fn">input.int</span>(<span class="num">5</span>,  title=<span class="str">"Short - L3 (Smooth)"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP1</span>)
+<span class="var">long_l1</span>  = <span class="fn">input.int</span>(<span class="num">20</span>, title=<span class="str">"Long  - L1"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP1</span>)
+<span class="var">long_l2</span>  = <span class="fn">input.int</span>(<span class="num">5</span>,  title=<span class="str">"Long  - L2 (Smooth)"</span>, minval=<span class="num">1</span>, group=<span class="var">GRP1</span>)
+
+<span class="kw">var</span> <span class="var">GRP2</span> = <span class="str">"Display"</span>
+<span class="var">show_labels</span> = <span class="fn">input.bool</span>(<span class="kw">true</span>, <span class="str">"Show HH / HL / LH / LL Labels"</span>, group=<span class="var">GRP2</span>)
+<span class="var">show_aplus</span>  = <span class="fn">input.bool</span>(<span class="kw">true</span>, <span class="str">"Show A+ Entry Signals"</span>, group=<span class="var">GRP2</span>)
+<span class="var">show_mode</span>   = <span class="fn">input.bool</span>(<span class="kw">true</span>, <span class="str">"Show Market Mode Background"</span>, group=<span class="var">GRP2</span>)
+
+<span class="cmt">// ─── BX Trender Calculation ─────────────────────────────────</span>
+<span class="var">short_raw</span> = <span class="fn">ta.ema</span>(close, <span class="var">short_l1</span>) - <span class="fn">ta.ema</span>(close, <span class="var">short_l2</span>)
+<span class="var">short_pct</span> = <span class="var">short_raw</span> / close * <span class="num">100</span>
+<span class="var">bx_short</span>  = <span class="fn">ta.ema</span>(<span class="var">short_pct</span>, <span class="var">short_l3</span>)
+
+<span class="var">long_raw</span>  = <span class="fn">ta.ema</span>(close, <span class="var">long_l1</span>) - <span class="fn">ta.ema</span>(close, <span class="var">short_l1</span>)
+<span class="var">long_pct</span>  = <span class="var">long_raw</span> / close * <span class="num">100</span>
+<span class="var">bx_long</span>   = <span class="fn">ta.ema</span>(<span class="var">long_pct</span>, <span class="var">long_l2</span>)
+
+<span class="var">bx</span> = <span class="var">bx_short</span> + <span class="var">bx_long</span>
+
+<span class="cmt">// ─── HH / HL / LH / LL Detection ───────────────────────────</span>
+<span class="var">is_peak</span>   = <span class="var">bx</span>[<span class="num">1</span>] > <span class="var">bx</span>[<span class="num">0</span>] <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] > <span class="var">bx</span>[<span class="num">2</span>]
+<span class="var">is_trough</span> = <span class="var">bx</span>[<span class="num">1</span>] < <span class="var">bx</span>[<span class="num">0</span>] <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] < <span class="var">bx</span>[<span class="num">2</span>]
+
+<span class="kw">var</span> <span class="var">last_peak</span>   = <span class="fn">float</span>(na)
+<span class="kw">var</span> <span class="var">prev_peak</span>   = <span class="fn">float</span>(na)
+<span class="kw">var</span> <span class="var">last_trough</span> = <span class="fn">float</span>(na)
+<span class="kw">var</span> <span class="var">prev_trough</span> = <span class="fn">float</span>(na)
+
+<span class="kw">if</span> <span class="var">is_peak</span>
+    <span class="var">prev_peak</span>  := <span class="var">last_peak</span>
+    <span class="var">last_peak</span>  := <span class="var">bx</span>[<span class="num">1</span>]
+
+<span class="kw">if</span> <span class="var">is_trough</span>
+    <span class="var">prev_trough</span> := <span class="var">last_trough</span>
+    <span class="var">last_trough</span> := <span class="var">bx</span>[<span class="num">1</span>]
+
+<span class="var">is_HH</span> = <span class="var">is_peak</span>   <span class="kw">and not</span> <span class="fn">na</span>(<span class="var">prev_peak</span>)   <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] > <span class="var">prev_peak</span>
+<span class="var">is_LH</span> = <span class="var">is_peak</span>   <span class="kw">and not</span> <span class="fn">na</span>(<span class="var">prev_peak</span>)   <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] < <span class="var">prev_peak</span>
+<span class="var">is_HL</span> = <span class="var">is_trough</span> <span class="kw">and not</span> <span class="fn">na</span>(<span class="var">prev_trough</span>) <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] > <span class="var">prev_trough</span>
+<span class="var">is_LL</span> = <span class="var">is_trough</span> <span class="kw">and not</span> <span class="fn">na</span>(<span class="var">prev_trough</span>) <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] < <span class="var">prev_trough</span>
+
+<span class="cmt">// ─── Market Mode Detection ──────────────────────────────────</span>
+<span class="var">ema_fast</span>   = <span class="fn">ta.ema</span>(close, <span class="num">8</span>)
+<span class="var">ema_slow</span>   = <span class="fn">ta.ema</span>(close, <span class="num">21</span>)
+<span class="var">atr_val</span>    = <span class="fn">ta.atr</span>(<span class="num">14</span>)
+<span class="var">atr_avg</span>    = <span class="fn">ta.sma</span>(<span class="var">atr_val</span>, <span class="num">20</span>)
+<span class="var">range_high</span> = <span class="fn">ta.highest</span>(high, <span class="num">10</span>)
+<span class="var">range_low</span>  = <span class="fn">ta.lowest</span>(low,  <span class="num">10</span>)
+<span class="var">range_pct</span>  = (<span class="var">range_high</span> - <span class="var">range_low</span>) / <span class="var">range_low</span> * <span class="num">100</span>
+
+<span class="var">in_compression</span>  = <span class="var">range_pct</span> < <span class="num">3.0</span> <span class="kw">or</span> <span class="var">atr_val</span> < <span class="var">atr_avg</span> * <span class="num">0.8</span>
+<span class="var">in_capitulation</span> = <span class="var">ema_fast</span> < <span class="var">ema_slow</span> <span class="kw">and</span> <span class="var">bx</span> < -<span class="num">1.5</span>
+<span class="var">in_expansion</span>    = <span class="fn">math.abs</span>(<span class="var">ema_fast</span> - <span class="var">ema_slow</span>) > <span class="fn">math.abs</span>(<span class="var">ema_fast</span>[<span class="num">1</span>] - <span class="var">ema_slow</span>[<span class="num">1</span>]) <span class="kw">and</span> <span class="var">atr_val</span> > <span class="var">atr_avg</span>
+
+<span class="cmt">// ─── Colors ─────────────────────────────────────────────────</span>
+<span class="var">bar_col</span> = <span class="var">bx</span> >= <span class="num">0</span>
+         ? (<span class="var">bx</span> > <span class="var">bx</span>[<span class="num">1</span>] ? <span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">0</span>) : <span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">45</span>))
+         : (<span class="var">bx</span> < <span class="var">bx</span>[<span class="num">1</span>] ? <span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">0</span>) : <span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">45</span>))
+
+<span class="cmt">// ─── Plot Histogram ─────────────────────────────────────────</span>
+<span class="fn">plot</span>(<span class="var">bx</span>, <span class="str">"BX Trender"</span>, style=plot.style_histogram, color=<span class="var">bar_col</span>, linewidth=<span class="num">2</span>)
+<span class="fn">hline</span>(<span class="num">0</span>, <span class="str">"Zero Line"</span>, color=<span class="fn">color.new</span>(color.white, <span class="num">70</span>), linewidth=<span class="num">1</span>)
+
+<span class="cmt">// ─── Mode Background ────────────────────────────────────────</span>
+<span class="fn">bgcolor</span>(<span class="var">show_mode</span> <span class="kw">and</span> <span class="var">in_compression</span>  ? <span class="fn">color.new</span>(#<span class="num">4466ff</span>, <span class="num">90</span>) : na, title=<span class="str">"Compression"</span>)
+<span class="fn">bgcolor</span>(<span class="var">show_mode</span> <span class="kw">and</span> <span class="var">in_expansion</span>    ? <span class="fn">color.new</span>(#<span class="num">00ff88</span>, <span class="num">94</span>) : na, title=<span class="str">"Expansion"</span>)
+<span class="fn">bgcolor</span>(<span class="var">show_mode</span> <span class="kw">and</span> <span class="var">in_capitulation</span> ? <span class="fn">color.new</span>(#<span class="num">ff4444</span>, <span class="num">92</span>) : na, title=<span class="str">"Capitulation"</span>)
+
+<span class="cmt">// ─── HH / HL / LH / LL Labels ───────────────────────────────</span>
+<span class="kw">if</span> <span class="var">show_labels</span>
+    <span class="kw">if</span> <span class="var">is_HH</span>
+        <span class="fn">label.new</span>(bar_index[<span class="num">1</span>], <span class="var">bx</span>[<span class="num">1</span>], <span class="str">"HH ✅"</span>,
+                  style=label.style_label_down,
+                  color=<span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">15</span>),
+                  textcolor=color.white, size=size.small)
+    <span class="kw">if</span> <span class="var">is_HL</span>
+        <span class="fn">label.new</span>(bar_index[<span class="num">1</span>], <span class="var">bx</span>[<span class="num">1</span>], <span class="str">"HL ✅"</span>,
+                  style=label.style_label_up,
+                  color=<span class="fn">color.new</span>(#<span class="num">00c87a</span>, <span class="num">15</span>),
+                  textcolor=color.white, size=size.small)
+    <span class="kw">if</span> <span class="var">is_LH</span>
+        <span class="fn">label.new</span>(bar_index[<span class="num">1</span>], <span class="var">bx</span>[<span class="num">1</span>], <span class="str">"LH 🔴"</span>,
+                  style=label.style_label_down,
+                  color=<span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">15</span>),
+                  textcolor=color.white, size=size.small)
+    <span class="kw">if</span> <span class="var">is_LL</span>
+        <span class="fn">label.new</span>(bar_index[<span class="num">1</span>], <span class="var">bx</span>[<span class="num">1</span>], <span class="str">"LL 🔴"</span>,
+                  style=label.style_label_up,
+                  color=<span class="fn">color.new</span>(#<span class="num">ff4d6a</span>, <span class="num">15</span>),
+                  textcolor=color.white, size=size.small)
+
+<span class="cmt">// ─── A+ Entry Signal ────────────────────────────────────────</span>
+<span class="cmt">// Fires when: prior compression + HL formed + BX crossing positive</span>
+<span class="var">a_plus_bull</span> = <span class="var">show_aplus</span> <span class="kw">and</span> <span class="var">in_compression</span>[<span class="num">1</span>] <span class="kw">and</span> <span class="var">is_HL</span> <span class="kw">and</span> <span class="var">bx</span>[<span class="num">1</span>] > <span class="num">0</span>
+<span class="kw">if</span> <span class="var">a_plus_bull</span>
+    <span class="fn">label.new</span>(bar_index[<span class="num">1</span>], <span class="var">bx</span>[<span class="num">1</span>] - <span class="num">0.5</span>, <span class="str">"A+ 🎯"</span>,
+              style=label.style_label_up,
+              color=<span class="fn">color.new</span>(#<span class="num">ffd700</span>, <span class="num">0</span>),
+              textcolor=color.black, size=size.normal)</pre>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // ── Theme ──────────────────────────────────────────────────
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+
+    // ── Position Size Calculator ───────────────────────────────
+    function calculate() {
+      const account  = parseFloat(document.getElementById('accountSize').value);
+      const type     = document.getElementById('tradeType').value;
+      const exposed  = parseFloat(document.getElementById('currentExposure').value) || 0;
+      if (!account || account <= 0) { alert('Please enter a valid account size.'); return; }
+
+      const maxPct      = type === 'options' ? 0.05 : 0.15;
+      const maxExpPct   = type === 'options' ? 0.40 : 0.85;
+      const maxPerTrade = account * maxPct;
+      const maxExposure = account * maxExpPct;
+      const remaining   = Math.max(0, maxExposure - exposed);
+      const canTrade    = exposed < maxExposure;
+
+      document.getElementById('maxPerTrade').textContent   = '$' + maxPerTrade.toLocaleString('en-US', {maximumFractionDigits: 0});
+      document.getElementById('maxExposure').textContent   = '$' + maxExposure.toLocaleString('en-US', {maximumFractionDigits: 0}) + ' (' + (maxExpPct*100) + '%)';
+      document.getElementById('remainingExposure').textContent = '$' + remaining.toLocaleString('en-US', {maximumFractionDigits: 0});
+      document.getElementById('tradeStatus').textContent   = canTrade ? '✅ Clear to Trade' : '🛑 At Max Exposure';
+
+      const statusRow = document.getElementById('statusRow');
+      statusRow.className = 'result-row ' + (canTrade ? 'green' : 'red');
+
+      const results = document.getElementById('calcResults');
+      results.style.display = 'flex';
+    }
+
+    // ── Pre-Trade Checklist ────────────────────────────────────
+    function toggleCheck(el) {
+      el.classList.toggle('checked');
+      updateProgress();
+    }
+    function updateProgress() {
+      const items   = document.querySelectorAll('.check-item');
+      const checked = document.querySelectorAll('.check-item.checked').length;
+      const total   = items.length;
+      document.getElementById('checkCount').textContent = checked + ' / ' + total;
+      document.getElementById('progressBar').style.width = (checked / total * 100) + '%';
+    }
+    function resetChecklist() {
+      document.querySelectorAll('.check-item').forEach(el => el.classList.remove('checked'));
+      updateProgress();
+    }
+
+    // ── Pine Script Tabs ───────────────────────────────────────
+    function switchTab(id, tabEl) {
+      document.querySelectorAll('.pine-code').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.pine-tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('code-' + id).classList.add('active');
+      tabEl.classList.add('active');
+    }
+    function copyActiveScript() {
+      const activeCode = document.querySelector('.pine-code.active');
+      const text = activeCode.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.pine-btn:first-of-type');
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => { btn.textContent = '⎘ Copy'; }, 2000);
+      });
+    }
+
+    // ── Fade-up ────────────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ── Password Gate ──────────────────────────────────────────
+    // Change SITE_PASSWORD below to set your own password
+    const SITE_PASSWORD = 'Fin@nce$7';
+    const SESSION_KEY   = 'tht_indicator_auth';
+
+    function checkPassword() {
+      const input = document.getElementById('pw-input');
+      const error = document.getElementById('pw-error');
+      if (input.value === SITE_PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        document.getElementById('pw-gate').style.display = 'none';
+        error.textContent = '';
+      } else {
+        input.classList.add('error');
+        error.textContent = 'Incorrect password. Try again.';
+        input.value = '';
+        setTimeout(() => input.classList.remove('error'), 400);
+      }
+    }
+
+    // Check on load — hide gate if already authenticated this session
+    (function() {
+      if (sessionStorage.getItem(SESSION_KEY) === '1') {
+        document.getElementById('pw-gate').style.display = 'none';
+      }
+    })();
+  </script>
+</body>
+</html>

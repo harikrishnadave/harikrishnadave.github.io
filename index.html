@@ -365,16 +365,53 @@
 
     /* ── PROJECTS ──────────────────────────────── */
     #projects { background: var(--bg2); }
+    .project-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px;
+    }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      text-decoration: none; display: block; color: inherit;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    .project-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .project-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem; font-weight: 700; color: var(--text-strong); margin-bottom: 10px;
+    }
+    .project-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+    .project-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+    .proj-badge {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border);
+      color: var(--text-muted); background: var(--bg2);
+    }
+    .project-link-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--border-hover); padding: 5px 14px; border-radius: 999px;
+    }
     .project-empty {
       border: 1px dashed var(--border); border-radius: 12px;
-      padding: 72px 32px; text-align: center;
+      padding: 48px 32px; text-align: center;
     }
     .project-empty .big { font-size: 38px; margin-bottom: 18px; }
     .project-empty h3 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 20px; font-weight: 700; color: var(--text-strong); margin-bottom: 10px;
+      font-size: 18px; font-weight: 700; color: var(--text-strong); margin-bottom: 8px;
     }
-    .project-empty p { font-size: 14px; color: var(--text-muted); max-width: 360px; margin: 0 auto 24px; line-height: 1.7; }
+    .project-empty p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
     .ai-pill {
       display: inline-flex; align-items: center; gap: 7px;
       font-family: 'JetBrains Mono', monospace;
@@ -877,11 +914,24 @@
     <div class="container">
       <p class="sec-label fade-up">06 Side Work</p>
       <h2 class="fade-up">Projects</h2>
-      <div class="project-empty fade-up">
-        <div class="big">🚀</div>
-        <h3>Projects Coming Soon</h3>
-        <p>Side projects built with curiosity and Claude AI will be showcased here as they come to life.</p>
-        <div class="ai-pill">⚡ Powered by Claude</div>
+      <div class="project-grid">
+        <a href="indicator.html" class="project-card fade-up">
+          <div class="project-tag">📈 Trading · Pine Script</div>
+          <h3>Elite Trader Indicator</h3>
+          <p>A custom TradingView indicator combining market bias trend analysis, mode detection, and BX Trender buy/sell pressure signals to identify high-probability A+ options trade setups.</p>
+          <div class="project-badges">
+            <span class="proj-badge">Pine Script v5</span>
+            <span class="proj-badge">TradingView</span>
+            <span class="proj-badge">Options</span>
+            <span class="proj-badge">Claude AI</span>
+          </div>
+          <span class="project-link-pill">View Project →</span>
+        </a>
+        <div class="project-empty fade-up">
+          <div class="big">🚀</div>
+          <h3>More Coming Soon</h3>
+          <p>More side projects built with curiosity and Claude AI will be showcased here.</p>
+        </div>
       </div>
     </div>
   </section>
