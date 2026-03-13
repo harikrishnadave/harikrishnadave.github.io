@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interests & Favorites – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg:             #06090f;
+      --bg2:            #0b1018;
+      --surface:        #101620;
+      --surface2:       #161e2e;
+      --border:         rgba(0, 212, 255, 0.12);
+      --border-hover:   rgba(0, 212, 255, 0.35);
+      --text:           #dde6f0;
+      --text-strong:    #f0f6ff;
+      --text-muted:     #7a90a8;
+      --text-dim:       #3d5060;
+      --accent:         #00d4ff;
+      --accent-dim:     rgba(0, 212, 255, 0.10);
+      --accent-glow:    rgba(0, 212, 255, 0.20);
+      --green:          #00e5a0;
+      --green-dim:      rgba(0, 229, 160, 0.10);
+      --dot-color:      rgba(0, 212, 255, 0.06);
+      --sidebar-bg:     #080d14;
+      --sidebar-border: rgba(0,212,255,0.10);
+    }
+    [data-theme="light"] {
+      --bg:             #f2f4f8;
+      --bg2:            #eaecf2;
+      --surface:        #ffffff;
+      --surface2:       #f0f2f7;
+      --border:         rgba(30, 80, 200, 0.14);
+      --border-hover:   rgba(30, 80, 200, 0.40);
+      --text:           #1a2030;
+      --text-strong:    #0a0f1a;
+      --text-muted:     #3e5070;
+      --text-dim:       #8a9ab8;
+      --accent:         #1060e0;
+      --accent-dim:     rgba(16, 96, 224, 0.09);
+      --accent-glow:    rgba(16, 96, 224, 0.15);
+      --green:          #059669;
+      --green-dim:      rgba(5,150,105,0.10);
+      --dot-color:      rgba(16, 96, 224, 0.06);
+      --sidebar-bg:     #ffffff;
+      --sidebar-border: rgba(30,80,200,0.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Sidebar ─────────────────────────────────── */
+    .sidebar {
+      width: 240px; min-height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex; flex-direction: column;
+      padding: 32px 0 24px;
+      position: fixed; top: 0; left: 0; z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--text-strong);
+      padding: 0 24px 28px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 24px;
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--text-muted); text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link { color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+    .sidebar-bottom { padding: 16px 24px 0; border-top: 1px solid var(--border); }
+    .status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 6px var(--green);
+    }
+
+    /* ── Theme toggle ─────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 18px; right: 24px; z-index: 200;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 6px 14px 6px 10px;
+      cursor: pointer; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Main ─────────────────────────────────────── */
+    .main { margin-left: 240px; flex: 1; padding: 56px 56px 80px; max-width: 1100px; }
+
+    /* ── Page header ──────────────────────────────── */
+    .page-header { margin-bottom: 56px; }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .page-header p {
+      font-size: 1rem; color: var(--text-muted);
+      max-width: 580px; line-height: 1.7;
+    }
+
+    /* ── Section header ───────────────────────────── */
+    .sec-block { margin-bottom: 52px; }
+    .sec-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--accent);
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .sec-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -0.5px; margin-bottom: 20px;
+    }
+
+    /* ── App / Tool cards ─────────────────────────── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+    .app-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 16px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      text-decoration: none; color: inherit;
+    }
+    .app-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--accent-glow);
+    }
+    .app-logo {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .app-logo img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+    .app-name {
+      font-size: 0.82rem; font-weight: 600;
+      color: var(--text-strong);
+    }
+    .app-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-muted);
+      margin-top: -6px;
+    }
+
+    /* ── Sport cards ──────────────────────────────── */
+    .sport-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .sport-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      display: flex; align-items: center; gap: 16px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .sport-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .sport-emoji { font-size: 2.2rem; flex-shrink: 0; }
+    .sport-info {}
+    .sport-name {
+      font-size: 0.92rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 4px;
+    }
+    .sport-detail { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+    .sport-logo {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sport-logo img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* ── Food cards ───────────────────────────────── */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .food-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 18px;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .food-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .food-emoji { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+    .food-name {
+      font-size: 0.88rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 4px;
+    }
+    .food-desc { font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── Places cards ─────────────────────────────── */
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .place-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 18px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .place-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--accent-glow);
+    }
+    .place-flag { font-size: 2.6rem; margin-bottom: 10px; display: block; }
+    .place-name {
+      font-size: 0.9rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 4px;
+    }
+    .place-region { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-muted); }
+
+    /* ── Fade-up ───────────────────────────────────── */
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+      .app-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="#apps"    class="nav-link"><span class="nav-num">01</span> Apps</a>
+      <a href="#finance" class="nav-link"><span class="nav-num">02</span> Finance Tools</a>
+      <a href="#sports"  class="nav-link"><span class="nav-num">03</span> Sports</a>
+      <a href="#food"    class="nav-link"><span class="nav-num">04</span> Food</a>
+      <a href="#places"  class="nav-link"><span class="nav-num">05</span> Places</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>interests.html</div>
+    </div>
+  </aside>
+
+  <!-- Theme toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <main class="main">
+
+    <!-- Header -->
+    <section class="page-header fade-up">
+      <div class="label">// beyond_work</div>
+      <h1>Interests &amp;<br>Favorites</h1>
+      <p>The apps I live in, tools I trade with, sports I follow, food I love, and places I want to explore.</p>
+    </section>
+
+    <!-- Apps -->
+    <div class="sec-block" id="apps">
+      <p class="sec-label fade-up">// 01</p>
+      <h2 class="sec-title fade-up">Apps</h2>
+      <div class="app-grid">
+
+        <a href="https://robinhood.com" target="_blank" rel="noopener" class="app-card fade-up">
+          <div class="app-logo">
+            <img src="https://logo.clearbit.com/robinhood.com" alt="Robinhood"
+                 onerror="this.style.display='none';this.parentElement.textContent='🟢'" />
+          </div>
+          <div>
+            <div class="app-name">Robinhood</div>
+            <div class="app-sub">// investing</div>
+          </div>
+        </a>
+
+        <a href="https://x.com" target="_blank" rel="noopener" class="app-card fade-up">
+          <div class="app-logo" style="background:#000;">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="white">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="app-name">X</div>
+            <div class="app-sub">// social</div>
+          </div>
+        </a>
+
+        <a href="https://slickdeals.net" target="_blank" rel="noopener" class="app-card fade-up">
+          <div class="app-logo">
+            <img src="https://logo.clearbit.com/slickdeals.net" alt="Slickdeals"
+                 onerror="this.style.display='none';this.parentElement.textContent='🏷️'" />
+          </div>
+          <div>
+            <div class="app-name">Slickdeals</div>
+            <div class="app-sub">// deals</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Finance Tools -->
+    <div class="sec-block" id="finance">
+      <p class="sec-label fade-up">// 02</p>
+      <h2 class="sec-title fade-up">Finance Tools</h2>
+      <div class="app-grid">
+
+        <a href="https://finviz.com" target="_blank" rel="noopener" class="app-card fade-up">
+          <div class="app-logo">
+            <img src="https://logo.clearbit.com/finviz.com" alt="Finviz"
+                 onerror="this.style.display='none';this.parentElement.textContent='📊'" />
+          </div>
+          <div>
+            <div class="app-name">Finviz</div>
+            <div class="app-sub">// screener</div>
+          </div>
+        </a>
+
+        <a href="https://tradingview.com" target="_blank" rel="noopener" class="app-card fade-up">
+          <div class="app-logo">
+            <img src="https://logo.clearbit.com/tradingview.com" alt="TradingView"
+                 onerror="this.style.display='none';this.parentElement.textContent='📈'" />
+          </div>
+          <div>
+            <div class="app-name">TradingView</div>
+            <div class="app-sub">// charts</div>
+          </div>
+        </a>
+
+        <a href="https://robinhood.com/legend" target="_blank" rel="noopener" class="app-card fade-up">
+          <div class="app-logo" style="background:#00c805;">
+            <svg viewBox="0 0 40 40" width="34" height="34" fill="white">
+              <path d="M20 5C11.7 5 5 11.7 5 20s6.7 15 15 15 15-6.7 15-15S28.3 5 20 5zm0 4c2.4 0 4.3 1.9 4.3 4.3S22.4 17.6 20 17.6s-4.3-1.9-4.3-4.3S17.6 9 20 9zm0 21.4c-3.7 0-7-1.9-9-4.8.1-3 6-4.6 9-4.6s8.9 1.6 9 4.6c-2 2.9-5.3 4.8-9 4.8z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="app-name">RH Legend</div>
+            <div class="app-sub">// desktop</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Sports -->
+    <div class="sec-block" id="sports">
+      <p class="sec-label fade-up">// 03</p>
+      <h2 class="sec-title fade-up">Sports</h2>
+      <div class="sport-grid">
+
+        <div class="sport-card fade-up">
+          <div class="sport-emoji">🏏</div>
+          <div class="sport-info">
+            <div class="sport-name">Cricket</div>
+            <div class="sport-detail">Die-hard Indian cricket fan. Team India all the way.</div>
+          </div>
+        </div>
+
+        <div class="sport-card fade-up">
+          <div class="sport-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Mumbai_Indians_Logo.svg/200px-Mumbai_Indians_Logo.svg.png"
+                 alt="Mumbai Indians"
+                 onerror="this.style.display='none';this.parentElement.textContent='🔵'" />
+          </div>
+          <div class="sport-info">
+            <div class="sport-name">Mumbai Indians</div>
+            <div class="sport-detail">IPL loyalist. Once a MI fan, always a MI fan.</div>
+          </div>
+        </div>
+
+        <div class="sport-card fade-up">
+          <div class="sport-emoji">⚽</div>
+          <div class="sport-info">
+            <div class="sport-name">Soccer</div>
+            <div class="sport-detail">Love the beautiful game — the pace, the skill, the drama.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Food -->
+    <div class="sec-block" id="food">
+      <p class="sec-label fade-up">// 04</p>
+      <h2 class="sec-title fade-up">Food</h2>
+      <div class="food-grid">
+
+        <div class="food-card fade-up">
+          <div class="food-emoji">🍛</div>
+          <div>
+            <div class="food-name">Indian Street Food</div>
+            <div class="food-desc">Mumbai-style street eats are unmatched. Chaat, vada pav, the whole experience.</div>
+          </div>
+        </div>
+
+        <div class="food-card fade-up">
+          <div class="food-emoji">🫕</div>
+          <div>
+            <div class="food-name">Pav Bhaji</div>
+            <div class="food-desc">The ultimate comfort food. Buttery, spicy, and perfect every time.</div>
+          </div>
+        </div>
+
+        <div class="food-card fade-up">
+          <div class="food-emoji">🥡</div>
+          <div>
+            <div class="food-name">Indo Chinese</div>
+            <div class="food-desc">Hakka noodles, Manchurian, chilli paneer — a category of its own.</div>
+          </div>
+        </div>
+
+        <div class="food-card fade-up">
+          <div class="food-emoji">🥦</div>
+          <div>
+            <div class="food-name">Vegetarian</div>
+            <div class="food-desc">Anything vegetarian. Proof you don't need meat to eat well.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Places to Visit -->
+    <div class="sec-block" id="places">
+      <p class="sec-label fade-up">// 05</p>
+      <h2 class="sec-title fade-up">Places to Visit</h2>
+      <div class="places-grid">
+
+        <div class="place-card fade-up">
+          <span class="place-flag">🌺</span>
+          <div class="place-name">Maui</div>
+          <div class="place-region">Hawaii, USA</div>
+        </div>
+
+        <div class="place-card fade-up">
+          <span class="place-flag">🌊</span>
+          <div class="place-name">Puerto Rico</div>
+          <div class="place-region">Caribbean</div>
+        </div>
+
+        <div class="place-card fade-up">
+          <span class="place-flag">🌿</span>
+          <div class="place-name">Costa Rica</div>
+          <div class="place-region">Central America</div>
+        </div>
+
+        <div class="place-card fade-up">
+          <span class="place-flag">🏔️</span>
+          <div class="place-name">Switzerland</div>
+          <div class="place-region">Europe</div>
+        </div>
+
+        <div class="place-card fade-up">
+          <span class="place-flag">🎵</span>
+          <div class="place-name">Austria</div>
+          <div class="place-region">Europe</div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
