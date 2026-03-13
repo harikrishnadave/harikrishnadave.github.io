@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Short Squeeze Screener – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg:             #06090f;
+      --bg2:            #0b1018;
+      --surface:        #101620;
+      --surface2:       #161e2e;
+      --border:         rgba(0, 212, 255, 0.12);
+      --border-hover:   rgba(0, 212, 255, 0.35);
+      --text:           #dde6f0;
+      --text-strong:    #f0f6ff;
+      --text-muted:     #7a90a8;
+      --text-dim:       #3d5060;
+      --accent:         #00d4ff;
+      --accent-dim:     rgba(0, 212, 255, 0.10);
+      --accent-glow:    rgba(0, 212, 255, 0.20);
+      --green:          #00e5a0;
+      --green-dim:      rgba(0, 229, 160, 0.12);
+      --red:            #ff4d6a;
+      --red-dim:        rgba(255, 77, 106, 0.12);
+      --gold:           #fbbf24;
+      --gold-dim:       rgba(251, 191, 36, 0.12);
+      --dot-color:      rgba(0, 212, 255, 0.06);
+      --sidebar-bg:     #080d14;
+      --sidebar-border: rgba(0,212,255,0.10);
+    }
+    [data-theme="light"] {
+      --bg:             #f2f4f8;
+      --bg2:            #eaecf2;
+      --surface:        #ffffff;
+      --surface2:       #f0f2f7;
+      --border:         rgba(30, 80, 200, 0.14);
+      --border-hover:   rgba(30, 80, 200, 0.40);
+      --text:           #1a2030;
+      --text-strong:    #0a0f1a;
+      --text-muted:     #3e5070;
+      --text-dim:       #8a9ab8;
+      --accent:         #1060e0;
+      --accent-dim:     rgba(16, 96, 224, 0.09);
+      --accent-glow:    rgba(16, 96, 224, 0.15);
+      --green:          #059669;
+      --green-dim:      rgba(5, 150, 105, 0.10);
+      --red:            #dc2626;
+      --red-dim:        rgba(220, 38, 38, 0.09);
+      --gold:           #d97706;
+      --gold-dim:       rgba(217, 119, 6, 0.10);
+      --dot-color:      rgba(16, 96, 224, 0.06);
+      --sidebar-bg:     #ffffff;
+      --sidebar-border: rgba(30,80,200,0.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Sidebar ─────────────────────────────────── */
+    .sidebar {
+      width: 240px; min-height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex; flex-direction: column;
+      padding: 32px 0 24px;
+      position: fixed; top: 0; left: 0; z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--text-strong);
+      padding: 0 24px 28px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 24px;
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--text-muted); text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link { color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+    .sidebar-bottom { padding: 16px 24px 0; border-top: 1px solid var(--border); }
+    .status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+    /* ── Theme toggle ─────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 18px; right: 24px; z-index: 200;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 6px 14px 6px 10px;
+      cursor: pointer; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Main ─────────────────────────────────────── */
+    .main { margin-left: 240px; flex: 1; padding: 56px 56px 80px; max-width: 1100px; }
+
+    /* ── Section helpers ──────────────────────────── */
+    .sec-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--accent);
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .sec-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -0.5px; margin-bottom: 24px;
+    }
+    section { margin-bottom: 60px; }
+
+    /* ── Page header ──────────────────────────────── */
+    .page-header { margin-bottom: 52px; }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .page-header p {
+      font-size: 1rem; color: var(--text-muted);
+      max-width: 640px; line-height: 1.7; margin-bottom: 20px;
+    }
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 999px; border: 1px solid;
+    }
+    .badge-green { color: var(--green);  background: var(--green-dim);  border-color: rgba(5,150,105,0.3); }
+    .badge-red   { color: var(--red);    background: var(--red-dim);    border-color: rgba(220,38,38,0.3); }
+    .badge-blue  { color: var(--accent); background: var(--accent-dim); border-color: var(--border-hover); }
+    .badge-gold  { color: var(--gold);   background: var(--gold-dim);   border-color: rgba(217,119,6,0.3); }
+
+    /* ── Concept cards ────────────────────────────── */
+    .concept-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-bottom: 8px;
+    }
+    .concept-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .concept-card:hover { border-color: var(--border-hover); }
+    .concept-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .concept-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.98rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 8px;
+    }
+    .concept-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Screener criteria table ──────────────────── */
+    .criteria-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    }
+    .criteria-row {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: border-color 0.2s;
+    }
+    .criteria-row:hover { border-color: var(--border-hover); }
+    .criteria-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .criteria-icon.green { background: var(--green-dim); }
+    .criteria-icon.red   { background: var(--red-dim); }
+    .criteria-icon.gold  { background: var(--gold-dim); }
+    .criteria-icon.blue  { background: var(--accent-dim); }
+    .criteria-body {}
+    .criteria-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .criteria-value {
+      font-size: 0.92rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 4px;
+    }
+    .criteria-why { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── Screener CTA ─────────────────────────────── */
+    .screener-cta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 32px;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .cta-left {}
+    .cta-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .cta-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -0.5px; margin-bottom: 8px;
+    }
+    .cta-desc { font-size: 0.86rem; color: var(--text-muted); line-height: 1.6; max-width: 480px; }
+    .cta-filters {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
+    }
+    .cta-filter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; font-weight: 600;
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted); background: var(--bg2);
+    }
+    .cta-right { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; flex-shrink: 0; }
+    .finviz-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--green);
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; font-weight: 700;
+      padding: 12px 24px; border-radius: 10px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+    .finviz-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .finviz-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .finviz-logo-row {
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-muted);
+    }
+    .finviz-logo {
+      height: 16px;
+      border-radius: 3px;
+      vertical-align: middle;
+    }
+
+    /* ── How to read section ──────────────────────── */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;
+    }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 18px;
+      transition: border-color 0.2s;
+    }
+    .step-card:hover { border-color: var(--border-hover); }
+    .step-n {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem; font-weight: 800;
+      color: var(--accent); opacity: 0.5; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .step-card h4 {
+      font-size: 0.88rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 6px;
+    }
+    .step-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Risk disclaimer ──────────────────────────── */
+    .disclaimer {
+      background: var(--red-dim);
+      border: 1px solid rgba(220,38,38,0.2);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .disclaimer-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+    .disclaimer p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+    .disclaimer strong { color: var(--text-strong); }
+
+    /* ── Fade-up ───────────────────────────────────── */
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .concept-grid { grid-template-columns: 1fr; }
+      .criteria-grid { grid-template-columns: 1fr; }
+      .screener-cta { flex-direction: column; }
+      .cta-right { align-items: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="#concept"   class="nav-link"><span class="nav-num">01</span> Concept</a>
+      <a href="#criteria"  class="nav-link"><span class="nav-num">02</span> Criteria</a>
+      <a href="#screener"  class="nav-link"><span class="nav-num">03</span> Screener</a>
+      <a href="#howto"     class="nav-link"><span class="nav-num">04</span> How to Use</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>squeeze.html</div>
+    </div>
+  </aside>
+
+  <!-- Theme toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <main class="main">
+
+    <!-- Header -->
+    <section class="page-header fade-up">
+      <div class="label">// projects · trading</div>
+      <h1>Short Squeeze<br>Screener</h1>
+      <p>A custom Finviz screener designed to surface stocks with the highest short squeeze potential — high short interest, low float, rising volume, and price above key levels.</p>
+      <div class="badge-row">
+        <span class="badge badge-red">Short Squeeze</span>
+        <span class="badge badge-green">Finviz Screener</span>
+        <span class="badge badge-blue">Momentum Trading</span>
+        <span class="badge badge-gold">Options Plays</span>
+      </div>
+    </section>
+
+    <!-- What is a short squeeze -->
+    <section id="concept">
+      <p class="sec-label fade-up">// 01 · concept</p>
+      <h2 class="sec-title fade-up">What Is a Short Squeeze?</h2>
+      <div class="concept-grid">
+
+        <div class="concept-card fade-up">
+          <div class="concept-num">Step 01 · Setup</div>
+          <h3>Heavy Short Interest</h3>
+          <p>A large percentage of a stock's float has been borrowed and sold short by traders betting the price will fall. The more shorts, the more fuel for a squeeze.</p>
+        </div>
+
+        <div class="concept-card fade-up">
+          <div class="concept-num">Step 02 · Trigger</div>
+          <h3>Price Starts Rising</h3>
+          <p>Good news, earnings beat, or just buying pressure sends the price up. Shorts now face losses — they must buy shares to close their positions, pushing price even higher.</p>
+        </div>
+
+        <div class="concept-card fade-up">
+          <div class="concept-num">Step 03 · Explosion</div>
+          <h3>Forced Buying Cascade</h3>
+          <p>Panic buying from short sellers compounds with new bullish buyers. With a small float, there aren't enough shares — price spikes rapidly and violently. That's the squeeze.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Screener Criteria -->
+    <section id="criteria">
+      <p class="sec-label fade-up">// 02 · filters</p>
+      <h2 class="sec-title fade-up">Screener Criteria</h2>
+      <div class="criteria-grid">
+
+        <div class="criteria-row fade-up">
+          <div class="criteria-icon red">🩳</div>
+          <div class="criteria-body">
+            <div class="criteria-name">Short Float</div>
+            <div class="criteria-value">Over 20%</div>
+            <div class="criteria-why">At least 20% of the float must be sold short. More shorts = more forced buying when the squeeze triggers.</div>
+          </div>
+        </div>
+
+        <div class="criteria-row fade-up">
+          <div class="criteria-icon red">📅</div>
+          <div class="criteria-body">
+            <div class="criteria-name">Short Ratio (Days to Cover)</div>
+            <div class="criteria-value">Over 5 Days</div>
+            <div class="criteria-why">It would take 5+ days of average volume for all shorts to cover. Higher = more pressure when squeeze begins.</div>
+          </div>
+        </div>
+
+        <div class="criteria-row fade-up">
+          <div class="criteria-icon green">📦</div>
+          <div class="criteria-body">
+            <div class="criteria-name">Float Size</div>
+            <div class="criteria-value">Under 50 Million Shares</div>
+            <div class="criteria-why">Smaller float means fewer available shares. When shorts rush to cover, limited supply sends price up faster.</div>
+          </div>
+        </div>
+
+        <div class="criteria-row fade-up">
+          <div class="criteria-icon gold">🔊</div>
+          <div class="criteria-body">
+            <div class="criteria-name">Relative Volume</div>
+            <div class="criteria-value">Over 1.5×</div>
+            <div class="criteria-why">Volume at least 1.5× the 30-day average signals unusual attention — a catalyst may already be in play.</div>
+          </div>
+        </div>
+
+        <div class="criteria-row fade-up">
+          <div class="criteria-icon blue">💵</div>
+          <div class="criteria-body">
+            <div class="criteria-name">Stock Price</div>
+            <div class="criteria-value">Over $5</div>
+            <div class="criteria-why">Filters out penny stocks and low-liquidity names where options are thin or manipulation is common.</div>
+          </div>
+        </div>
+
+        <div class="criteria-row fade-up">
+          <div class="criteria-icon green">📈</div>
+          <div class="criteria-body">
+            <div class="criteria-name">Sort Order</div>
+            <div class="criteria-value">Highest Short Float First</div>
+            <div class="criteria-why">Results sorted by short float % descending — the most compressed setups rise to the top of the list.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Launch Screener CTA -->
+    <section id="screener">
+      <p class="sec-label fade-up">// 03 · launch</p>
+      <h2 class="sec-title fade-up">Open the Screener</h2>
+      <div class="screener-cta fade-up">
+        <div class="cta-left">
+          <div class="cta-tag">// pre-configured · finviz</div>
+          <div class="cta-title">Short Squeeze Scan</div>
+          <p class="cta-desc">All 5 filters are pre-set and ready. Click the button to open Finviz with the exact screener configuration — results are sorted by highest short float first.</p>
+          <div class="cta-filters">
+            <span class="cta-filter">Short Float &gt; 20%</span>
+            <span class="cta-filter">Short Ratio &gt; 5</span>
+            <span class="cta-filter">Float &lt; 50M</span>
+            <span class="cta-filter">Rel. Volume &gt; 1.5×</span>
+            <span class="cta-filter">Price &gt; $5</span>
+            <span class="cta-filter">Sort: Short Float ↓</span>
+          </div>
+        </div>
+        <div class="cta-right">
+          <a href="https://finviz.com/screener.ashx?v=111&f=sh_float_u50,sh_price_o5,sh_relvol_o1.5,sh_short_o20,sh_shortratio_o5&o=-shortfloat"
+             target="_blank" rel="noopener" class="finviz-btn">
+            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open in Finviz →
+          </a>
+          <div class="finviz-logo-row">
+            <img src="https://logo.clearbit.com/finviz.com" alt="Finviz" class="finviz-logo"
+                 onerror="this.style.display='none'" />
+            Powered by Finviz
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to use results -->
+    <section id="howto">
+      <p class="sec-label fade-up">// 04 · workflow</p>
+      <h2 class="sec-title fade-up">How to Use the Results</h2>
+      <div class="steps-grid">
+
+        <div class="step-card fade-up">
+          <div class="step-n">01</div>
+          <h4>Run the Scan Daily</h4>
+          <p>Best used pre-market or at open. Relative volume filter ensures only active names appear — stale setups drop off automatically.</p>
+        </div>
+
+        <div class="step-card fade-up">
+          <div class="step-n">02</div>
+          <h4>Check the Chart</h4>
+          <p>Open each result in TradingView. Look for compression or a bullish base forming. Avoid names already up 30%+ — the squeeze may be over.</p>
+        </div>
+
+        <div class="step-card fade-up">
+          <div class="step-n">03</div>
+          <h4>Confirm a Catalyst</h4>
+          <p>Check news for earnings surprises, FDA approvals, short seller reports, or unusual options activity. Squeezes without catalysts often fizzle.</p>
+        </div>
+
+        <div class="step-card fade-up">
+          <div class="step-n">04</div>
+          <h4>Size Small, Move Fast</h4>
+          <p>These are high-risk, high-reward setups. Keep position size small (under 5% of account), set a tight stop, and take partial profits quickly on the way up.</p>
+        </div>
+
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer fade-up" style="margin-top: 24px;">
+        <div class="disclaimer-icon">⚠️</div>
+        <p><strong>Not financial advice.</strong> Short squeeze setups are speculative and high-risk. Stocks can reverse violently. This screener is a research tool — always do your own due diligence, manage position sizes, and never risk more than you can afford to lose.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
