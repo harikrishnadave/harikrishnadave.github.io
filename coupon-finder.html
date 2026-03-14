@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coupon & Discount Finder – Harikrishna Dave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #06090f; --bg2: #0b1018; --surface: #101620; --surface2: #161e2e;
+      --border: rgba(0,212,255,0.12); --border-hover: rgba(0,212,255,0.35);
+      --text: #dde6f0; --text-strong: #f0f6ff; --text-muted: #7a90a8; --text-dim: #3d5060;
+      --accent: #00d4ff; --accent2: #7c3aed; --accent-dim: rgba(0,212,255,0.10); --accent-glow: rgba(0,212,255,0.20);
+      --green: #00e5a0; --green-dim: rgba(0,229,160,0.10); --green-border: rgba(0,229,160,0.25);
+      --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.10); --amber-border: rgba(251,191,36,0.25);
+      --red: #f87171; --red-dim: rgba(248,113,113,0.10); --red-border: rgba(248,113,113,0.25);
+      --dot-color: rgba(0,212,255,0.06); --sidebar-bg: #080d14; --sidebar-border: rgba(0,212,255,0.10);
+      --input-bg: #0b1018;
+    }
+    [data-theme="light"] {
+      --bg: #f2f4f8; --bg2: #eaecf2; --surface: #ffffff; --surface2: #f0f2f7;
+      --border: rgba(30,80,200,0.14); --border-hover: rgba(30,80,200,0.40);
+      --text: #1a2030; --text-strong: #0a0f1a; --text-muted: #3e5070; --text-dim: #8a9ab8;
+      --accent: #1060e0; --accent2: #7c3aed; --accent-dim: rgba(16,96,224,0.09); --accent-glow: rgba(16,96,224,0.15);
+      --green: #059669; --green-dim: rgba(5,150,105,0.10); --green-border: rgba(5,150,105,0.25);
+      --amber: #d97706; --amber-dim: rgba(217,119,6,0.10); --amber-border: rgba(217,119,6,0.25);
+      --red: #dc2626; --red-dim: rgba(220,38,38,0.08); --red-border: rgba(220,38,38,0.20);
+      --dot-color: rgba(16,96,224,0.06); --sidebar-bg: #ffffff; --sidebar-border: rgba(30,80,200,0.10);
+      --input-bg: #f8f9fc;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+      display: flex; min-height: 100vh;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 28px 28px; transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── SIDEBAR ─────────────────────────── */
+    .sidebar {
+      width: 240px; min-height: 100vh; background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex; flex-direction: column; padding: 32px 0 24px;
+      position: fixed; top: 0; left: 0; z-index: 100;
+    }
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800;
+      color: var(--text-strong); padding: 0 24px 28px; border-bottom: 1px solid var(--border); letter-spacing: -0.5px;
+    }
+    .sidebar-logo span { color: var(--accent); }
+    .sidebar-nav { padding: 20px 0; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; padding: 10px 24px;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted); text-decoration: none;
+      transition: all 0.2s; font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-link:hover { color: var(--accent); background: var(--accent-dim); }
+    .nav-link.back-link { color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+    .nav-link.active { color: var(--accent); background: var(--accent-dim); border-right: 2px solid var(--accent); }
+    .nav-num { color: var(--text-muted); font-size: 0.72rem; }
+    .sidebar-bottom { padding: 16px 24px 0; border-top: 1px solid var(--border); }
+    .status { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── THEME TOGGLE ─────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 18px; right: 24px; z-index: 200;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+      padding: 6px 14px 6px 10px; cursor: pointer;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── MAIN ─────────────────────────── */
+    .main { margin-left: 240px; flex: 1; padding: 56px 56px 80px; max-width: 1100px; }
+
+    .page-header { margin-bottom: 40px; }
+    .page-header .label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.4rem; font-weight: 800;
+      color: var(--text-strong); letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px;
+    }
+    .page-header p { font-size: 1rem; color: var(--text-muted); max-width: 600px; line-height: 1.7; }
+
+    /* ── INPUT PANEL ─────────────────────────── */
+    .input-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px; margin-bottom: 32px;
+    }
+    .input-panel-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .input-row {
+      display: flex; gap: 12px; align-items: stretch;
+    }
+    .url-input {
+      flex: 1; padding: 14px 18px;
+      background: var(--input-bg); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text-strong);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .url-input::placeholder { color: var(--text-dim); }
+    .url-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+    .scan-btn {
+      padding: 14px 28px; background: var(--accent); color: #fff;
+      border: none; border-radius: 12px; font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s; white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .scan-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .scan-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .paste-btn {
+      padding: 14px 18px; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .paste-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── PRODUCT DETECTED ─────────────────────────── */
+    .product-strip {
+      margin-top: 16px; padding: 14px 18px;
+      background: var(--green-dim); border: 1px solid var(--green-border);
+      border-radius: 12px; display: none; align-items: center; gap: 12px;
+    }
+    .product-strip.visible { display: flex; }
+    .product-strip .asin-badge {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600;
+      background: var(--green); color: #fff; padding: 3px 10px; border-radius: 6px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .product-strip .product-name {
+      font-size: 0.84rem; color: var(--text-strong); font-weight: 600;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .product-strip .product-meta {
+      margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+    }
+
+    /* ── LOADING ─────────────────────────── */
+    .loading-bar {
+      display: none; margin-top: 16px; overflow: hidden;
+      border-radius: 8px; height: 4px; background: var(--surface2);
+    }
+    .loading-bar.active { display: block; }
+    .loading-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+      background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+    .loading-text {
+      display: none; margin-top: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);
+    }
+    .loading-text.active { display: block; }
+
+    /* ── RESULTS GRID ─────────────────────────── */
+    .results-section { display: none; }
+    .results-section.visible { display: block; }
+    .results-heading {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .results-heading .count-badge {
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--accent-glow); border-radius: 999px;
+      padding: 1px 10px; font-size: 0.68rem;
+    }
+
+    /* ── DEAL CARDS ─────────────────────────── */
+    .deals-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .deal-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 24px;
+      display: flex; align-items: flex-start; gap: 16px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .deal-card:hover { border-color: var(--border-hover); transform: translateX(2px); }
+    .deal-source-logo {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      background: var(--surface2); display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; overflow: hidden;
+    }
+    .deal-source-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+    .deal-body { flex: 1; min-width: 0; }
+    .deal-title {
+      font-size: 0.88rem; font-weight: 600; color: var(--text-strong);
+      margin-bottom: 6px; line-height: 1.4; overflow: hidden;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    }
+    .deal-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .deal-source-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--text-muted); background: var(--surface2);
+      border: 1px solid var(--border); padding: 2px 8px; border-radius: 6px;
+    }
+    .deal-savings {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600;
+      color: var(--green); background: var(--green-dim);
+      border: 1px solid var(--green-border); padding: 2px 8px; border-radius: 6px;
+    }
+    .deal-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .coupon-code-box {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--amber-dim); border: 1px solid var(--amber-border);
+      border-radius: 10px; padding: 8px 14px;
+    }
+    .coupon-code-box .code-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--amber); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .coupon-code-box .code-value {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700;
+      color: var(--text-strong); letter-spacing: 0.08em;
+    }
+    .copy-btn {
+      background: none; border: 1px solid var(--border); border-radius: 6px;
+      padding: 3px 8px; cursor: pointer; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+    .deal-link-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px;
+    }
+    .deal-link-btn:hover { text-decoration: underline; }
+    .no-code-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--text-dim); background: var(--surface2);
+      border: 1px solid var(--border); padding: 4px 10px; border-radius: 8px;
+    }
+
+    /* ── QUICK SEARCH LINKS ─────────────────────────── */
+    .quick-links-section { margin-bottom: 32px; }
+    .quick-links-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
+    }
+    .quick-link-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 20px; text-decoration: none;
+      transition: all 0.2s; display: flex; align-items: center; gap: 14px;
+    }
+    .quick-link-card:hover { border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 6px 24px var(--accent-glow); }
+    .ql-logo {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      background: var(--surface2); display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; overflow: hidden;
+    }
+    .ql-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+    .ql-body { min-width: 0; }
+    .ql-name {
+      font-size: 0.82rem; font-weight: 600; color: var(--text-strong);
+      margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ql-desc { font-size: 0.70rem; color: var(--text-muted); }
+
+    /* ── DISCOUNT TYPE BADGE ─────────────────────────── */
+    .disc-type {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .disc-type.pct { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-glow); }
+    .disc-type.flat { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
+    .disc-type.clip { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-border); }
+
+    /* ── ERROR STATE ─────────────────────────── */
+    .error-strip {
+      display: none; margin-top: 16px; padding: 14px 18px;
+      background: var(--red-dim); border: 1px solid var(--red-border);
+      border-radius: 12px; font-size: 0.83rem; color: var(--red);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .error-strip.visible { display: block; }
+
+    /* ── EMPTY STATE ─────────────────────────── */
+    .empty-state {
+      text-align: center; padding: 40px 20px;
+      background: var(--surface); border: 1px dashed var(--border);
+      border-radius: 16px; margin-bottom: 32px;
+    }
+    .empty-state .empty-icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .empty-state h3 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700;
+      color: var(--text-strong); margin-bottom: 6px;
+    }
+    .empty-state p { font-size: 0.83rem; color: var(--text-muted); max-width: 380px; margin: 0 auto; line-height: 1.6; }
+
+    /* ── SECTION DIVIDER ─────────────────────────── */
+    .section-divider {
+      display: flex; align-items: center; gap: 14px; margin: 28px 0 20px;
+    }
+    .section-divider span {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap;
+    }
+    .section-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+
+    /* ── NOTE BOX ─────────────────────────── */
+    .note-box {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 20px; display: flex; gap: 10px; margin-top: 24px;
+    }
+    .note-box span { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .note-box p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+    .note-box strong { color: var(--text); }
+
+    .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 20px 60px; }
+      .input-row { flex-direction: column; }
+      .quick-links-grid { grid-template-columns: 1fr 1fr; }
+      .deal-right { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">HK<span>.</span>Dave</div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-link back-link">← Back to Main</a>
+      <a href="shopping-tools.html" class="nav-link"><span class="nav-num">↑</span> Shopping Tools</a>
+      <a href="#search" class="nav-link active"><span class="nav-num">01</span> Find Coupons</a>
+      <a href="#quick-links" class="nav-link"><span class="nav-num">02</span> Quick Links</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="status"><span class="status-dot"></span>coupon-finder.html</div>
+    </div>
+  </aside>
+
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="themeIcon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+
+  <main class="main">
+
+    <!-- HEADER -->
+    <section class="page-header fade-up" id="search">
+      <div class="label">// shopping-tools · coupon-finder</div>
+      <h1>Coupon &amp;<br>Discount Finder</h1>
+      <p>Paste an Amazon product URL and instantly surface coupon codes, deal threads, and discount opportunities from Slickdeals and beyond.</p>
+    </section>
+
+    <!-- INPUT PANEL -->
+    <div class="input-panel fade-up">
+      <div class="input-panel-label">
+        <span>🔗</span> Step 1 — Paste Amazon Product URL
+      </div>
+      <div class="input-row">
+        <input
+          type="text"
+          id="urlInput"
+          class="url-input"
+          placeholder="https://www.amazon.com/product-name/dp/B0XXXXXXXX"
+          oninput="onUrlChange()"
+          onkeydown="if(event.key==='Enter') findDeals()"
+        />
+        <button class="paste-btn" onclick="pasteUrl()">📋 Paste</button>
+        <button class="scan-btn" id="scanBtn" onclick="findDeals()" disabled>
+          <span>🔍</span> Find Deals
+        </button>
+      </div>
+
+      <!-- Product detected strip -->
+      <div class="product-strip" id="productStrip">
+        <span class="asin-badge" id="asinBadge">ASIN</span>
+        <span class="product-name" id="productName">Detecting product...</span>
+        <span class="product-meta" id="productMeta">amazon.com</span>
+      </div>
+
+      <!-- Error strip -->
+      <div class="error-strip" id="errorStrip"></div>
+
+      <!-- Loading -->
+      <div class="loading-bar" id="loadingBar"><div class="loading-fill"></div></div>
+      <div class="loading-text" id="loadingText">⟳ Scanning Slickdeals for deals...</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-section" id="resultsSection">
+
+      <!-- Slickdeals results -->
+      <div id="slickdealsResults"></div>
+
+      <!-- Quick search links -->
+      <div class="section-divider" id="quick-links">
+        <hr><span>Also search on</span><hr>
+      </div>
+      <div class="quick-links-section">
+        <div class="quick-links-grid" id="quickLinksGrid"></div>
+      </div>
+
+      <div class="note-box">
+        <span>💡</span>
+        <p><strong>Tip:</strong> Slickdeals threads often have community-verified codes in the comments. RetailMeNot and CouponFollow list Amazon-specific promo codes. CamelCamelCamel shows full price history so you know if the "deal" is actually a deal.</p>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS (default — shown before search) -->
+    <div id="defaultQuickLinks" class="fade-up">
+      <div class="section-divider">
+        <hr><span>Quick access — Amazon deal sites</span><hr>
+      </div>
+      <div class="quick-links-grid" id="defaultQuickLinksGrid"></div>
+
+      <div class="note-box" style="margin-top:24px">
+        <span>ℹ️</span>
+        <p><strong>How it works:</strong> Paste any Amazon product URL above. The tool extracts the product name and ASIN, then searches Slickdeals for active deal threads and coupon codes. Discount type (% off vs flat price drop vs clip coupon) is shown with each result. Use the quick links below to cross-check other coupon databases.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    /* ── THEME ─────────────────────────── */
+    const sunSVG  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+      document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+    }
+
+    /* ── FADE-UP ─────────────────────────── */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+    }, { threshold: 0.04 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    /* ── AMAZON URL PARSER ─────────────────────────── */
+    function parseAmazonUrl(url) {
+      url = url.trim();
+      try {
+        const u = new URL(url);
+        if (!u.hostname.includes('amazon')) return null;
+
+        // Extract ASIN from /dp/ASIN or /gp/product/ASIN
+        let asin = null;
+        const dpMatch = u.pathname.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+        if (dpMatch) asin = dpMatch[1].toUpperCase();
+
+        // Extract product name from URL slug (first path segment before /dp/)
+        let slug = '';
+        const slugMatch = u.pathname.match(/^\/([^/]+)\/(?:dp|gp\/product)\//i);
+        if (slugMatch) {
+          slug = slugMatch[1].replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+          // Title case and truncate
+          slug = slug.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+          if (slug.length > 80) slug = slug.substring(0, 77) + '...';
+        }
+        if (!slug && asin) slug = 'Amazon Product';
+
+        return { asin, productName: slug || 'Amazon Product', url };
+      } catch(e) { return null; }
+    }
+
+    function onUrlChange() {
+      const val = document.getElementById('urlInput').value.trim();
+      const parsed = parseAmazonUrl(val);
+      const strip = document.getElementById('productStrip');
+      const btn = document.getElementById('scanBtn');
+      const err = document.getElementById('errorStrip');
+
+      err.classList.remove('visible');
+      err.textContent = '';
+
+      if (!val) {
+        strip.classList.remove('visible');
+        btn.disabled = true;
+        return;
+      }
+
+      if (parsed) {
+        strip.classList.add('visible');
+        document.getElementById('asinBadge').textContent = parsed.asin || 'ASIN';
+        document.getElementById('productName').textContent = parsed.productName;
+        document.getElementById('productMeta').textContent = 'amazon.com · ready to scan';
+        btn.disabled = false;
+      } else if (val.includes('amazon')) {
+        strip.classList.remove('visible');
+        err.classList.add('visible');
+        err.textContent = '⚠ Unrecognized URL format. Try a direct product URL e.g. amazon.com/…/dp/BXXXXXXXXX';
+        btn.disabled = true;
+      } else {
+        strip.classList.remove('visible');
+        btn.disabled = true;
+      }
+    }
+
+    async function pasteUrl() {
+      try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById('urlInput').value = text;
+        onUrlChange();
+      } catch(e) {
+        document.getElementById('urlInput').focus();
+      }
+    }
+
+    /* ── DEAL SOURCES CONFIG ─────────────────────────── */
+    const QUICK_SOURCES = [
+      { name: 'Slickdeals',       logo: 'https://logo.clearbit.com/slickdeals.net',       desc: 'Community deal threads',       url: q => `https://slickdeals.net/newsearch.php?src=SearchBarV2&q=${encodeURIComponent(q)}&searchin=first&stype=deals` },
+      { name: 'RetailMeNot',      logo: 'https://logo.clearbit.com/retailmenot.com',      desc: 'Amazon promo codes',           url: q => `https://www.retailmenot.com/view/amazon.com?coupon=${encodeURIComponent(q)}` },
+      { name: 'CouponFollow',     logo: 'https://logo.clearbit.com/couponfollow.com',     desc: 'Verified coupon codes',        url: q => `https://couponfollow.com/site/amazon.com` },
+      { name: 'CamelCamelCamel',  logo: 'https://logo.clearbit.com/camelcamelcamel.com', desc: 'Price history chart',          url: (q, asin) => asin ? `https://camelcamelcamel.com/product/${asin}` : `https://camelcamelcamel.com/search?sq=${encodeURIComponent(q)}` },
+      { name: 'Honey',            logo: 'https://logo.clearbit.com/joinhoney.com',        desc: 'Auto-apply coupon ext.',       url: q => `https://www.joinhoney.com/shop/amazon.com` },
+      { name: 'Amazon Coupons',   logo: 'https://logo.clearbit.com/amazon.com',           desc: 'Clip coupons on Amazon',      url: q => `https://www.amazon.com/coupons?q=${encodeURIComponent(q)}` },
+    ];
+
+    function renderQuickLinks(container, productName, asin) {
+      container.innerHTML = QUICK_SOURCES.map(s => {
+        const href = s.url(productName, asin);
+        return `
+          <a href="${href}" target="_blank" rel="noopener" class="quick-link-card">
+            <div class="ql-logo">
+              <img src="${s.logo}" alt="${s.name}" onerror="this.parentElement.innerHTML='🔗'">
+            </div>
+            <div class="ql-body">
+              <div class="ql-name">${s.name}</div>
+              <div class="ql-desc">${s.desc}</div>
+            </div>
+          </a>`;
+      }).join('');
+    }
+
+    /* ── SLICKDEALS FETCH & PARSE ─────────────────────────── */
+    async function fetchSlickdeals(productName) {
+      const q = productName;
+      const sdUrl = `https://slickdeals.net/newsearch.php?src=SearchBarV2&q=${encodeURIComponent(q)}&searchin=first&stype=deals`;
+      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(sdUrl)}&timestamp=${Date.now()}`;
+
+      const resp = await fetch(proxy, { signal: AbortSignal.timeout(10000) });
+      if (!resp.ok) throw new Error('Proxy fetch failed');
+      const data = await resp.json();
+      return parseSlickdealsHTML(data.contents || '', q, sdUrl);
+    }
+
+    function parseSlickdealsHTML(html, query, searchUrl) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const results = [];
+
+      // Try multiple selectors Slickdeals uses
+      const selectors = [
+        '.dealTile', '.js-page-load-trigger', '[data-test="dealTile"]',
+        '.itemTitle', '.dealCard', '.fpGridBox', '[class*="dealCard"]',
+        '[class*="DealCard"]', 'li.fpItem', '.resultRow'
+      ];
+
+      let items = [];
+      for (const sel of selectors) {
+        const found = doc.querySelectorAll(sel);
+        if (found.length > 0) { items = Array.from(found); break; }
+      }
+
+      // Fallback: look for links with price-like patterns
+      if (items.length === 0) {
+        const allLinks = doc.querySelectorAll('a[href*="/f/"]');
+        items = Array.from(allLinks).slice(0, 10);
+      }
+
+      for (const item of items.slice(0, 6)) {
+        const titleEl = item.querySelector('[class*="title" i], [class*="Title" i], h2, h3, strong');
+        const title = titleEl ? titleEl.textContent.trim() : item.textContent.trim().split('\n')[0].trim();
+        if (!title || title.length < 10) continue;
+
+        const href = item.getAttribute('href') || item.querySelector('a')?.getAttribute('href') || '';
+        const fullHref = href.startsWith('http') ? href : (href ? `https://slickdeals.net${href}` : searchUrl);
+
+        // Extract price/savings info
+        const text = item.textContent;
+        const priceMatch = text.match(/\$[\d,]+\.?\d*/g);
+        const pctMatch = text.match(/(\d+)%\s*off/i);
+        const codeMatch = text.match(/(?:code|coupon|promo)[:\s]+([A-Z0-9]{4,20})/i);
+
+        let savings = null, discType = null, code = null;
+        if (pctMatch) { savings = pctMatch[1] + '% off'; discType = 'pct'; }
+        else if (priceMatch && priceMatch.length >= 2) {
+          const prices = priceMatch.map(p => parseFloat(p.replace(/[$,]/g, '')));
+          const diff = Math.max(...prices) - Math.min(...prices);
+          if (diff > 0.5) { savings = `$${diff.toFixed(0)} off`; discType = 'flat'; }
+        }
+        if (codeMatch) code = codeMatch[1].toUpperCase();
+
+        results.push({ title: title.substring(0, 120), url: fullHref, savings, discType, code, source: 'Slickdeals' });
+      }
+
+      return results;
+    }
+
+    function discTypeBadge(type) {
+      if (!type) return '';
+      const labels = { pct: '% Discount', flat: 'Flat Price Drop', clip: 'Clip Coupon' };
+      return `<span class="disc-type ${type}">${labels[type] || type}</span>`;
+    }
+
+    function renderDeals(deals, searchUrl) {
+      if (!deals || deals.length === 0) {
+        return `
+          <div class="empty-state">
+            <div class="empty-icon">🔎</div>
+            <h3>No direct deal threads found</h3>
+            <p>Slickdeals may not have an active thread for this exact product. Use the quick links below to search manually — community codes are often in the comments.</p>
+            <a href="${searchUrl}" target="_blank" rel="noopener" style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent)">Open Slickdeals search →</a>
+          </div>`;
+      }
+
+      const heading = `
+        <div class="results-heading">
+          <span>📋 Slickdeals Results</span>
+          <span class="count-badge">${deals.length} deal${deals.length !== 1 ? 's' : ''} found</span>
+        </div>`;
+
+      const cards = deals.map(d => `
+        <div class="deal-card">
+          <div class="deal-source-logo">
+            <img src="https://logo.clearbit.com/slickdeals.net" alt="Slickdeals" onerror="this.parentElement.innerHTML='🏷️'">
+          </div>
+          <div class="deal-body">
+            <div class="deal-title">${escHtml(d.title)}</div>
+            <div class="deal-meta">
+              <span class="deal-source-tag">slickdeals.net</span>
+              ${d.savings ? `<span class="deal-savings">💰 ${escHtml(d.savings)}</span>` : ''}
+              ${discTypeBadge(d.discType)}
+            </div>
+          </div>
+          <div class="deal-right">
+            ${d.code
+              ? `<div class="coupon-code-box">
+                  <div>
+                    <div class="code-label">Coupon Code</div>
+                    <div class="code-value">${escHtml(d.code)}</div>
+                  </div>
+                  <button class="copy-btn" onclick="copyCode(this,'${escHtml(d.code)}')">Copy</button>
+                </div>`
+              : `<span class="no-code-pill">No code · auto-applied</span>`
+            }
+            <a href="${escHtml(d.url)}" target="_blank" rel="noopener" class="deal-link-btn">View deal →</a>
+          </div>
+        </div>`).join('');
+
+      return heading + `<div class="deals-grid">${cards}</div>`;
+    }
+
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function copyCode(btn, code) {
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = '✓ Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    /* ── MAIN FIND DEALS FUNCTION ─────────────────────────── */
+    async function findDeals() {
+      const url = document.getElementById('urlInput').value.trim();
+      const parsed = parseAmazonUrl(url);
+      if (!parsed) return;
+
+      const { asin, productName } = parsed;
+      const scanBtn = document.getElementById('scanBtn');
+      const loadingBar = document.getElementById('loadingBar');
+      const loadingText = document.getElementById('loadingText');
+      const resultsSection = document.getElementById('resultsSection');
+      const defaultQL = document.getElementById('defaultQuickLinks');
+      const err = document.getElementById('errorStrip');
+
+      // Reset state
+      err.classList.remove('visible');
+      scanBtn.disabled = true;
+      scanBtn.innerHTML = '<span>⟳</span> Scanning...';
+      loadingBar.classList.add('active');
+      loadingText.classList.add('active');
+      loadingText.textContent = '⟳ Scanning Slickdeals for deals on "' + productName.substring(0, 40) + '"...';
+      resultsSection.classList.remove('visible');
+      defaultQL.style.display = 'none';
+
+      try {
+        const sdSearchUrl = `https://slickdeals.net/newsearch.php?src=SearchBarV2&q=${encodeURIComponent(productName)}&searchin=first&stype=deals`;
+        loadingText.textContent = '⟳ Fetching Slickdeals results...';
+        const deals = await fetchSlickdeals(productName);
+
+        loadingText.textContent = '⟳ Building quick links...';
+        // Render results
+        document.getElementById('slickdealsResults').innerHTML = renderDeals(deals, sdSearchUrl);
+        renderQuickLinks(document.getElementById('quickLinksGrid'), productName, asin);
+
+        resultsSection.classList.add('visible');
+      } catch (e) {
+        // Slickdeals scan failed — show quick links only
+        document.getElementById('slickdealsResults').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">⚠️</div>
+            <h3>Slickdeals scan unavailable</h3>
+            <p>Couldn't reach Slickdeals right now (likely a browser CORS restriction). Use the quick links below to search manually — all links open directly in your browser.</p>
+            <a href="https://slickdeals.net/newsearch.php?q=${encodeURIComponent(productName)}&stype=deals" target="_blank" rel="noopener" style="display:inline-block;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent)">Open Slickdeals search →</a>
+          </div>`;
+        renderQuickLinks(document.getElementById('quickLinksGrid'), productName, asin);
+        resultsSection.classList.add('visible');
+      } finally {
+        loadingBar.classList.remove('active');
+        loadingText.classList.remove('active');
+        scanBtn.disabled = false;
+        scanBtn.innerHTML = '<span>🔍</span> Find Deals';
+      }
+    }
+
+    /* ── RENDER DEFAULT QUICK LINKS (no search) ─────────────────────────── */
+    renderQuickLinks(document.getElementById('defaultQuickLinksGrid'), 'amazon deals', null);
+  </script>
+</body>
+</html>
