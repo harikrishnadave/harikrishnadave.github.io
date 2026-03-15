@@ -307,7 +307,7 @@
       font-size: 0.75rem;
     }
 
-    /* ── Video section ────────────────────────────── */
+    /* ── Section label ────────────────────────────── */
     .section-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.70rem; font-weight: 600;
@@ -317,12 +317,23 @@
     }
     .section-label hr { flex: 1; border: none; border-top: 1px solid var(--border); }
 
+    /* ── Hero row: video + photo panel side by side ── */
+    .hero-row {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    /* ── Video card ───────────────────────────────── */
     .video-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       overflow: hidden;
       transition: border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
     }
     .video-card:hover {
       border-color: var(--border-hover);
@@ -330,9 +341,10 @@
     }
     .video-wrapper {
       position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
+      padding-bottom: 56.25%;
       height: 0;
       overflow: hidden;
+      flex-shrink: 0;
     }
     .video-wrapper iframe {
       position: absolute;
@@ -341,8 +353,8 @@
       border: none;
     }
     .video-caption {
-      padding: 16px 22px 18px;
-      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px 16px;
+      display: flex; align-items: center; gap: 10px;
     }
     .video-caption .event-tag {
       font-family: 'JetBrains Mono', monospace;
@@ -351,76 +363,85 @@
       flex-shrink: 0;
     }
     .video-caption h3 {
-      font-size: 0.92rem; font-weight: 600; color: var(--text-strong);
+      font-size: 0.88rem; font-weight: 600; color: var(--text-strong);
     }
 
-    /* ── Photo preview teaser ─────────────────────── */
-    .photo-teaser {
-      margin-top: 20px;
+    /* ── Photo panel (right side) ─────────────────── */
+    .photo-panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px 20px;
+      border-radius: 16px;
+      padding: 20px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 14px;
-      cursor: pointer;
-      transition: border-color 0.2s, box-shadow 0.2s;
       text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
-    .photo-teaser:hover {
+    .photo-panel:hover {
       border-color: var(--border-hover);
-      box-shadow: 0 6px 20px var(--accent-glow);
+      box-shadow: 0 8px 32px var(--accent-glow);
     }
-    .teaser-thumbs {
-      display: flex;
-      gap: 6px;
-      flex-shrink: 0;
+    .photo-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .teaser-thumbs img {
-      width: 52px;
-      height: 52px;
+    .photo-panel-header .panel-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; font-weight: 600;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .photo-panel-header .panel-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-muted);
+    }
+    .photo-thumb-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      flex: 1;
+    }
+    .photo-thumb-grid img {
+      width: 100%;
+      aspect-ratio: 1;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid var(--border);
+      display: block;
+      transition: transform 0.2s;
     }
-    .teaser-thumbs .thumb-more {
-      width: 52px;
-      height: 52px;
-      border-radius: 8px;
+    .photo-panel:hover .photo-thumb-grid img { transform: scale(1.02); }
+    .thumb-more-tile {
+      aspect-ratio: 1;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--surface2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4px;
+    }
+    .thumb-more-tile span {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--accent);
+      font-size: 1.1rem; font-weight: 700; color: var(--accent);
     }
-    .teaser-body { flex: 1; min-width: 0; }
-    .teaser-body .teaser-label {
+    .thumb-more-tile small {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 3px;
+      font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
     }
-    .teaser-body h4 {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-strong);
-      margin-bottom: 2px;
+    .photo-panel-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 4px; border-top: 1px solid var(--border);
     }
-    .teaser-body p {
-      font-size: 0.76rem;
-      color: var(--text-muted);
+    .photo-panel-footer p {
+      font-size: 0.76rem; color: var(--text-muted);
     }
-    .teaser-arrow {
-      font-size: 1.1rem;
-      color: var(--accent);
-      flex-shrink: 0;
+    .photo-panel-footer .arrow {
+      font-size: 1rem; color: var(--accent);
+    }
+
+    @media (max-width: 860px) {
+      .hero-row { grid-template-columns: 1fr; }
+      .photo-thumb-grid { grid-template-columns: repeat(4, 1fr); }
+      .thumb-more-tile { aspect-ratio: 1; }
     }
 
     /* ── Fade-up animation ────────────────────────── */
@@ -477,40 +498,49 @@
       <p>Active member of BAPS Charities San Diego — participating in walk/run events, health awareness programs, donation drives, and cultural celebrations that strengthen community bonds.</p>
     </section>
 
-    <!-- Video -->
+    <!-- Hero row: video + photo panel -->
     <section id="video">
-      <div class="section-label"><span>🎥 &nbsp;Featured Video</span><hr></div>
-      <div class="video-card fade-up">
-        <div class="video-wrapper">
-          <iframe
-            src="https://www.youtube.com/embed/1ICVUO_JBWM"
-            title="BAPS Charities Community Service"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-        </div>
-        <div class="video-caption">
-          <span class="event-tag">BAPS Charities</span>
-          <h3>Community Service — San Diego</h3>
-        </div>
-      </div>
+      <div class="hero-row fade-up">
 
-      <!-- Photo teaser strip — visible without scrolling -->
-      <a href="#gallery" class="photo-teaser fade-up">
-        <div class="teaser-thumbs">
-          <img src="WalkRun2022.png"   alt="Walk & Run 2022" />
-          <img src="WalkRun2024_A.jpg" alt="Walk & Run 2024" />
-          <img src="CovidDonation.jpg" alt="Donation Drive"  />
-          <div class="thumb-more">+4</div>
+        <!-- Video (left) -->
+        <div class="video-card">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/1ICVUO_JBWM"
+              title="BAPS Charities Community Service"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy">
+            </iframe>
+          </div>
+          <div class="video-caption">
+            <span class="event-tag">BAPS Charities</span>
+            <h3>Community Service — San Diego</h3>
+          </div>
         </div>
-        <div class="teaser-body">
-          <div class="teaser-label">📸 &nbsp;Photo Gallery</div>
-          <h4>7 photos from community events</h4>
-          <p>Walk &amp; Run events, donation drives, and more — scroll down to view</p>
-        </div>
-        <span class="teaser-arrow">↓</span>
-      </a>
+
+        <!-- Photo panel (right) — links down to gallery -->
+        <a href="#gallery" class="photo-panel">
+          <div class="photo-panel-header">
+            <span class="panel-label">📸 &nbsp;Photo Gallery</span>
+            <span class="panel-count">7 photos</span>
+          </div>
+          <div class="photo-thumb-grid">
+            <img src="WalkRun2022.png"   alt="Walk & Run 2022" />
+            <img src="WalkRun2024_A.jpg" alt="Walk & Run 2024" />
+            <img src="CovidDonation.jpg" alt="Donation Drive"  />
+            <div class="thumb-more-tile">
+              <span>+4</span>
+              <small>more</small>
+            </div>
+          </div>
+          <div class="photo-panel-footer">
+            <p>Walk &amp; Run, donations &amp; more</p>
+            <span class="arrow">↓ View all</span>
+          </div>
+        </a>
+
+      </div>
     </section>
 
     <!-- Photo Gallery -->
