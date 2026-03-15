@@ -354,6 +354,75 @@
       font-size: 0.92rem; font-weight: 600; color: var(--text-strong);
     }
 
+    /* ── Photo preview teaser ─────────────────────── */
+    .photo-teaser {
+      margin-top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .photo-teaser:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+    .teaser-thumbs {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .teaser-thumbs img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .teaser-thumbs .thumb-more {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .teaser-body { flex: 1; min-width: 0; }
+    .teaser-body .teaser-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .teaser-body h4 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-strong);
+      margin-bottom: 2px;
+    }
+    .teaser-body p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+    .teaser-arrow {
+      font-size: 1.1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
     /* ── Fade-up animation ────────────────────────── */
     .fade-up { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
     .fade-up.visible { opacity: 1; transform: none; }
@@ -375,8 +444,8 @@
     <div class="sidebar-logo">HK<span>.</span>Dave</div>
     <nav class="sidebar-nav">
       <a href="index.html" class="nav-link back-link">← Back to Main</a>
-      <a href="#gallery" class="nav-link"><span class="nav-num">01</span> Gallery</a>
-      <a href="#video" class="nav-link"><span class="nav-num">02</span> Video</a>
+      <a href="#video" class="nav-link"><span class="nav-num">01</span> Video</a>
+      <a href="#gallery" class="nav-link"><span class="nav-num">02</span> Photo Gallery</a>
     </nav>
     <div class="sidebar-bottom">
       <div class="status"><span class="status-dot"></span>community_service.html</div>
@@ -408,8 +477,45 @@
       <p>Active member of BAPS Charities San Diego — participating in walk/run events, health awareness programs, donation drives, and cultural celebrations that strengthen community bonds.</p>
     </section>
 
+    <!-- Video -->
+    <section id="video">
+      <div class="section-label"><span>🎥 &nbsp;Featured Video</span><hr></div>
+      <div class="video-card fade-up">
+        <div class="video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/1ICVUO_JBWM"
+            title="BAPS Charities Community Service"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+        <div class="video-caption">
+          <span class="event-tag">BAPS Charities</span>
+          <h3>Community Service — San Diego</h3>
+        </div>
+      </div>
+
+      <!-- Photo teaser strip — visible without scrolling -->
+      <a href="#gallery" class="photo-teaser fade-up">
+        <div class="teaser-thumbs">
+          <img src="WalkRun2022.png"   alt="Walk & Run 2022" />
+          <img src="WalkRun2024_A.jpg" alt="Walk & Run 2024" />
+          <img src="CovidDonation.jpg" alt="Donation Drive"  />
+          <div class="thumb-more">+4</div>
+        </div>
+        <div class="teaser-body">
+          <div class="teaser-label">📸 &nbsp;Photo Gallery</div>
+          <h4>7 photos from community events</h4>
+          <p>Walk &amp; Run events, donation drives, and more — scroll down to view</p>
+        </div>
+        <span class="teaser-arrow">↓</span>
+      </a>
+    </section>
+
     <!-- Photo Gallery -->
     <section id="gallery">
+      <div class="section-label"><span>📸 &nbsp;Photo Gallery</span><hr></div>
       <div class="gallery-grid">
 
         <div class="gallery-item fade-up" onclick="openLightbox(0)">
@@ -468,26 +574,6 @@
           </div>
         </div>
 
-      </div>
-    </section>
-
-    <!-- Video -->
-    <section id="video">
-      <div class="section-label"><span>🎥 &nbsp;Featured Video</span><hr></div>
-      <div class="video-card fade-up">
-        <div class="video-wrapper">
-          <iframe
-            src="https://www.youtube.com/embed/1ICVUO_JBWM"
-            title="BAPS Charities Community Service"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-        </div>
-        <div class="video-caption">
-          <span class="event-tag">BAPS Charities</span>
-          <h3>Community Service — San Diego</h3>
-        </div>
       </div>
     </section>
 
