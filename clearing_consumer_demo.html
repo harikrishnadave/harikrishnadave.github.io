@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unified Wealth Platform — Product Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #0d1117;
+    --ink2:   #1c2333;
+    --ink3:   #2d3748;
+    --muted:  #6b7b8e;
+    --muted2: #94a3b8;
+    --rule:   #e2e8f0;
+    --rule2:  #f1f5f9;
+    --white:  #ffffff;
+    --teal:   #0d9488;
+    --teal2:  #14b8a6;
+    --teal3:  #ccfbf1;
+    --blue:   #1d4ed8;
+    --blue2:  #3b82f6;
+    --blue3:  #dbeafe;
+    --gold:   #d97706;
+    --gold2:  #fbbf24;
+    --gold3:  #fef3c7;
+    --green:  #059669;
+    --green3: #d1fae5;
+    --red:    #dc2626;
+    --red3:   #fee2e2;
+    --slate:  #f8fafc;
+    --r: 10px;
+    --r2: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--slate);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREEN MANAGER ── */
+  .screen { display: none; animation: fadeUp 0.45s ease both; }
+  .screen.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 28px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+  }
+  .brand span { color: var(--teal); }
+  .nav-steps {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; color: var(--muted);
+  }
+  .nav-step {
+    padding: 4px 12px; border-radius: 20px;
+    transition: all 0.25s;
+    cursor: default;
+  }
+  .nav-step.done { background: var(--teal3); color: var(--teal); }
+  .nav-step.active { background: var(--ink); color: white; }
+  .nav-dot { width: 20px; height: 1px; background: var(--rule); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 600; font-size: 13px;
+  }
+
+  /* ── MAIN WRAPPER ── */
+  .main { padding-top: 60px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── TYPOGRAPHY ── */
+  .serif { font-family: 'DM Serif Display', serif; }
+  .mono  { font-family: 'DM Mono', monospace; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.6px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+  }
+  .tag-teal  { background: var(--teal3); color: var(--teal); }
+  .tag-blue  { background: var(--blue3); color: var(--blue); }
+  .tag-gold  { background: var(--gold3); color: var(--gold); }
+  .tag-green { background: var(--green3); color: var(--green); }
+  .tag-red   { background: var(--red3); color: var(--red); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* ── CARDS ── */
+  .card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: var(--r2);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--rule2);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-body { padding: 20px 22px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .card-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 22px; border-radius: var(--r);
+    font-size: 13.5px; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: all 0.2s; text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--ink); color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { background: var(--ink2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+  .btn-teal {
+    background: var(--teal); color: white;
+    box-shadow: 0 1px 3px rgba(13,148,136,0.3);
+  }
+  .btn-teal:hover { background: #0b7a72; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(13,148,136,0.35); }
+  .btn-ghost {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--rule);
+  }
+  .btn-ghost:hover { border-color: var(--ink3); color: var(--ink); }
+  .btn-outline-teal {
+    background: transparent; color: var(--teal);
+    border: 1.5px solid var(--teal);
+  }
+  .btn-outline-teal:hover { background: var(--teal3); }
+  .btn-sm { padding: 7px 14px; font-size: 12px; }
+  .btn-lg { padding: 14px 28px; font-size: 15px; }
+  .btn-xl { padding: 16px 36px; font-size: 16px; border-radius: 12px; }
+
+  /* ── STAT CHIPS ── */
+  .stat-chip {
+    display: flex; flex-direction: column;
+    padding: 14px 18px; border-radius: var(--r);
+    background: var(--rule2);
+  }
+  .stat-val { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--ink); line-height: 1; }
+  .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+  .stat-chip.teal { background: var(--teal3); }
+  .stat-chip.teal .stat-val { color: var(--teal); }
+  .stat-chip.blue { background: var(--blue3); }
+  .stat-chip.blue .stat-val { color: var(--blue); }
+
+  /* ── ROW HELPERS ── */
+  .row { display: flex; gap: 16px; align-items: stretch; }
+  .row.gap-sm { gap: 10px; }
+  .row.gap-lg { gap: 24px; }
+  .row.wrap { flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; gap: 16px; }
+  .flex1 { flex: 1; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--rule); margin: 20px 0; }
+  .divider-label {
+    display: flex; align-items: center; gap: 10px; margin: 20px 0;
+    font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .divider-label::before, .divider-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--rule);
+  }
+
+  /* ── NUMBER FORMAT ── */
+  .amount-lg {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px; letter-spacing: -0.5px; color: var(--ink);
+  }
+  .amount-md {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; letter-spacing: -0.3px; color: var(--ink);
+  }
+  .amount-sm {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px; font-weight: 500; color: var(--ink);
+  }
+  .up   { color: var(--green); }
+  .down { color: var(--red); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-track { height: 6px; background: var(--rule); border-radius: 4px; overflow: hidden; }
+  .progress-fill  { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+  /* ── TOAST / TRIGGER ── */
+  .trigger-banner {
+    background: linear-gradient(135deg, #0d1117 0%, #1c3a5e 100%);
+    border-radius: var(--r2);
+    padding: 24px 28px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .trigger-banner::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(13,148,136,0.15);
+  }
+  .trigger-banner::after {
+    content: '';
+    position: absolute; bottom: -60px; right: 60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(13,148,136,0.08);
+  }
+  .pulse-ring {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(13,148,136,0.25);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .pulse-ring::after {
+    content: ''; position: absolute;
+    width: 100%; height: 100%; border-radius: 50%;
+    border: 2px solid var(--teal2);
+    animation: pulse-out 2s ease infinite;
+  }
+  @keyframes pulse-out {
+    0%   { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  .pulse-icon { font-size: 20px; z-index: 1; }
+
+  /* ── TIMELINE ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item  { display: flex; gap: 14px; }
+  .tl-line  { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot   { width: 10px; height: 10px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 5px; }
+  .tl-dot.done  { background: var(--teal); }
+  .tl-dot.pending { background: var(--rule); border: 2px solid var(--muted2); }
+  .tl-connector { width: 2px; flex: 1; background: var(--rule); margin: 3px 0; min-height: 20px; }
+  .tl-content { padding-bottom: 18px; }
+  .tl-label { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+  .tl-sub   { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+  /* ── ACCOUNT ITEMS ── */
+  .acct-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 0; border-bottom: 1px solid var(--rule2);
+  }
+  .acct-row:last-child { border-bottom: none; }
+  .acct-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .acct-info { flex: 1; }
+  .acct-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .acct-type { font-size: 11px; color: var(--muted); }
+  .acct-amt  { font-family: 'DM Mono', monospace; font-size: 13.5px; font-weight: 500; color: var(--ink); text-align: right; }
+  .acct-chg  { font-size: 10.5px; text-align: right; }
+
+  /* ── TRADE TABLE ── */
+  .trade-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .trade-table th { font-size: 10.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.4px; text-transform: uppercase; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--rule); }
+  .trade-table td { padding: 10px 10px; border-bottom: 1px solid var(--rule2); color: var(--ink); vertical-align: middle; }
+  .trade-table tr:last-child td { border-bottom: none; }
+  .trade-table tr:hover td { background: var(--slate); }
+  .ticker { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 13px; }
+
+  /* ── MINI CHART ── */
+  .sparkline { display: flex; align-items: flex-end; gap: 3px; height: 32px; }
+  .spark-bar { border-radius: 2px 2px 0 0; width: 5px; background: var(--teal3); transition: background 0.2s; }
+  .spark-bar.up { background: var(--green3); }
+  .spark-bar.hl { background: var(--teal); }
+
+  /* ── ALLOCATION BARS ── */
+  .alloc-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .alloc-label { font-size: 12px; color: var(--ink); width: 95px; flex-shrink: 0; }
+  .alloc-pct { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--muted); width: 34px; text-align: right; flex-shrink: 0; }
+  .alloc-bar { flex: 1; height: 7px; border-radius: 4px; overflow: hidden; background: var(--rule); }
+  .alloc-fill { height: 100%; border-radius: 4px; }
+
+  /* ── ONBOARDING FORM ── */
+  .form-group { margin-bottom: 18px; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 6px; display: block; }
+  .form-input {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r); font-size: 14px; font-family: 'DM Sans', sans-serif;
+    color: var(--ink); background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+  .form-input.prefilled { background: var(--teal3); border-color: var(--teal); color: var(--teal); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7b8e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .check-box {
+    width: 18px; height: 18px; border-radius: 5px;
+    background: var(--teal); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .check-text { font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+
+  /* ── UNIFIED DASHBOARD ── */
+  .balance-hero { text-align: center; padding: 40px 24px 32px; }
+  .balance-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .balance-total { font-family: 'DM Serif Display', serif; font-size: 52px; letter-spacing: -1.5px; color: var(--ink); line-height: 1; }
+  .balance-sub { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .balance-change { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; margin-top: 10px; padding: 4px 12px; border-radius: 20px; }
+  .balance-change.up { background: var(--green3); color: var(--green); }
+
+  .unified-section {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px 28px;
+  }
+  .u-card {
+    border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--rule);
+    background: white;
+  }
+  .u-card-hdr {
+    padding: 14px 18px 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--rule2);
+  }
+  .u-card-title { font-size: 12px; font-weight: 600; color: var(--ink); }
+  .u-card-body { padding: 14px 18px; }
+  .u-stat { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--ink); }
+  .u-sub  { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  .ai-strip {
+    margin: 0 20px 24px; border-radius: 14px;
+    background: linear-gradient(135deg, #0d1117 0%, #0d4a3e 100%);
+    padding: 18px 22px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .ai-icon { font-size: 28px; }
+  .ai-msg { flex: 1; }
+  .ai-headline { font-size: 13px; font-weight: 600; color: white; margin-bottom: 3px; }
+  .ai-detail   { font-size: 11.5px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+  .ai-btn { background: var(--teal); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; transition: all 0.2s; }
+  .ai-btn:hover { background: #0b7a72; }
+
+  /* ── ALERTS / BEHAVIORAL TRIGGER ── */
+  .behavioral-card {
+    border: 1.5px solid var(--teal);
+    border-radius: var(--r2);
+    background: white;
+    overflow: hidden;
+    animation: slideIn 0.5s ease;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .behavioral-hdr {
+    background: linear-gradient(135deg, #0d1117, #064e3b);
+    padding: 20px 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .behavioral-body { padding: 22px 24px; }
+
+  /* ── KYC STATUS ── */
+  .kyc-steps { display: flex; gap: 0; margin: 20px 0; border-radius: var(--r); overflow: hidden; }
+  .kyc-step {
+    flex: 1; padding: 10px 14px; text-align: center;
+    background: var(--rule2); border-right: 1px solid var(--rule);
+    font-size: 11.5px; font-weight: 600; color: var(--muted);
+    transition: all 0.3s;
+  }
+  .kyc-step:last-child { border-right: none; }
+  .kyc-step.done { background: var(--teal3); color: var(--teal); }
+  .kyc-step.active { background: var(--teal); color: white; }
+
+  /* ── PAGE TRANSITIONS ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px; letter-spacing: -0.5px;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .section-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+  /* ── DEMO CONCEPT LABEL ── */
+  .concept-label {
+    position: fixed; bottom: 20px; right: 20px;
+    background: rgba(13,17,23,0.85); backdrop-filter: blur(8px);
+    color: rgba(255,255,255,0.6); font-size: 10.5px; font-weight: 500;
+    padding: 7px 13px; border-radius: 20px; z-index: 200;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .unified-section { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .balance-total { font-size: 38px; }
+  }
+
+  /* ── NAV ARROW ── */
+  .nav-arrow { font-size: 14px; }
+
+  /* Fade in children */
+  .stagger > * { animation: fadeUp 0.4s ease both; }
+  .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.2s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.25s; }
+
+  .badge {
+    display: inline-flex; align-items: center;
+    background: var(--gold3); color: var(--gold);
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 4px;
+    letter-spacing: 0.4px; text-transform: uppercase;
+  }
+
+  /* Notification dot */
+  .notif-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--red); border: 2px solid white;
+    position: absolute; top: -2px; right: -2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="brand">Wealth<span>Bridge</span></div>
+  <div class="nav-steps">
+    <div class="nav-step active" id="ns1">1 · Investor Portal</div>
+    <div class="nav-dot"></div>
+    <div class="nav-step" id="ns2">2 · Opportunity</div>
+    <div class="nav-dot"></div>
+    <div class="nav-step" id="ns3">3 · Activate</div>
+    <div class="nav-dot"></div>
+    <div class="nav-step" id="ns4">4 · Unified View</div>
+  </div>
+  <div class="nav-right">
+    <div style="position:relative;">
+      <div class="nav-avatar">MR</div>
+      <div class="notif-dot" id="navNotif" style="display:none;"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 1 — INVESTOR PORTAL (CLEARING SIDE)
+═══════════════════════════════════════════════════ -->
+<div class="screen active" id="s1">
+<div class="page stagger">
+
+  <div style="margin-bottom:24px;">
+    <div class="tag tag-blue" style="margin-bottom:10px;"><div class="dot"></div> Brokerage Client Portal</div>
+    <div class="section-title">Good morning, Marcus.</div>
+    <div class="section-sub">Your investment portfolio across all held accounts — updated as of today.</div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="row gap-sm" style="margin-bottom:18px; flex-wrap:wrap;">
+    <div class="stat-chip flex1">
+      <div class="stat-val">$54,820</div>
+      <div class="stat-lbl">Total Portfolio Value</div>
+    </div>
+    <div class="stat-chip flex1 teal">
+      <div class="stat-val">+8.4%</div>
+      <div class="stat-lbl">YTD Return</div>
+    </div>
+    <div class="stat-chip flex1">
+      <div class="stat-val">$3,210</div>
+      <div class="stat-lbl">Cash & Equivalents</div>
+    </div>
+    <div class="stat-chip flex1">
+      <div class="stat-val">23</div>
+      <div class="stat-lbl">Positions Held</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="row gap-lg" style="align-items:flex-start;">
+
+    <!-- LEFT: Holdings -->
+    <div class="flex1 col">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Portfolio Holdings</div>
+            <div class="card-sub">Self-directed brokerage · Settled as of today</div>
+          </div>
+          <div class="tag tag-teal"><div class="dot"></div> Live</div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="trade-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Shares</th>
+                <th>Mkt Value</th>
+                <th>Gain/Loss</th>
+                <th>5D</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="ticker">AAPL</span></td>
+                <td>42</td>
+                <td class="amount-sm">$8,946</td>
+                <td class="up">+$1,240 <span style="font-size:10px;">(+16.1%)</span></td>
+                <td>
+                  <div class="sparkline">
+                    <div class="spark-bar" style="height:40%;"></div>
+                    <div class="spark-bar up" style="height:55%;"></div>
+                    <div class="spark-bar up" style="height:70%;"></div>
+                    <div class="spark-bar up" style="height:62%;"></div>
+                    <div class="spark-bar hl" style="height:80%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="ticker">NVDA</span></td>
+                <td>18</td>
+                <td class="amount-sm">$12,330</td>
+                <td class="up">+$4,100 <span style="font-size:10px;">(+49.7%)</span></td>
+                <td>
+                  <div class="sparkline">
+                    <div class="spark-bar" style="height:50%;"></div>
+                    <div class="spark-bar up" style="height:65%;"></div>
+                    <div class="spark-bar up" style="height:85%;"></div>
+                    <div class="spark-bar up" style="height:78%;"></div>
+                    <div class="spark-bar hl" style="height:100%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="ticker">VTI</span></td>
+                <td>60</td>
+                <td class="amount-sm">$14,880</td>
+                <td class="up">+$2,020 <span style="font-size:10px;">(+15.7%)</span></td>
+                <td>
+                  <div class="sparkline">
+                    <div class="spark-bar" style="height:60%;"></div>
+                    <div class="spark-bar" style="height:55%;"></div>
+                    <div class="spark-bar up" style="height:70%;"></div>
+                    <div class="spark-bar up" style="height:65%;"></div>
+                    <div class="spark-bar hl" style="height:75%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="ticker">MSFT</span></td>
+                <td>22</td>
+                <td class="amount-sm">$9,460</td>
+                <td class="up">+$870 <span style="font-size:10px;">(+10.1%)</span></td>
+                <td>
+                  <div class="sparkline">
+                    <div class="spark-bar" style="height:70%;"></div>
+                    <div class="spark-bar" style="height:65%;"></div>
+                    <div class="spark-bar" style="height:72%;"></div>
+                    <div class="spark-bar up" style="height:80%;"></div>
+                    <div class="spark-bar hl" style="height:85%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="ticker">BND</span></td>
+                <td>90</td>
+                <td class="amount-sm">$6,004</td>
+                <td class="down">-$310 <span style="font-size:10px;">(-4.9%)</span></td>
+                <td>
+                  <div class="sparkline">
+                    <div class="spark-bar" style="height:80%;"></div>
+                    <div class="spark-bar" style="height:72%;"></div>
+                    <div class="spark-bar" style="height:65%;"></div>
+                    <div class="spark-bar" style="height:60%;"></div>
+                    <div class="spark-bar hl" style="height:55%;"></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Recent Transactions</div>
+        </div>
+        <div class="card-body">
+          <div class="acct-row">
+            <div class="acct-icon" style="background:#f0fdf4;">📈</div>
+            <div class="acct-info">
+              <div class="acct-name">Bought NVDA — 5 shares</div>
+              <div class="acct-type">Market order · Settled T+1 · 3 days ago</div>
+            </div>
+            <div>
+              <div class="acct-amt">-$3,420</div>
+              <div class="acct-chg" style="color:var(--muted);">Executed</div>
+            </div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-icon" style="background:#f0f9ff;">💰</div>
+            <div class="acct-info">
+              <div class="acct-name">Dividend — VTI</div>
+              <div class="acct-type">Quarterly dividend · Auto-reinvested</div>
+            </div>
+            <div>
+              <div class="acct-amt up">+$84.20</div>
+              <div class="acct-chg up">DRIP</div>
+            </div>
+          </div>
+          <div class="acct-row">
+            <div class="acct-icon" style="background:#fefce8;">🏦</div>
+            <div class="acct-info">
+              <div class="acct-name">Cash Transfer — ACH from external bank</div>
+              <div class="acct-type">Wells Fargo ····4821 · 7 days ago</div>
+            </div>
+            <div>
+              <div class="acct-amt up">+$2,000</div>
+              <div class="acct-chg up">Cleared</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Allocation + Milestone -->
+    <div class="col" style="width:300px; flex-shrink:0;">
+
+      <!-- Allocation -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Asset Allocation</div>
+          <div class="tag tag-teal">Balanced</div>
+        </div>
+        <div class="card-body">
+          <div class="alloc-item">
+            <div class="alloc-label">US Equities</div>
+            <div class="alloc-bar"><div class="alloc-fill" style="width:58%; background:var(--teal);"></div></div>
+            <div class="alloc-pct">58%</div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-label">Int'l Equities</div>
+            <div class="alloc-bar"><div class="alloc-fill" style="width:14%; background:var(--blue2);"></div></div>
+            <div class="alloc-pct">14%</div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-label">Fixed Income</div>
+            <div class="alloc-bar"><div class="alloc-fill" style="width:18%; background:var(--gold2);"></div></div>
+            <div class="alloc-pct">18%</div>
+          </div>
+          <div class="alloc-item">
+            <div class="alloc-label">Cash</div>
+            <div class="alloc-bar"><div class="alloc-fill" style="width:10%; background:var(--muted2);"></div></div>
+            <div class="alloc-pct">10%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Milestone TRIGGER -->
+      <div class="behavioral-card" id="triggerCard">
+        <div class="behavioral-hdr">
+          <div class="pulse-ring">
+            <span class="pulse-icon">✦</span>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:700; color:var(--teal2); letter-spacing:0.5px; text-transform:uppercase;">Milestone Reached</div>
+            <div style="font-size:16px; font-weight:700; color:white; margin-top:2px;">$50K Portfolio</div>
+          </div>
+        </div>
+        <div class="behavioral-body">
+          <div style="font-size:13.5px; font-weight:600; color:var(--ink); margin-bottom:8px;">
+            Unlock integrated banking
+          </div>
+          <div style="font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:16px;">
+            Your portfolio just hit $50K. High-growth investors like you typically benefit from consolidating their investment and banking in one place — higher yields, zero transfers, one statement.
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); margin-bottom:16px;">
+            <span style="color:var(--teal);">✓</span> FDIC-insured up to $2.5MM
+            <span style="color:var(--rule);">·</span>
+            <span style="color:var(--teal);">✓</span> Same login
+            <span style="color:var(--rule);">·</span>
+            <span style="color:var(--teal);">✓</span> One statement
+          </div>
+          <button class="btn btn-teal" style="width:100%; justify-content:center;" onclick="goTo(2)">
+            See What You're Missing <span class="nav-arrow">→</span>
+          </button>
+          <button class="btn btn-ghost btn-sm" style="width:100%; justify-content:center; margin-top:8px;" onclick="goTo(2)">
+            Remind me later
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div style="margin-top:24px; display:flex; justify-content:flex-end; align-items:center; gap:12px;">
+    <span style="font-size:12px; color:var(--muted);">Step 1 of 4 — Investor Portal view</span>
+    <button class="btn btn-primary" onclick="goTo(2)">
+      View Integrated Banking Opportunity <span class="nav-arrow">→</span>
+    </button>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 2 — OPPORTUNITY / VALUE PROP
+═══════════════════════════════════════════════════ -->
+<div class="screen" id="s2">
+<div class="page stagger">
+
+  <button class="btn btn-ghost btn-sm" onclick="goTo(1)" style="margin-bottom:20px;">
+    ← Back
+  </button>
+
+  <div style="margin-bottom:28px;">
+    <div class="tag tag-gold" style="margin-bottom:10px;"><span>⭐</span> Exclusive to Portfolio Clients</div>
+    <div class="section-title">Your money, finally together.</div>
+    <div class="section-sub" style="max-width:560px;">
+      Based on your investment activity and portfolio milestone, you qualify for a fully integrated banking experience. Here's what changes when your banking and investing are unified.
+    </div>
+  </div>
+
+  <!-- BEFORE / AFTER -->
+  <div class="row gap-lg" style="align-items:flex-start; margin-bottom:28px;">
+
+    <div class="card flex1">
+      <div class="card-header" style="background:var(--rule2);">
+        <div>
+          <div class="card-title" style="color:var(--muted);">⊘  Today — Fragmented</div>
+          <div class="card-sub">Your current setup across multiple institutions</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="acct-row">
+          <div class="acct-icon" style="background:#fef3c7;">🏦</div>
+          <div class="acct-info">
+            <div class="acct-name">Wells Fargo Checking</div>
+            <div class="acct-type">0.01% APY · $12 monthly fee · External</div>
+          </div>
+          <div><div class="acct-amt">$8,400</div></div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-icon" style="background:#fef3c7;">🏦</div>
+          <div class="acct-info">
+            <div class="acct-name">Chase Savings</div>
+            <div class="acct-type">0.50% APY · External · 2-3 day transfers</div>
+          </div>
+          <div><div class="acct-amt">$15,200</div></div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-icon" style="background:#f0f9ff;">📈</div>
+          <div class="acct-info">
+            <div class="acct-name">Brokerage Portfolio (here)</div>
+            <div class="acct-type">Settled trades take T+2 to reach external bank</div>
+          </div>
+          <div><div class="acct-amt">$54,820</div></div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:var(--muted);">Avg savings yield on $23.6K cash</span>
+          <span style="font-family:'DM Mono',monospace; font-size:13px; color:var(--red); font-weight:600;">~$118 / yr</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="tag tag-red">3 logins</span>
+          <span class="tag tag-red">3 statements</span>
+          <span class="tag tag-red">T+2 friction</span>
+          <span class="tag tag-red">$12/mo fee</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 8px; flex-shrink:0; align-self:center;">
+      <div style="font-size:26px;">→</div>
+      <div style="font-size:10px; color:var(--muted); font-weight:600; text-align:center; margin-top:4px;">UNIFY</div>
+    </div>
+
+    <div class="card flex1" style="border-color:var(--teal);">
+      <div class="card-header" style="background:linear-gradient(135deg,#0d1117,#064e3b);">
+        <div>
+          <div class="card-title" style="color:white;">✦ Integrated — Unified</div>
+          <div class="card-sub" style="color:rgba(255,255,255,0.6);">One account. One login. One statement.</div>
+        </div>
+        <div class="badge">New</div>
+      </div>
+      <div class="card-body">
+        <div class="acct-row">
+          <div class="acct-icon" style="background:var(--teal3);">⚡</div>
+          <div class="acct-info">
+            <div class="acct-name">Integrated Checking</div>
+            <div class="acct-type">Instant transfers to/from brokerage · No fees</div>
+          </div>
+          <div><div class="acct-amt">$8,400</div></div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-icon" style="background:var(--teal3);">📈</div>
+          <div class="acct-info">
+            <div class="acct-name">High-Yield Savings (4.21% APY)</div>
+            <div class="acct-type">FDIC-insured up to $2.5MM · Auto-sweep</div>
+          </div>
+          <div><div class="acct-amt">$15,200</div></div>
+        </div>
+        <div class="acct-row">
+          <div class="acct-icon" style="background:var(--blue3);">📊</div>
+          <div class="acct-info">
+            <div class="acct-name">Brokerage Portfolio (unified)</div>
+            <div class="acct-type">Same-day settlement to savings · One statement</div>
+          </div>
+          <div><div class="acct-amt">$54,820</div></div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:var(--muted);">Projected yield on $23.6K at 4.21%</span>
+          <span style="font-family:'DM Mono',monospace; font-size:13px; color:var(--green); font-weight:600;">~$994 / yr</span>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="tag tag-teal">1 login</span>
+          <span class="tag tag-teal">1 statement</span>
+          <span class="tag tag-teal">Instant settlement</span>
+          <span class="tag tag-teal">$0 fee</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANNUAL GAIN BANNER -->
+  <div class="trigger-banner" style="margin-bottom:24px;">
+    <div style="position:relative; z-index:1;">
+      <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:8px;">Your estimated annual gain</div>
+      <div style="display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap;">
+        <div>
+          <div style="font-family:'DM Serif Display',serif; font-size:42px; color:var(--teal2); line-height:1; letter-spacing:-1px;">+$876</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-top:4px;">In additional interest + eliminated fees</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.15); padding-left:20px;">
+          <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:4px;">Over 5 years (compounding)</div>
+          <div style="font-family:'DM Serif Display',serif; font-size:28px; color:white;">$4,820+</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.15); padding-left:20px;">
+          <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:4px;">Time to switch</div>
+          <div style="font-family:'DM Serif Display',serif; font-size:28px; color:white;">~4 min</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+    <button class="btn btn-teal btn-lg" onclick="goTo(3)">
+      Open Integrated Account <span class="nav-arrow">→</span>
+    </button>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 3 — ACTIVATION / ONBOARDING
+═══════════════════════════════════════════════════ -->
+<div class="screen" id="s3">
+<div class="page stagger">
+
+  <button class="btn btn-ghost btn-sm" onclick="goTo(2)" style="margin-bottom:20px;">← Back</button>
+
+  <div style="margin-bottom:24px;">
+    <div class="tag tag-teal" style="margin-bottom:10px;"><div class="dot"></div> Account Activation</div>
+    <div class="section-title">Almost there, Marcus.</div>
+    <div class="section-sub">Because you're already an investor with us, most of your information is pre-filled. This typically takes under 4 minutes.</div>
+  </div>
+
+  <!-- KYC PROGRESS -->
+  <div class="kyc-steps" style="margin-bottom:24px;">
+    <div class="kyc-step done" id="kyc1">✓ Identity Verified</div>
+    <div class="kyc-step done" id="kyc2">✓ Address Confirmed</div>
+    <div class="kyc-step active" id="kyc3">3 · Account Setup</div>
+    <div class="kyc-step" id="kyc4">4 · Funding</div>
+  </div>
+
+  <div class="row gap-lg" style="align-items:flex-start;">
+
+    <!-- LEFT: FORM -->
+    <div class="flex1">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Account Setup</div>
+          <div class="tag tag-teal">Pre-filled from portfolio</div>
+        </div>
+        <div class="card-body">
+
+          <div style="background:var(--teal3); border-radius:var(--r); padding:12px 14px; margin-bottom:20px; display:flex; align-items:center; gap:10px;">
+            <span style="font-size:18px;">⚡</span>
+            <div style="font-size:12px; color:var(--teal);">
+              <strong>Identity already verified.</strong> Your KYC, address, and SSN are confirmed from your brokerage account. We've pre-filled everything we know.
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input class="form-input prefilled" type="text" value="Marcus" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input class="form-input prefilled" type="text" value="Rodriguez" readonly>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input prefilled" type="email" value="m.rodriguez@email.com" readonly>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date of Birth</label>
+              <input class="form-input prefilled" type="text" value="04 / 12 / 1988" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">SSN</label>
+              <input class="form-input prefilled" type="text" value="●●●-●●-4821" readonly>
+            </div>
+          </div>
+
+          <div class="divider-label">Account Preferences</div>
+
+          <div class="form-group">
+            <label class="form-label">Account Type</label>
+            <select class="form-input form-select">
+              <option selected>Integrated Checking + High-Yield Savings</option>
+              <option>Checking Only</option>
+              <option>High-Yield Savings Only</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Initial Funding Method</label>
+            <select class="form-input form-select">
+              <option selected>Transfer from Wells Fargo ····4821 (linked)</option>
+              <option>Wire transfer</option>
+              <option>Transfer from brokerage cash</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Initial Deposit Amount</label>
+            <input class="form-input" type="text" placeholder="$1,000 minimum" value="$5,000">
+          </div>
+
+          <div class="divider-label">Preferences</div>
+
+          <div class="check-item">
+            <div class="check-box">✓</div>
+            <div class="check-text">Auto-sweep excess checking balance (>$2,500) into High-Yield Savings nightly</div>
+          </div>
+          <div class="check-item">
+            <div class="check-box">✓</div>
+            <div class="check-text">Show investment portfolio and banking on one unified dashboard</div>
+          </div>
+          <div class="check-item">
+            <div class="check-box">✓</div>
+            <div class="check-text">Enable AI-powered money insights and routing suggestions</div>
+          </div>
+
+          <button class="btn btn-teal btn-lg" style="width:100%; justify-content:center; margin-top:10px;" onclick="activateAndGo()">
+            Activate Integrated Account ✦
+          </button>
+          <div style="text-align:center; font-size:11px; color:var(--muted); margin-top:10px;">
+            FDIC insured · No monthly fees · Cancel anytime
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SUMMARY + TIMELINE -->
+    <div class="col" style="width:280px; flex-shrink:0;">
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">What happens next</div></div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot done"></div><div class="tl-connector"></div></div>
+              <div class="tl-content">
+                <div class="tl-label">Identity verified ✓</div>
+                <div class="tl-sub">KYC passed from brokerage</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot done"></div><div class="tl-connector"></div></div>
+              <div class="tl-content">
+                <div class="tl-label">Account provisioned ✓</div>
+                <div class="tl-sub">Routing & account numbers ready</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot active"></div><div class="tl-connector"></div></div>
+              <div class="tl-content">
+                <div class="tl-label">Funding in progress</div>
+                <div class="tl-sub">ACH from Wells Fargo · 1 business day</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot pending"></div><div class="tl-connector"></div></div>
+              <div class="tl-content">
+                <div class="tl-label">Debit card dispatched</div>
+                <div class="tl-sub">Arrives in 5–7 business days</div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-line"><div class="tl-dot pending"></div></div>
+              <div class="tl-content">
+                <div class="tl-label">Unified dashboard live</div>
+                <div class="tl-sub">Brokerage + banking in one view</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Account Summary</div></div>
+        <div class="card-body">
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:12px; color:var(--muted);">Integrated Checking APY</span>
+            <span class="amount-sm up">0.51%</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:12px; color:var(--muted);">High-Yield Savings APY</span>
+            <span class="amount-sm up">4.21%</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:12px; color:var(--muted);">Monthly fee</span>
+            <span class="amount-sm">$0.00</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:12px; color:var(--muted);">FDIC coverage</span>
+            <span class="amount-sm">up to $2.5MM</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span style="font-size:12px; color:var(--muted);">ATM reimbursements</span>
+            <span class="amount-sm">Unlimited domestic</span>
+          </div>
+          <div class="divider"></div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-size:12px; font-weight:600; color:var(--ink);">Projected first-year yield</span>
+            <span style="font-family:'DM Serif Display',serif; font-size:18px; color:var(--green);">+$876</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 4 — UNIFIED DASHBOARD (NORTH STAR)
+═══════════════════════════════════════════════════ -->
+<div class="screen" id="s4">
+
+  <!-- Celebration strip -->
+  <div style="background:linear-gradient(135deg,#059669,#0d9488); padding:14px 28px; display:flex; align-items:center; gap:12px;">
+    <span style="font-size:20px;">🎉</span>
+    <div style="flex:1;">
+      <div style="font-size:13px; font-weight:700; color:white;">Account activated! Your banking and investing are now unified.</div>
+      <div style="font-size:11.5px; color:rgba(255,255,255,0.75); margin-top:2px;">Earning 4.21% APY on savings · $5,000 ACH in progress · Debit card dispatched</div>
+    </div>
+    <div class="tag" style="background:rgba(255,255,255,0.2); color:white; font-size:10.5px;">✓ Live</div>
+  </div>
+
+  <!-- Balance hero -->
+  <div class="balance-hero">
+    <div class="balance-eyebrow">Total Net Worth — All Accounts</div>
+    <div class="balance-total">$78,020</div>
+    <div class="balance-sub">Investments · Banking · Pending transfers</div>
+    <div class="balance-change up">↑ +$8.4% YTD &nbsp;·&nbsp; +$642 this month</div>
+  </div>
+
+  <!-- AI STRIP -->
+  <div class="ai-strip" style="margin-bottom:18px; position:relative; z-index:1;">
+    <div class="ai-icon">🤖</div>
+    <div class="ai-msg">
+      <div class="ai-headline">AI Insight: Your checking has $3,200 sitting idle above your spending threshold.</div>
+      <div class="ai-detail">Based on your last 90 days, you typically spend ~$1,800/month. I can automatically route $1,400 to your 4.21% savings account tonight — earning ~$59/year extra. Want me to set this up?</div>
+    </div>
+    <button class="ai-btn" onclick="this.textContent='✓ Done!'">Auto-route</button>
+  </div>
+
+  <!-- UNIFIED CARDS GRID -->
+  <div class="unified-section">
+
+    <!-- Banking Summary -->
+    <div class="u-card">
+      <div class="u-card-hdr">
+        <div class="u-card-title">🏦 Banking</div>
+        <div class="tag tag-teal">Active</div>
+      </div>
+      <div class="u-card-body">
+        <div class="acct-row" style="padding:9px 0;">
+          <div class="acct-icon" style="background:var(--teal3); width:32px;height:32px;font-size:14px;">⚡</div>
+          <div class="acct-info">
+            <div class="acct-name" style="font-size:12px;">Integrated Checking</div>
+            <div class="acct-type">0.51% APY · Routing ····8821</div>
+          </div>
+          <div><div class="acct-amt" style="font-size:12.5px;">$3,200</div></div>
+        </div>
+        <div class="acct-row" style="padding:9px 0;">
+          <div class="acct-icon" style="background:var(--green3); width:32px;height:32px;font-size:14px;">📈</div>
+          <div class="acct-info">
+            <div class="acct-name" style="font-size:12px;">High-Yield Savings</div>
+            <div class="acct-type">4.21% APY · Auto-sweep active</div>
+          </div>
+          <div><div class="acct-amt" style="font-size:12.5px;">$20,000</div></div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <button class="btn btn-outline-teal btn-sm" style="flex:1; justify-content:center;">Transfer</button>
+          <button class="btn btn-ghost btn-sm" style="flex:1; justify-content:center;">Pay Bills</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investments Summary -->
+    <div class="u-card">
+      <div class="u-card-hdr">
+        <div class="u-card-title">📊 Investments</div>
+        <div class="tag tag-blue">+8.4% YTD</div>
+      </div>
+      <div class="u-card-body">
+        <div class="row gap-sm" style="margin-bottom:12px;">
+          <div style="flex:1; text-align:center; padding:10px; background:var(--blue3); border-radius:8px;">
+            <div style="font-family:'DM Serif Display',serif; font-size:18px; color:var(--blue);">$54,820</div>
+            <div style="font-size:10px; color:var(--muted); margin-top:2px;">Portfolio Value</div>
+          </div>
+          <div style="flex:1; text-align:center; padding:10px; background:var(--green3); border-radius:8px;">
+            <div style="font-family:'DM Serif Display',serif; font-size:18px; color:var(--green);">+$8,020</div>
+            <div style="font-size:10px; color:var(--muted); margin-top:2px;">Total Gain</div>
+          </div>
+        </div>
+        <div style="font-size:12px; font-weight:600; color:var(--ink); margin-bottom:8px;">Top performers</div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span class="ticker" style="font-size:12px;">NVDA</span>
+          <span class="up" style="font-size:12px; font-family:'DM Mono',monospace;">+49.7%</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span class="ticker" style="font-size:12px;">AAPL</span>
+          <span class="up" style="font-size:12px; font-family:'DM Mono',monospace;">+16.1%</span>
+        </div>
+        <div style="margin-top:10px;">
+          <button class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;" onclick="goTo(1)">View Portfolio →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Money Flow -->
+    <div class="u-card">
+      <div class="u-card-hdr">
+        <div class="u-card-title">💸 Money Flow — Last 30 Days</div>
+      </div>
+      <div class="u-card-body">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <div>
+            <div style="font-size:10.5px; color:var(--muted); font-weight:600;">IN</div>
+            <div style="font-family:'DM Serif Display',serif; font-size:20px; color:var(--green);">$3,840</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10.5px; color:var(--muted); font-weight:600;">OUT</div>
+            <div style="font-family:'DM Serif Display',serif; font-size:20px; color:var(--red);">$1,960</div>
+          </div>
+        </div>
+        <div class="progress-track" style="height:10px; margin-bottom:10px;">
+          <div class="progress-fill" style="width:66%; background:linear-gradient(90deg,var(--teal),var(--green));"></div>
+        </div>
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px;">Net savings rate: 49% this month</div>
+        <div class="acct-row" style="padding:6px 0; border:none;">
+          <div style="font-size:11.5px; color:var(--ink);">Salary (direct deposit)</div>
+          <div class="up" style="font-size:11.5px; font-family:'DM Mono',monospace;">+$3,200</div>
+        </div>
+        <div class="acct-row" style="padding:6px 0; border:none;">
+          <div style="font-size:11.5px; color:var(--ink);">Dividends (DRIP)</div>
+          <div class="up" style="font-size:11.5px; font-family:'DM Mono',monospace;">+$84</div>
+        </div>
+        <div class="acct-row" style="padding:6px 0; border:none;">
+          <div style="font-size:11.5px; color:var(--ink);">Groceries + dining</div>
+          <div class="down" style="font-size:11.5px; font-family:'DM Mono',monospace;">-$620</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Suggestions -->
+    <div class="u-card">
+      <div class="u-card-hdr">
+        <div class="u-card-title">✦ Smart Suggestions</div>
+        <div class="badge">3 New</div>
+      </div>
+      <div class="u-card-body">
+        <div style="padding:12px; background:var(--teal3); border-radius:10px; margin-bottom:10px;">
+          <div style="font-size:12px; font-weight:600; color:var(--teal); margin-bottom:3px;">💡 Route idle cash</div>
+          <div style="font-size:11.5px; color:var(--ink); line-height:1.5;">$1,400 sitting above spend buffer → move to savings → earn $59/yr extra</div>
+          <button class="btn btn-teal btn-sm" style="margin-top:8px;" onclick="this.textContent='✓ Done!'">Do it →</button>
+        </div>
+        <div style="padding:12px; background:var(--blue3); border-radius:10px; margin-bottom:10px;">
+          <div style="font-size:12px; font-weight:600; color:var(--blue); margin-bottom:3px;">📊 Rebalance alert</div>
+          <div style="font-size:11.5px; color:var(--ink); line-height:1.5;">Tech weighting at 64% — above target. Consider adding BND for balance.</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="this.textContent='Dismissed'">Review →</button>
+        </div>
+        <div style="padding:12px; background:var(--gold3); border-radius:10px;">
+          <div style="font-size:12px; font-weight:600; color:var(--gold); margin-bottom:3px;">🏠 Mortgage eligibility</div>
+          <div style="font-size:11.5px; color:var(--ink); line-height:1.5;">Based on your assets + income, you may qualify for a home loan. Explore rates.</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:8px;">Check rates →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom: reset demo -->
+  <div style="text-align:center; padding:20px 0 40px;">
+    <div style="font-size:12px; color:var(--muted); margin-bottom:12px;">✦ End of demo flow — this is the unified experience</div>
+    <button class="btn btn-ghost" onclick="resetDemo()">↺ Restart Demo</button>
+    <span style="color:var(--rule); margin:0 12px;">|</span>
+    <button class="btn btn-ghost" onclick="goTo(1)">← Back to Start</button>
+  </div>
+
+</div>
+
+</div><!-- end main -->
+
+<!-- Concept label -->
+<div class="concept-label">Product Concept Demo · Not a real product</div>
+
+<script>
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  // Update nav steps
+  const labels = ['1 · Investor Portal','2 · Opportunity','3 · Activate','4 · Unified View'];
+  for(let i=1;i<=4;i++){
+    const el = document.getElementById('ns'+i);
+    el.classList.remove('active','done');
+    if(i < n) el.classList.add('done');
+    else if(i === n) el.classList.add('active');
+  }
+
+  // Show notif dot when on screen 4
+  document.getElementById('navNotif').style.display = n===4 ? 'block' : 'none';
+}
+
+function activateAndGo() {
+  const btn = event.target;
+  btn.textContent = '⏳ Activating...';
+  btn.disabled = true;
+  setTimeout(() => goTo(4), 1200);
+}
+
+function resetDemo() {
+  goTo(1);
+}
+
+// KYC animation on screen 3 load
+const s3 = document.getElementById('s3');
+const observer = new MutationObserver(() => {
+  if(s3.classList.contains('active')) {
+    setTimeout(() => {
+      document.getElementById('kyc1').className = 'kyc-step done';
+      document.getElementById('kyc2').className = 'kyc-step done';
+      document.getElementById('kyc3').className = 'kyc-step active';
+      document.getElementById('kyc4').className = 'kyc-step';
+    }, 100);
+  }
+});
+observer.observe(s3, {attributes:true, attributeFilter:['class']});
+</script>
+</body>
+</html>

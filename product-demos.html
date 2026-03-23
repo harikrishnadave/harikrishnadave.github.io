@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Demos – Harikrishna Dave</title>
+  <style>
+    /* ── Base / Reset ───────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #eef2f7;
+      --bg2:       #e4eaf2;
+      --sidebar:   #ffffff;
+      --text:      #1a1a2e;
+      --text2:     #4a5568;
+      --accent:    #4a7cf7;
+      --accent2:   #2563eb;
+      --border:    #d1d9e6;
+      --card-bg:   #ffffff;
+      --card-sh:   rgba(74,124,247,0.08);
+      --teal:      #0d9488;
+      --teal-lt:   #e0f4f1;
+      --gold:      #d97706;
+      --gold-lt:   #fef3c7;
+      --green:     #059669;
+      --green-lt:  #d1fae5;
+      --muted:     #6b7b8e;
+      --rule:      #e2e8f0;
+      --r:         12px;
+    }
+
+    body.dark {
+      --bg:       #0f1117;
+      --bg2:      #161b27;
+      --sidebar:  #1a1f2e;
+      --text:     #e2e8f0;
+      --text2:    #94a3b8;
+      --border:   #2d3748;
+      --card-bg:  #1e2535;
+      --card-sh:  rgba(74,124,247,0.12);
+      --muted:    #64748b;
+      --rule:     #2d3748;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Sidebar ──────────────────────────────────── */
+    .sidebar {
+      width: 180px;
+      min-height: 100vh;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: background 0.3s, border-color 0.3s;
+      z-index: 10;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0 14px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 6px;
+      padding: 4px 0;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent2); }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s;
+    }
+    .nav-item:hover { background: var(--bg); color: var(--text); }
+    .nav-item.active { background: var(--accent); color: #fff; }
+    .nav-num {
+      font-size: 10px;
+      font-weight: 700;
+      opacity: 0.55;
+      width: 16px;
+    }
+
+    /* ── Dark mode toggle ─────────────────────────── */
+    .dark-toggle {
+      position: fixed;
+      top: 16px; right: 20px;
+      display: flex; align-items: center; gap: 7px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .dark-toggle:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+
+    /* ── Main ──────────────────────────────────────── */
+    .main {
+      margin-left: 180px;
+      flex: 1;
+      padding: 48px 52px 80px;
+      max-width: 960px;
+    }
+
+    /* ── Password gate ─────────────────────────────── */
+    #gate {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+    }
+
+    .gate-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      filter: grayscale(0.2);
+    }
+
+    .gate-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .gate-sub {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 28px;
+      max-width: 340px;
+      line-height: 1.6;
+    }
+
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .gate-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--card-bg);
+      color: var(--text);
+      outline: none;
+      text-align: center;
+      letter-spacing: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .gate-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(74,124,247,0.12);
+    }
+    .gate-input.error {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 3px rgba(229,62,62,0.1);
+      animation: shake 0.35s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-8px); }
+      75%      { transform: translateX(8px); }
+    }
+
+    .gate-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.2px;
+    }
+    .gate-btn:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(74,124,247,0.3); }
+
+    .gate-error {
+      font-size: 12.5px;
+      color: #e53e3e;
+      font-weight: 500;
+      display: none;
+    }
+
+    .gate-hint {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Content (hidden until unlock) ────────────── */
+    #content { display: none; }
+
+    /* ── Section header ───────────────────────────── */
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 580px;
+    }
+
+    /* ── Demo cards ───────────────────────────────── */
+    .demos-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .demo-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px var(--card-sh);
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .demo-card:hover {
+      box-shadow: 0 6px 24px var(--card-sh);
+      transform: translateY(-2px);
+    }
+
+    .demo-card-header {
+      padding: 22px 26px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .demo-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .demo-meta { flex: 1; }
+
+    .demo-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.2px;
+      margin-bottom: 4px;
+    }
+
+    .demo-desc {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.55;
+    }
+
+    .demo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .tag-teal  { background: var(--teal-lt); color: var(--teal); }
+    .tag-gold  { background: var(--gold-lt); color: var(--gold); }
+    .tag-green { background: var(--green-lt); color: var(--green); }
+    .tag-blue  { background: #dbeafe; color: #1d4ed8; }
+
+    .demo-card-body {
+      padding: 18px 26px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .demo-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .highlight-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .demo-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 22px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-launch:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(74,124,247,0.3); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      background: transparent;
+      color: var(--text2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Coming soon card ─────────────────────────── */
+    .demo-card.soon {
+      opacity: 0.65;
+      border-style: dashed;
+    }
+    .demo-card.soon:hover { transform: none; }
+
+    .soon-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--gold-lt);
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+
+    /* ── Context note ─────────────────────────────── */
+    .context-note {
+      margin-top: 36px;
+      padding: 16px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      font-size: 12.5px;
+      color: var(--text2);
+      line-height: 1.65;
+    }
+
+    .context-note strong { color: var(--text); }
+
+    /* ── Footer ───────────────────────────────────── */
+    .footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Animations ───────────────────────────────── */
+    .fade-in {
+      animation: fadeUp 0.4s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in:nth-child(2) { animation-delay: 0.08s; }
+    .fade-in:nth-child(3) { animation-delay: 0.16s; }
+    .fade-in:nth-child(4) { animation-delay: 0.24s; }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 720px) {
+      .main { margin-left: 0; padding: 80px 20px 60px; }
+      .sidebar { display: none; }
+      .demo-card-body { flex-direction: column; align-items: flex-start; }
+      .demo-actions { flex-direction: row; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">HK.Dave</div>
+    <div class="sidebar-divider"></div>
+    <a href="index.html" class="back-link">← Back to Main</a>
+    <a href="#demos" class="nav-item active">
+      <span class="nav-num">01</span> Demos
+    </a>
+  </aside>
+
+  <!-- Dark Mode Toggle -->
+  <button class="dark-toggle" onclick="toggleDark()">
+    <span id="darkIcon">☾</span>
+    <span id="darkLabel">Dark Mode</span>
+  </button>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- ── PASSWORD GATE ─────────────────────────── -->
+    <div id="gate">
+      <div class="gate-icon">🔐</div>
+      <div class="gate-title">Product Demos</div>
+      <div class="gate-sub">
+        This section contains work-in-progress product concepts and interactive demos.<br>
+        Enter the access code to continue.
+      </div>
+      <div class="gate-form">
+        <input
+          id="pwInput"
+          type="password"
+          class="gate-input"
+          placeholder="Access code"
+          onkeydown="if(event.key==='Enter') checkPw()"
+          autocomplete="off"
+        />
+        <div class="gate-error" id="gateError">Incorrect code. Please try again.</div>
+        <button class="gate-btn" onclick="checkPw()">Unlock →</button>
+        <div class="gate-hint">Contact harikrishnadave@gmail.com for access</div>
+      </div>
+    </div>
+
+    <!-- ── CONTENT (unlocked) ─────────────────────── -->
+    <div id="content">
+
+      <div class="section-eyebrow">Product Demos</div>
+      <div class="section-title">Interactive Concepts</div>
+      <div class="section-sub">
+        End-to-end product prototypes exploring fintech, AI-driven UX, and cross-platform financial experiences.
+        Built to demonstrate product thinking — from problem framing through north-star vision.
+      </div>
+
+      <div class="demos-grid" id="demos">
+
+        <!-- DEMO 1: WealthBridge -->
+        <div class="demo-card fade-in">
+          <div class="demo-card-header">
+            <div class="demo-icon" style="background:#e0f4f1;">🌉</div>
+            <div class="demo-meta">
+              <div class="demo-title">WealthBridge — Unified Investor Banking</div>
+              <div class="demo-desc">
+                A 4-screen interactive prototype showing how a brokerage end-investor can be seamlessly converted
+                into a full banking customer through behavioral triggers, pre-filled KYC, and a unified financial dashboard.
+                Demonstrates the Clearing-to-Consumer pipeline product concept.
+              </div>
+              <div class="demo-tags">
+                <span class="tag tag-teal">Fintech</span>
+                <span class="tag tag-blue">Consumer Banking</span>
+                <span class="tag tag-teal">Clearing → Consumer</span>
+                <span class="tag tag-gold">AI/Agentic</span>
+                <span class="tag tag-green">KYC/Identity</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-highlights">
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span><strong>Screen 1:</strong> Investor's brokerage portal — live holdings, allocation, behavioral milestone trigger</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span><strong>Screen 2:</strong> Before/after value prop — fragmented vs. unified, +$876/yr opportunity</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span><strong>Screen 3:</strong> One-step onboarding with pre-filled KYC (identity reuse from brokerage)</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span><strong>Screen 4:</strong> North-star unified dashboard — banking + investing + AI money routing</span>
+              </div>
+            </div>
+            <div class="demo-actions">
+              <a href="clearing-consumer-demo.html" class="btn-launch" target="_blank">
+                Launch Demo ↗
+              </a>
+              <a href="mailto:harikrishnadave@gmail.com?subject=WealthBridge Demo Feedback" class="btn-ghost">
+                💬 Feedback
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO 2: Coming Soon -->
+        <div class="demo-card soon fade-in">
+          <div class="demo-card-header">
+            <div class="demo-icon" style="background:#fef3c7;">🤖</div>
+            <div class="demo-meta">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <div class="demo-title" style="margin-bottom:0;">Evo 2.0 — Agentic Financial Assistant</div>
+                <span class="soon-badge">Coming Soon</span>
+              </div>
+              <div class="demo-desc">
+                Upgrade from FAQ chatbot to an agentic financial assistant that opens accounts, initiates transfers,
+                runs what-if loan simulations, and files disputes — all in natural conversation. No UI navigation required.
+              </div>
+              <div class="demo-tags">
+                <span class="tag tag-gold">Agentic AI</span>
+                <span class="tag tag-teal">Conversational UX</span>
+                <span class="tag tag-blue">PFM</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-highlights">
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span>Natural language → account actions (transfer, invest, dispute, apply)</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span>In-session re-verification before high-risk actions (identity-aware AI)</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span>Target: 30% reduction in call center escalation · 20% session-to-action rate</span>
+              </div>
+            </div>
+            <div class="demo-actions">
+              <button class="btn-ghost" disabled style="opacity:0.5;cursor:default;">In Progress…</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEMO 3: Coming Soon -->
+        <div class="demo-card soon fade-in">
+          <div class="demo-card-header">
+            <div class="demo-icon" style="background:#d1fae5;">⚡</div>
+            <div class="demo-meta">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <div class="demo-title" style="margin-bottom:0;">Intelligent Money Routing — Agentic PFM</div>
+                <span class="soon-badge">Coming Soon</span>
+              </div>
+              <div class="demo-desc">
+                AI money manager that learns your income/spend pattern, auto-routes excess checking to high-yield savings,
+                sweeps into managed portfolios when savings targets are hit, and alerts on loan payoff opportunities.
+              </div>
+              <div class="demo-tags">
+                <span class="tag tag-green">PFM 2.0</span>
+                <span class="tag tag-gold">ML Behavioral Model</span>
+                <span class="tag tag-teal">Banking + Investing</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-highlights">
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span>Learns spend patterns from transaction history — no manual rules setup</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span>Same-day cross-product routing (savings → managed portfolio) vs. T+2 at legacy banks</span>
+              </div>
+              <div class="highlight-item">
+                <div class="highlight-dot"></div>
+                <span>Target: +25% managed AUM from existing banking customers in 12 months</span>
+              </div>
+            </div>
+            <div class="demo-actions">
+              <button class="btn-ghost" disabled style="opacity:0.5;cursor:default;">In Progress…</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /demos-grid -->
+
+      <div class="context-note">
+        <strong>About these demos:</strong> These are product concept prototypes — interactive mockups built to communicate
+        product thinking, UX vision, and business logic. They are not connected to any real financial institution,
+        do not process real data, and are intended solely as a demonstration of product design methodology.
+      </div>
+
+      <div class="footer">
+        © 2026 Harikrishna Dave · Product Demos · <a href="index.html" style="color:var(--accent);text-decoration:none;">Back to Main</a>
+      </div>
+
+    </div><!-- /content -->
+
+  </main>
+
+  <script>
+    // ── Password gate ─────────────────────────────
+    const PW_HASH = btoa('Product$7');   // base64 obfuscation — not cryptographic
+
+    function checkPw() {
+      const val = document.getElementById('pwInput').value;
+      const input = document.getElementById('pwInput');
+      const err   = document.getElementById('gateError');
+
+      if (btoa(val) === PW_HASH) {
+        sessionStorage.setItem('demo_access', PW_HASH);
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+        // Animate children
+        document.querySelectorAll('#content .fade-in').forEach((el, i) => {
+          el.style.animationDelay = (i * 0.08) + 's';
+        });
+      } else {
+        input.classList.add('error');
+        err.style.display = 'block';
+        setTimeout(() => input.classList.remove('error'), 400);
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    // ── Auto-unlock if session active ─────────────
+    (function() {
+      if (sessionStorage.getItem('demo_access') === PW_HASH) {
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+      }
+    })();
+
+    // ── Dark mode ─────────────────────────────────
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.getElementById('darkIcon').textContent  = isDark ? '☀' : '☾';
+      document.getElementById('darkLabel').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+      localStorage.setItem('hkdave_theme', isDark ? 'dark' : 'light');
+    }
+
+    // ── Load saved theme ──────────────────────────
+    (function() {
+      if (localStorage.getItem('hkdave_theme') === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('darkIcon').textContent  = '☀';
+        document.getElementById('darkLabel').textContent = 'Light Mode';
+      }
+    })();
+  </script>
+</body>
+</html>
