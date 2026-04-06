@@ -542,6 +542,138 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
 }
 .callout strong { color: var(--accent); font-weight: 500; }
 
+/* ── collapsible panels (roadmap) ─────────────────────────────────── */
+.collapsible-panels { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+.collapse-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.collapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.collapse-header:hover { background: var(--bg3); }
+.collapse-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.collapse-chevron {
+  width: 14px; height: 14px;
+  color: var(--text3);
+  transition: transform .25s ease;
+  flex-shrink: 0;
+}
+.collapse-header.active .collapse-chevron { transform: rotate(90deg); }
+.collapse-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+  border-top: 1px solid transparent;
+}
+.collapse-body.open {
+  max-height: 2000px;
+  border-top-color: var(--border);
+}
+
+/* ── architecture flow diagrams ──────────────────────────────────── */
+.arch-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.flow-sub-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding: 0 0 16px;
+}
+.flow-node {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--mono);
+  white-space: nowrap;
+  text-align: center;
+}
+.flow-start {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+.flow-process {
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border2);
+}
+.flow-end {
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(46,158,110,0.25);
+}
+.flow-audit {
+  background: var(--amber-dim);
+  color: var(--amber);
+  border: 1px solid rgba(212,138,46,0.25);
+  font-size: 12px;
+}
+.flow-ca { background: var(--green-dim); color: var(--green); border: 1px solid rgba(46,158,110,0.25); }
+.flow-uk { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+.flow-fr { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(124,92,196,0.25); }
+.flow-gdpr { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+.flow-hds { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(124,92,196,0.25); }
+.flow-euda { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(26,171,142,0.25); }
+.flow-arrow {
+  font-size: 18px;
+  color: var(--text3);
+  font-weight: 300;
+  flex-shrink: 0;
+}
+.flow-branch {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── definitions glossary ────────────────────────────────────────── */
+.def-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+.def-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.def-item:nth-child(2n) { border-right: none; }
+.def-item:nth-last-child(-n+2) { border-bottom: none; }
+.def-abbr {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.def-full {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.def-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
 /* ── scrollbar ───────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -633,6 +765,15 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
     </div>
   </div>
 
+  <div class="nav-section">
+    <div class="nav-section-label">Reference</div>
+    <div class="nav-item" onclick="showPage('definitions',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3 1h10a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm1 3v2h8V4H4zm0 3v1h8V7H4zm0 2.5v1h5v-1H4z"/></svg>
+      Definitions
+      <span class="nav-badge ok">glossary</span>
+    </div>
+  </div>
+
   <div class="sidebar-footer">
     <div class="version-pill">
       <span class="status-dot"></span>
@@ -689,78 +830,79 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
       </div>
     </div>
 
-    <div class="two-col">
-      <!-- left: requirement backlog -->
-      <div>
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="panel-title-dot" style="background:var(--accent)"></span>
-              Compliance requirement backlog
-            </div>
-          </div>
-          <div class="filter-bar">
-            <label>STATUS</label>
-            <select id="f-status" onchange="filterReqs()">
-              <option value="all">All</option>
-              <option value="done">Done</option>
-              <option value="prog">In progress</option>
-              <option value="block">Blocked</option>
-              <option value="todo">Planned</option>
-            </select>
-            <label>OWNER</label>
-            <select id="f-owner" onchange="filterReqs()">
-              <option value="all">All teams</option>
-              <option value="Eng">Engineering</option>
-              <option value="Legal">Legal</option>
-              <option value="Security">Security</option>
-              <option value="PM">PM</option>
-            </select>
-            <label>REGULATION</label>
-            <select id="f-reg" onchange="filterReqs()">
-              <option value="all">All</option>
-              <option value="GDPR">GDPR</option>
-              <option value="HDS">HDS</option>
-              <option value="EU">EU Data Act</option>
-            </select>
-          </div>
-          <div style="overflow-x:auto">
-            <table class="data-table" id="req-table">
-              <thead>
-                <tr>
-                  <th style="width:46px">ID</th>
-                  <th>Requirement</th>
-                  <th style="width:130px">Regulations</th>
-                  <th style="width:75px">Owner</th>
-                  <th style="width:105px">Status</th>
-                </tr>
-              </thead>
-              <tbody id="req-tbody"></tbody>
-            </table>
-            <div id="req-empty" class="empty" style="display:none">No requirements match the current filters.</div>
-          </div>
+    <!-- Requirement backlog — full width -->
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-dot" style="background:var(--accent)"></span>
+          Compliance requirement backlog
         </div>
       </div>
+      <div class="filter-bar">
+        <label>STATUS</label>
+        <select id="f-status" onchange="filterReqs()">
+          <option value="all">All</option>
+          <option value="done">Done</option>
+          <option value="prog">In progress</option>
+          <option value="block">Blocked</option>
+          <option value="todo">Planned</option>
+        </select>
+        <label>OWNER</label>
+        <select id="f-owner" onchange="filterReqs()">
+          <option value="all">All teams</option>
+          <option value="Eng">Engineering</option>
+          <option value="Legal">Legal</option>
+          <option value="Security">Security</option>
+          <option value="PM">PM</option>
+        </select>
+        <label>REGULATION</label>
+        <select id="f-reg" onchange="filterReqs()">
+          <option value="all">All</option>
+          <option value="GDPR">GDPR</option>
+          <option value="HDS">HDS</option>
+          <option value="EU">EU Data Act</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="req-table">
+          <thead>
+            <tr>
+              <th style="width:46px">ID</th>
+              <th>Requirement</th>
+              <th style="width:130px">Regulations</th>
+              <th style="width:75px">Owner</th>
+              <th style="width:105px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="req-tbody"></tbody>
+        </table>
+        <div id="req-empty" class="empty" style="display:none">No requirements match the current filters.</div>
+      </div>
+    </div>
 
-      <!-- right: timeline + deps -->
-      <div>
-        <div class="panel" style="margin-bottom:16px">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="panel-title-dot" style="background:var(--green)"></span>
-              Market launch timeline
-            </div>
+    <!-- Collapsible side panels -->
+    <div class="collapsible-panels">
+      <div class="collapse-panel">
+        <div class="collapse-header" onclick="togglePanel(this)">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="panel-title-dot" style="background:var(--green)"></span>
+            <span class="collapse-title">Market launch timeline</span>
           </div>
+          <svg class="collapse-chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M6 3l5 5-5 5V3z"/></svg>
+        </div>
+        <div class="collapse-body open">
           <div class="timeline" id="timeline"></div>
         </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span class="panel-title-dot" style="background:var(--amber)"></span>
-              Cross-team dependencies
-            </div>
+      </div>
+      <div class="collapse-panel">
+        <div class="collapse-header" onclick="togglePanel(this)">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="panel-title-dot" style="background:var(--amber)"></span>
+            <span class="collapse-title">Cross-team dependencies</span>
           </div>
+          <svg class="collapse-chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M6 3l5 5-5 5V3z"/></svg>
+        </div>
+        <div class="collapse-body">
           <div class="dep-list" id="deps"></div>
         </div>
       </div>
@@ -778,14 +920,55 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
     <div class="panel">
       <div class="arch-section">
         <div class="arch-section-title">Data residency layer</div>
+        <div class="arch-flow">
+          <div class="flow-node flow-start">Inbound Patient Data</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-process">Geo-Routing Engine</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-branch">
+            <div class="flow-node flow-ca">CA · ca-central-1</div>
+            <div class="flow-node flow-uk">UK · eu-west-2</div>
+            <div class="flow-node flow-fr">FR · eu-west-3</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-end">Region-Locked Storage</div>
+        </div>
         <div class="arch-grid" id="arch-residency"></div>
       </div>
       <div class="arch-section">
         <div class="arch-section-title">Healthcare data security layer</div>
+        <div class="arch-flow">
+          <div class="flow-node flow-start">Patient Request</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-process">TLS 1.2+ Encrypted</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-process">RBAC + Market Scope</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-process">AES-256 at Rest</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-end">KMS Per-Region</div>
+        </div>
+        <div class="flow-sub-row">
+          <div class="flow-node flow-audit">↕ Audit Log (per data subject)</div>
+          <div class="flow-node flow-audit">↕ Consent Service API</div>
+        </div>
         <div class="arch-grid" id="arch-security"></div>
       </div>
       <div class="arch-section">
         <div class="arch-section-title">Privacy regulation mapping</div>
+        <div class="arch-flow">
+          <div class="flow-node flow-start">Data Processing Activity</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-branch">
+            <div class="flow-node flow-gdpr">GDPR (EU + UK)</div>
+            <div class="flow-node flow-hds">HDS (France)</div>
+            <div class="flow-node flow-euda">EU Data Act</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-process">DPIAs + DPAs</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node flow-end">Compliant Processing</div>
+        </div>
         <div class="arch-grid" id="arch-privacy"></div>
       </div>
     </div>
@@ -850,6 +1033,19 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
     </div>
 
   </div><!-- /vendors -->
+
+  <!-- ══════════════════════════════════════════ DEFINITIONS ══ -->
+  <div id="page-definitions" class="page">
+
+    <div class="callout">
+      <strong>Glossary:</strong> Quick-reference definitions for all regulatory acronyms and frameworks referenced in this tracker.
+    </div>
+
+    <div class="panel">
+      <div class="def-grid" id="def-list"></div>
+    </div>
+
+  </div><!-- /definitions -->
 
   </div><!-- /content -->
 </div><!-- /main -->
@@ -1077,7 +1273,48 @@ function renderVendors() {
 }
 
 // ── navigation ────────────────────────────────────────────────────────────────
-const PAGE_TITLES = {roadmap:"Roadmap",arch:"Architecture",risks:"Risks & Blockers",vendors:"Vendors"};
+const DEFINITIONS = [
+  {abbr:"GDPR",full:"General Data Protection Regulation",desc:"EU regulation on data protection and privacy. Applies to all organisations processing personal data of EU/EEA residents. Establishes rights like data access, erasure, and portability."},
+  {abbr:"HDS",full:"Hébergeur de Données de Santé",desc:"French certification required to host personal health data. Mandated by Article L.1111-8 of the French Public Health Code. Requires audit by an ANSSI-accredited body."},
+  {abbr:"PIPEDA",full:"Personal Information Protection and Electronic Documents Act",desc:"Canada's federal privacy law governing how private-sector organisations collect, use, and disclose personal information in commercial activities."},
+  {abbr:"UK DPA",full:"UK Data Protection Act 2018",desc:"UK legislation that supplements the UK GDPR post-Brexit. Governs how personal data is processed in the United Kingdom, enforced by the ICO."},
+  {abbr:"CNIL",full:"Commission Nationale de l'Informatique et des Libertés",desc:"France's independent data protection authority. Responsible for enforcing GDPR in France and overseeing HDS-related data processing compliance."},
+  {abbr:"ICO",full:"Information Commissioner's Office",desc:"UK's independent authority for data protection and information rights. Responsible for enforcing the UK GDPR and Data Protection Act 2018."},
+  {abbr:"eIDAS",full:"Electronic Identification, Authentication and Trust Services",desc:"EU regulation on electronic identification and trust services for electronic transactions. Establishes standards for digital identity across EU member states."},
+  {abbr:"ANSSI",full:"Agence Nationale de la Sécurité des Systèmes d'Information",desc:"France's national cybersecurity agency. Accredits auditors for HDS certification and sets security standards for French government and health systems."},
+  {abbr:"DPIA",full:"Data Protection Impact Assessment",desc:"A process required under GDPR Article 35 to assess the impact of data processing activities on individual privacy, especially for high-risk processing like biometric data."},
+  {abbr:"DPA",full:"Data Processing Agreement",desc:"A legally binding contract between a data controller and data processor, required under GDPR Article 28 to ensure sub-processors handle data compliantly."},
+  {abbr:"SCCs",full:"Standard Contractual Clauses",desc:"EU-approved legal mechanisms for transferring personal data outside the EU/EEA to countries without an adequacy decision. Used for UK–EU data transfers post-Brexit."},
+  {abbr:"KMS",full:"Key Management Service",desc:"Cloud-based encryption key management. In this context, KMS keys are scoped per-region to enforce data residency boundaries and prevent cross-border key access."},
+  {abbr:"RBAC",full:"Role-Based Access Control",desc:"Security model where system access is granted based on a user's role. Used here to scope data access by market, ensuring UK staff cannot access French patient data and vice versa."},
+  {abbr:"EU Data Act",full:"European Union Data Act (2024)",desc:"EU regulation establishing rules for fair access to and use of data generated by connected devices. Includes data portability obligations and business-to-government data sharing provisions."},
+  {abbr:"B2G",full:"Business-to-Government",desc:"Data sharing obligations under the EU Data Act where businesses may be required to provide data to public sector bodies in cases of exceptional need."},
+  {abbr:"mDL",full:"Mobile Driver's Licence",desc:"A digital version of a driver's licence stored on a mobile device. Part of the broader digital identity framework referenced in eIDAS 2.0 and various national ID wallet initiatives."},
+];
+
+// ── collapsible panel toggle ──────────────────────────────────────
+function togglePanel(header) {
+  header.classList.toggle('active');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// auto-open first panel on load
+document.addEventListener('DOMContentLoaded', function() {
+  const firstHeader = document.querySelector('.collapse-header');
+  if (firstHeader) firstHeader.classList.add('active');
+});
+
+function renderDefinitions() {
+  document.getElementById('def-list').innerHTML = DEFINITIONS.map(d => `
+    <div class="def-item">
+      <div class="def-abbr">${d.abbr}</div>
+      <div class="def-full">${d.full}</div>
+      <div class="def-desc">${d.desc}</div>
+    </div>`).join("");
+}
+
+const PAGE_TITLES = {roadmap:"Roadmap",arch:"Architecture",risks:"Risks & Blockers",vendors:"Vendors",definitions:"Definitions"};
 
 function showPage(id, el) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -1106,6 +1343,7 @@ renderDeps();
 renderArch();
 renderRisks();
 renderVendors();
+renderDefinitions();
 </script>
 </body>
 </html>
