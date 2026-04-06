@@ -542,41 +542,51 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
 }
 .callout strong { color: var(--accent); font-weight: 500; }
 
-/* ── collapsible panels (roadmap) ─────────────────────────────────── */
-.collapsible-panels { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-.collapse-panel {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.collapse-header {
+/* ── roadmap two-col layout with collapsible side ─────────────────── */
+.roadmap-layout {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  cursor: pointer;
-  user-select: none;
-  transition: background .15s;
-}
-.collapse-header:hover { background: var(--bg3); }
-.collapse-title { font-size: 14px; font-weight: 500; color: var(--text); }
-.collapse-chevron {
-  width: 14px; height: 14px;
-  color: var(--text3);
-  transition: transform .25s ease;
-  flex-shrink: 0;
-}
-.collapse-header.active .collapse-chevron { transform: rotate(90deg); }
-.collapse-body {
-  max-height: 0;
+  gap: 0;
+  align-items: flex-start;
   overflow: hidden;
-  transition: max-height .3s ease;
-  border-top: 1px solid transparent;
 }
-.collapse-body.open {
-  max-height: 2000px;
-  border-top-color: var(--border);
+.roadmap-main {
+  flex: 1;
+  min-width: 0;
+  padding-right: 14px;
+}
+.roadmap-side {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  position: relative;
+  width: 340px;
+  transition: width .3s ease;
+}
+.roadmap-side.collapsed {
+  width: 24px;
+}
+.side-toggle {
+  width: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14px;
+  cursor: pointer;
+  color: var(--text3);
+  transition: color .15s;
+}
+.side-toggle:hover { color: var(--accent); }
+.roadmap-side.collapsed .side-toggle svg { transform: rotate(180deg); }
+.side-content {
+  flex: 1;
+  overflow: hidden;
+  transition: opacity .2s ease;
+  min-width: 0;
+}
+.roadmap-side.collapsed .side-content {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ── architecture flow diagrams ──────────────────────────────────── */
@@ -830,80 +840,84 @@ select:hover, select:focus { border-color: var(--accent-border); color: var(--te
       </div>
     </div>
 
-    <!-- Requirement backlog — full width -->
-    <div class="panel" style="margin-bottom:16px">
-      <div class="panel-header">
-        <div class="panel-title">
-          <span class="panel-title-dot" style="background:var(--accent)"></span>
-          Compliance requirement backlog
+    <div class="roadmap-layout">
+      <!-- Left: requirement backlog -->
+      <div class="roadmap-main">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-title-dot" style="background:var(--accent)"></span>
+              Compliance requirement backlog
+            </div>
+          </div>
+          <div class="filter-bar">
+            <label>STATUS</label>
+            <select id="f-status" onchange="filterReqs()">
+              <option value="all">All</option>
+              <option value="done">Done</option>
+              <option value="prog">In progress</option>
+              <option value="block">Blocked</option>
+              <option value="todo">Planned</option>
+            </select>
+            <label>OWNER</label>
+            <select id="f-owner" onchange="filterReqs()">
+              <option value="all">All teams</option>
+              <option value="Eng">Engineering</option>
+              <option value="Legal">Legal</option>
+              <option value="Security">Security</option>
+              <option value="PM">PM</option>
+            </select>
+            <label>REGULATION</label>
+            <select id="f-reg" onchange="filterReqs()">
+              <option value="all">All</option>
+              <option value="GDPR">GDPR</option>
+              <option value="HDS">HDS</option>
+              <option value="EU">EU Data Act</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table" id="req-table">
+              <thead>
+                <tr>
+                  <th style="width:46px">ID</th>
+                  <th>Requirement</th>
+                  <th style="width:130px">Regulations</th>
+                  <th style="width:75px">Owner</th>
+                  <th style="width:105px">Status</th>
+                </tr>
+              </thead>
+              <tbody id="req-tbody"></tbody>
+            </table>
+            <div id="req-empty" class="empty" style="display:none">No requirements match the current filters.</div>
+          </div>
         </div>
       </div>
-      <div class="filter-bar">
-        <label>STATUS</label>
-        <select id="f-status" onchange="filterReqs()">
-          <option value="all">All</option>
-          <option value="done">Done</option>
-          <option value="prog">In progress</option>
-          <option value="block">Blocked</option>
-          <option value="todo">Planned</option>
-        </select>
-        <label>OWNER</label>
-        <select id="f-owner" onchange="filterReqs()">
-          <option value="all">All teams</option>
-          <option value="Eng">Engineering</option>
-          <option value="Legal">Legal</option>
-          <option value="Security">Security</option>
-          <option value="PM">PM</option>
-        </select>
-        <label>REGULATION</label>
-        <select id="f-reg" onchange="filterReqs()">
-          <option value="all">All</option>
-          <option value="GDPR">GDPR</option>
-          <option value="HDS">HDS</option>
-          <option value="EU">EU Data Act</option>
-        </select>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="data-table" id="req-table">
-          <thead>
-            <tr>
-              <th style="width:46px">ID</th>
-              <th>Requirement</th>
-              <th style="width:130px">Regulations</th>
-              <th style="width:75px">Owner</th>
-              <th style="width:105px">Status</th>
-            </tr>
-          </thead>
-          <tbody id="req-tbody"></tbody>
-        </table>
-        <div id="req-empty" class="empty" style="display:none">No requirements match the current filters.</div>
-      </div>
-    </div>
 
-    <!-- Collapsible side panels -->
-    <div class="collapsible-panels">
-      <div class="collapse-panel">
-        <div class="collapse-header" onclick="togglePanel(this)">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="panel-title-dot" style="background:var(--green)"></span>
-            <span class="collapse-title">Market launch timeline</span>
+      <!-- Right: horizontally collapsible side drawer -->
+      <div class="roadmap-side" id="roadmapSide">
+        <!-- Collapse toggle tab -->
+        <div class="side-toggle" onclick="toggleSidePanel()" title="Toggle side panel">
+          <svg id="sideToggleIcon" viewBox="0 0 16 16" fill="currentColor" style="width:14px;height:14px;transition:transform .25s;"><path d="M10 3L5 8l5 5V3z"/></svg>
+        </div>
+        <div class="side-content" id="sideContent">
+          <div class="panel" style="margin-bottom:14px">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-dot" style="background:var(--green)"></span>
+                Market launch timeline
+              </div>
+            </div>
+            <div class="timeline" id="timeline"></div>
           </div>
-          <svg class="collapse-chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M6 3l5 5-5 5V3z"/></svg>
-        </div>
-        <div class="collapse-body open">
-          <div class="timeline" id="timeline"></div>
-        </div>
-      </div>
-      <div class="collapse-panel">
-        <div class="collapse-header" onclick="togglePanel(this)">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="panel-title-dot" style="background:var(--amber)"></span>
-            <span class="collapse-title">Cross-team dependencies</span>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-dot" style="background:var(--amber)"></span>
+                Cross-team dependencies
+              </div>
+            </div>
+            <div class="dep-list" id="deps"></div>
           </div>
-          <svg class="collapse-chevron" viewBox="0 0 16 16" fill="currentColor"><path d="M6 3l5 5-5 5V3z"/></svg>
-        </div>
-        <div class="collapse-body">
-          <div class="dep-list" id="deps"></div>
         </div>
       </div>
     </div>
@@ -1292,18 +1306,10 @@ const DEFINITIONS = [
   {abbr:"mDL",full:"Mobile Driver's Licence",desc:"A digital version of a driver's licence stored on a mobile device. Part of the broader digital identity framework referenced in eIDAS 2.0 and various national ID wallet initiatives."},
 ];
 
-// ── collapsible panel toggle ──────────────────────────────────────
-function togglePanel(header) {
-  header.classList.toggle('active');
-  const body = header.nextElementSibling;
-  body.classList.toggle('open');
+// ── horizontal side panel toggle ──────────────────────────────────
+function toggleSidePanel() {
+  document.getElementById('roadmapSide').classList.toggle('collapsed');
 }
-
-// auto-open first panel on load
-document.addEventListener('DOMContentLoaded', function() {
-  const firstHeader = document.querySelector('.collapse-header');
-  if (firstHeader) firstHeader.classList.add('active');
-});
 
 function renderDefinitions() {
   document.getElementById('def-list').innerHTML = DEFINITIONS.map(d => `
