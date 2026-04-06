@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Compliance Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --bg2: #13161e;
+  --bg3: #1a1e28;
+  --bg4: #222636;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --text2: #8b90a0;
+  --text3: #555c70;
+  --accent: #4f7ef8;
+  --accent-dim: rgba(79,126,248,0.12);
+  --accent-border: rgba(79,126,248,0.35);
+  --teal: #3ecfb2;
+  --teal-dim: rgba(62,207,178,0.1);
+  --amber: #f0a042;
+  --amber-dim: rgba(240,160,66,0.1);
+  --red: #f05252;
+  --red-dim: rgba(240,82,82,0.1);
+  --green: #4abe8a;
+  --green-dim: rgba(74,190,138,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --sidebar-w: 220px;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── layout ─────────────────────────────────────────────────────── */
+.shell { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── sidebar ─────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.logo {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.logo-icon {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon svg { width: 16px; height: 16px; fill: white; }
+.logo-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.logo-sub {
+  font-size: 11px;
+  color: var(--text3);
+  padding-left: 36px;
+  font-family: var(--mono);
+}
+
+.nav-section {
+  padding: 16px 10px 8px;
+}
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 0 8px;
+  margin-bottom: 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 400;
+  transition: all .15s;
+  border: 1px solid transparent;
+  margin-bottom: 1px;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent-border);
+  font-weight: 500;
+}
+.nav-icon {
+  width: 16px; height: 16px;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.nav-item.active .nav-icon { opacity: 1; }
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid rgba(240,82,82,0.2);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.nav-badge.ok {
+  background: var(--green-dim);
+  color: var(--green);
+  border-color: rgba(74,190,138,0.2);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px;
+  border-top: 1px solid var(--border);
+}
+.version-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 8px;
+}
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+/* ── main ─────────────────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.page-title { font-size: 15px; font-weight: 500; color: var(--text); }
+.page-crumb { font-size: 13px; color: var(--text3); }
+.sep { color: var(--text3); }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.mkt-pills { display: flex; gap: 5px; }
+.mkt-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all .15s;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  background: var(--bg3);
+}
+.mkt-pill.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+.mkt-pill:hover:not(.active) { background: var(--bg4); color: var(--text); }
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+}
+
+/* ── page sections ───────────────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── stat cards ──────────────────────────────────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.stat-label { font-size: 11px; color: var(--text3); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
+.stat-val { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; color: var(--text); line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--text2); margin-top: 5px; }
+.stat-card.accent { border-color: var(--accent-border); background: linear-gradient(135deg, var(--bg2), var(--accent-dim)); }
+.stat-card.warn { border-color: rgba(240,160,66,0.3); background: linear-gradient(135deg, var(--bg2), var(--amber-dim)); }
+.stat-card.warn .stat-val { color: var(--amber); }
+.stat-card.danger { border-color: rgba(240,82,82,0.3); background: linear-gradient(135deg, var(--bg2), var(--red-dim)); }
+.stat-card.danger .stat-val { color: var(--red); }
+.stat-card.ok { border-color: rgba(74,190,138,0.3); background: linear-gradient(135deg, var(--bg2), var(--green-dim)); }
+.stat-card.ok .stat-val { color: var(--green); }
+
+/* ── grid layout ─────────────────────────────────────────────────── */
+.two-col { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,340px); gap: 16px; align-items: start; }
+.full-col { grid-column: 1 / -1; }
+
+/* ── panel ───────────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+}
+.panel-body { padding: 0; }
+
+/* ── filters ─────────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.filter-bar label { font-size: 11px; color: var(--text3); letter-spacing: 0.04em; }
+select {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+}
+select:hover, select:focus { border-color: var(--accent-border); color: var(--text); }
+
+/* ── table ───────────────────────────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.data-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--bg3);
+}
+.data-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--text2);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--bg3); }
+.data-table td.primary { color: var(--text); font-weight: 500; }
+.data-table td.mono { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+/* ── badges ──────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.badge.done { background: var(--green-dim); color: var(--green); border-color: rgba(74,190,138,0.2); }
+.badge.done::before { background: var(--green); }
+.badge.prog { background: var(--accent-dim); color: var(--accent); border-color: var(--accent-border); }
+.badge.prog::before { background: var(--accent); }
+.badge.block { background: var(--red-dim); color: var(--red); border-color: rgba(240,82,82,0.2); }
+.badge.block::before { background: var(--red); }
+.badge.todo { background: var(--bg3); color: var(--text3); border-color: var(--border2); }
+.badge.todo::before { background: var(--text3); }
+.badge.high { background: var(--red-dim); color: var(--red); border-color: rgba(240,82,82,0.2); }
+.badge.high::before { background: var(--red); }
+.badge.med { background: var(--amber-dim); color: var(--amber); border-color: rgba(240,160,66,0.2); }
+.badge.med::before { background: var(--amber); }
+.badge.low { background: var(--green-dim); color: var(--green); border-color: rgba(74,190,138,0.2); }
+.badge.low::before { background: var(--green); }
+
+/* ── reg tags ─────────────────────────────────────────────────────── */
+.reg-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-right: 3px;
+  white-space: nowrap;
+}
+.rt-gdpr { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+.rt-hds { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(62,207,178,0.2); }
+.rt-eu { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(240,160,66,0.2); }
+
+/* ── market tags ─────────────────────────────────────────────────── */
+.mkt-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-right: 2px;
+  background: var(--bg4);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+
+/* ── timeline ─────────────────────────────────────────────────────── */
+.timeline { padding: 16px 18px; }
+.tl-item {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  width: 16px;
+}
+.tl-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--bg2);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.tl-dot.done { background: var(--green); }
+.tl-dot.prog { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+.tl-dot.block { background: var(--red); box-shadow: 0 0 0 3px var(--red-dim); }
+.tl-dot.todo { background: var(--bg4); border-color: var(--border2); }
+.tl-line {
+  width: 1px;
+  flex: 1;
+  background: var(--border);
+  margin-top: 3px;
+  min-height: 14px;
+}
+.tl-item:last-child .tl-line { display: none; }
+.tl-body { flex: 1; }
+.tl-label { font-size: 13px; font-weight: 500; color: var(--text); }
+.tl-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.tl-tags { margin-top: 5px; }
+
+/* ── deps ─────────────────────────────────────────────────────────── */
+.dep-list { padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+.dep-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px 14px;
+}
+.dep-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.dep-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.dep-links { display: flex; flex-direction: column; gap: 4px; }
+.dep-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text3);
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border);
+}
+.dep-link:last-child { border-bottom: none; }
+.dep-progress { margin-top: 8px; }
+.dep-pct { font-size: 10px; color: var(--text3); margin-bottom: 4px; font-family: var(--mono); }
+.prog-track { height: 3px; background: var(--bg4); border-radius: 2px; }
+.prog-fill { height: 3px; background: var(--accent); border-radius: 2px; transition: width .5s ease; }
+
+/* ── arch blocks ─────────────────────────────────────────────────── */
+.arch-section { padding: 18px; border-bottom: 1px solid var(--border); }
+.arch-section:last-child { border-bottom: none; }
+.arch-section-title {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.arch-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+.arch-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px 14px;
+}
+.arch-card-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 5px; font-family: var(--mono); }
+.arch-card-desc { font-size: 11px; color: var(--text3); line-height: 1.6; margin-bottom: 8px; }
+
+/* ── risks ─────────────────────────────────────────────────────────── */
+.risk-card {
+  border-left: 3px solid transparent;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.risk-card:last-child { border-bottom: none; }
+.risk-card.high { border-left-color: var(--red); background: linear-gradient(90deg, rgba(240,82,82,0.04), transparent); }
+.risk-card.med { border-left-color: var(--amber); background: linear-gradient(90deg, rgba(240,160,66,0.04), transparent); }
+.risk-card.low { border-left-color: var(--green); background: linear-gradient(90deg, rgba(74,190,138,0.04), transparent); }
+.risk-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.risk-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.risk-mkt { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 1px; }
+.risk-desc { font-size: 12px; color: var(--text2); margin-bottom: 6px; line-height: 1.6; }
+.risk-impact { font-size: 11px; color: var(--red); margin-bottom: 8px; }
+.risk-mit-label { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text3); margin-bottom: 3px; }
+.risk-mit { font-size: 11px; color: var(--text2); }
+
+/* ── decision log ────────────────────────────────────────────────── */
+.decision-item {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 120px;
+  gap: 14px;
+  align-items: start;
+}
+.decision-item:last-child { border-bottom: none; }
+.decision-date { font-family: var(--mono); font-size: 10px; color: var(--text3); padding-top: 2px; }
+.decision-text { font-size: 12px; font-weight: 500; color: var(--text); }
+.decision-rat { font-size: 11px; color: var(--text3); line-height: 1.6; }
+.decision-owner { font-size: 11px; color: var(--accent); text-align: right; }
+
+/* ── vendors ─────────────────────────────────────────────────────── */
+.vendor-card {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 160px 130px 1fr 120px;
+  gap: 12px;
+  align-items: center;
+}
+.vendor-card:last-child { border-bottom: none; }
+.vendor-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.vendor-type { font-size: 11px; color: var(--text3); }
+.vendor-scope { font-size: 11px; color: var(--text2); line-height: 1.5; }
+.vendor-status { text-align: right; }
+
+/* ── empty state ─────────────────────────────────────────────────── */
+.empty {
+  padding: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* ── quote block ─────────────────────────────────────────────────── */
+.callout {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin: 0 18px 14px;
+}
+.callout strong { color: var(--accent); font-weight: 500; }
+
+/* ── scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+
+/* ── animations ──────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page.active { animation: fadeUp .2s ease; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── sidebar ───────────────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-icon">
+        <svg viewBox="0 0 16 16"><path d="M2 4h5v2H2V4zm0 3h8v2H2V7zm0 3h6v2H2v-2zM11 2l3 3-3 3V6h-1V4h1V2z"/></svg>
+      </div>
+      <span class="logo-name">ComplianceTracker</span>
+    </div>
+    <div class="logo-sub">intl-expansion v1.0</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="showPage('roadmap',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v2H1V3zm0 4h10v2H1V7zm0 4h7v2H1v-2z"/></svg>
+      Roadmap
+      <span class="nav-badge">3 blocked</span>
+    </div>
+    <div class="nav-item" onclick="showPage('arch',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-5 5h3.17A3 3 0 0 0 8 7a3 3 0 0 0 1.83-.67V7H13a1 1 0 0 1 1 1v2h1v3h-4v-3h1V9h-2.17A3 3 0 0 0 8 10a3 3 0 0 0-1.83-.67V9H4v2h1v3H1v-3h1V9a1 1 0 0 1 1-1z"/></svg>
+      Architecture
+      <span class="nav-badge ok">mapped</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Execution</div>
+    <div class="nav-item" onclick="showPage('risks',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L1 14h14L8 1zm0 3l4.5 8h-9L8 4zm-.5 3v3h1V7h-1zm0 4v1h1v-1h-1z"/></svg>
+      Risks &amp; Blockers
+      <span class="nav-badge">2 high</span>
+    </div>
+    <div class="nav-item" onclick="showPage('vendors',this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a3 3 0 1 1 0 6A3 3 0 0 1 8 1zm0 7c3.3 0 6 1.3 6 3v1H2v-1c0-1.7 2.7-3 6-3z"/></svg>
+      Vendors
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="version-pill">
+      <span class="status-dot"></span>
+      3 markets active
+    </div>
+  </div>
+</aside>
+
+<!-- ── main ───────────────────────────────────────────────────────── -->
+<div class="main">
+
+  <!-- topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="page-crumb">Product</span>
+      <span class="sep">/</span>
+      <span class="page-title" id="topbar-title">Roadmap</span>
+    </div>
+    <div class="topbar-right">
+      <div class="mkt-pills">
+        <span class="mkt-pill active" onclick="filterMarket('all',this)">ALL</span>
+        <span class="mkt-pill" onclick="filterMarket('CA',this)">CA</span>
+        <span class="mkt-pill" onclick="filterMarket('UK',this)">UK</span>
+        <span class="mkt-pill" onclick="filterMarket('FR',this)">FR</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ═══════════════════════════════════════════════ ROADMAP ══ -->
+  <div id="page-roadmap" class="page active">
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Markets in scope</div>
+        <div class="stat-val">3</div>
+        <div class="stat-sub">CA live · UK active · FR in flight</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-label">Requirements mapped</div>
+        <div class="stat-val">18</div>
+        <div class="stat-sub">GDPR · HDS · EU Data Act</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-label">Open blockers</div>
+        <div class="stat-val">3</div>
+        <div class="stat-sub">2 high · 1 medium priority</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="stat-label">Overall progress</div>
+        <div class="stat-val">41%</div>
+        <div class="stat-sub">7 of 18 requirements complete</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <!-- left: requirement backlog -->
+      <div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-title-dot" style="background:var(--accent)"></span>
+              Compliance requirement backlog
+            </div>
+          </div>
+          <div class="filter-bar">
+            <label>STATUS</label>
+            <select id="f-status" onchange="filterReqs()">
+              <option value="all">All</option>
+              <option value="done">Done</option>
+              <option value="prog">In progress</option>
+              <option value="block">Blocked</option>
+              <option value="todo">Planned</option>
+            </select>
+            <label>OWNER</label>
+            <select id="f-owner" onchange="filterReqs()">
+              <option value="all">All teams</option>
+              <option value="Eng">Engineering</option>
+              <option value="Legal">Legal</option>
+              <option value="Security">Security</option>
+              <option value="PM">PM</option>
+            </select>
+            <label>REGULATION</label>
+            <select id="f-reg" onchange="filterReqs()">
+              <option value="all">All</option>
+              <option value="GDPR">GDPR</option>
+              <option value="HDS">HDS</option>
+              <option value="EU">EU Data Act</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table" id="req-table">
+              <thead>
+                <tr>
+                  <th style="width:46px">ID</th>
+                  <th>Requirement</th>
+                  <th style="width:130px">Regulations</th>
+                  <th style="width:75px">Owner</th>
+                  <th style="width:105px">Status</th>
+                </tr>
+              </thead>
+              <tbody id="req-tbody"></tbody>
+            </table>
+            <div id="req-empty" class="empty" style="display:none">No requirements match the current filters.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right: timeline + deps -->
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-title-dot" style="background:var(--green)"></span>
+              Market launch timeline
+            </div>
+          </div>
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="panel-title-dot" style="background:var(--amber)"></span>
+              Cross-team dependencies
+            </div>
+          </div>
+          <div class="dep-list" id="deps"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /roadmap -->
+
+  <!-- ═══════════════════════════════════════════ ARCHITECTURE ══ -->
+  <div id="page-arch" class="page">
+
+    <div class="callout">
+      <strong>Architecture strategy:</strong> Leverage HDS-certified IaaS (cloud provider per-region) rather than self-certifying the infrastructure layer. This scopes HDS certification effort to the <em>software layer only</em>, reducing timeline by ~12 months. Data residency boundaries enforced at the infrastructure level — not the application level.
+    </div>
+
+    <div class="panel">
+      <div class="arch-section">
+        <div class="arch-section-title">Data residency layer</div>
+        <div class="arch-grid" id="arch-residency"></div>
+      </div>
+      <div class="arch-section">
+        <div class="arch-section-title">Healthcare data security layer</div>
+        <div class="arch-grid" id="arch-security"></div>
+      </div>
+      <div class="arch-section">
+        <div class="arch-section-title">Privacy regulation mapping</div>
+        <div class="arch-grid" id="arch-privacy"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-dot" style="background:var(--purple)"></span>
+          Architecture decision log
+        </div>
+      </div>
+      <div id="decision-log"></div>
+    </div>
+
+  </div><!-- /arch -->
+
+  <!-- ═══════════════════════════════════════════════ RISKS ══ -->
+  <div id="page-risks" class="page">
+
+    <div class="stats-row" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="stat-card danger"><div class="stat-label">High priority</div><div class="stat-val">3</div><div class="stat-sub">Launch-blocking</div></div>
+      <div class="stat-card warn"><div class="stat-label">Medium priority</div><div class="stat-val">1</div><div class="stat-sub">Schedule risk</div></div>
+      <div class="stat-card ok"><div class="stat-label">Low priority</div><div class="stat-val">1</div><div class="stat-sub">Monitor only</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-dot" style="background:var(--red)"></span>
+          Active risks &amp; blockers
+        </div>
+      </div>
+      <div id="risk-list"></div>
+    </div>
+
+  </div><!-- /risks -->
+
+  <!-- ══════════════════════════════════════════════ VENDORS ══ -->
+  <div id="page-vendors" class="page">
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-title-dot" style="background:var(--teal)"></span>
+          External compliance partners &amp; vendors
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:160px">Partner</th>
+              <th style="width:130px">Type</th>
+              <th style="width:55px">Market</th>
+              <th>Scope</th>
+              <th style="width:110px">Status</th>
+            </tr>
+          </thead>
+          <tbody id="vendor-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /vendors -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ── data ──────────────────────────────────────────────────────────────────────
+const REQS = [
+  {id:"R01",name:"Data residency — CA",desc:"Scan data, patient records, lab orders hosted in-region. No cross-border to US.",markets:["CA"],regs:["GDPR"],owner:"Eng",status:"done",pri:"high"},
+  {id:"R02",name:"PIPEDA privacy notice",desc:"Canadian privacy law: consent collection, data use disclosure, patient rights.",markets:["CA"],regs:["GDPR"],owner:"Legal",status:"done",pri:"med"},
+  {id:"R03",name:"Data residency — UK",desc:"UK GDPR requires data hosted in UK region. SCCs required for any EU transfer.",markets:["UK"],regs:["GDPR"],owner:"Eng",status:"prog",pri:"high"},
+  {id:"R04",name:"UK DPA registration (ICO)",desc:"Register with ICO as data controller before processing UK patient data.",markets:["UK"],regs:["GDPR"],owner:"Legal",status:"done",pri:"high"},
+  {id:"R05",name:"GDPR DPIA — scanning workflow",desc:"Data Protection Impact Assessment for intraoral scanning (biometric-adjacent). Required before UK and FR launch.",markets:["UK","FR"],regs:["GDPR"],owner:"Security",status:"block",pri:"high"},
+  {id:"R06",name:"Records of Processing Activities",desc:"GDPR Art. 30: document all data processing activities per market. Maintained by PM.",markets:["UK","FR"],regs:["GDPR"],owner:"PM",status:"prog",pri:"med"},
+  {id:"R07",name:"Right to erasure API",desc:"GDPR Art. 17: patient can request deletion. Requires unified delete API across scan, lab, and order systems.",markets:["UK","FR"],regs:["GDPR"],owner:"Eng",status:"block",pri:"high"},
+  {id:"R08",name:"Data portability service",desc:"GDPR Art. 20: practices can export all patient data in machine-readable format.",markets:["UK","FR"],regs:["GDPR","EU"],owner:"Eng",status:"todo",pri:"med"},
+  {id:"R09",name:"HDS IaaS — Paris region",desc:"HDS-certified cloud IaaS for FR. Health data must be physically located in France.",markets:["FR"],regs:["HDS"],owner:"Eng",status:"todo",pri:"high"},
+  {id:"R10",name:"HDS software layer certification",desc:"Platform must be certified as HDS hébergeur separately from IaaS. ANSSI-accredited auditor required.",markets:["FR"],regs:["HDS"],owner:"PM",status:"block",pri:"high"},
+  {id:"R11",name:"HDS auditor engagement",desc:"RFP to ANSSI-accredited audit firms. ~6-month process. Critical path item for FR go-live.",markets:["FR"],regs:["HDS"],owner:"PM",status:"block",pri:"high"},
+  {id:"R12",name:"French DPA (CNIL) registration",desc:"Register with CNIL as data controller before processing French patient health data.",markets:["FR"],regs:["GDPR"],owner:"Legal",status:"todo",pri:"high"},
+  {id:"R13",name:"French consent overlay",desc:"CNIL requires explicit consent for health data. UI overlay required for all French practices.",markets:["FR"],regs:["GDPR","HDS"],owner:"Eng",status:"todo",pri:"med"},
+  {id:"R14",name:"EU Data Act — scanner portability",desc:"Connected device data (scanner) must be portable to practice or third party on request.",markets:["UK","FR"],regs:["EU"],owner:"Eng",status:"todo",pri:"med"},
+  {id:"R15",name:"Audit log — per data subject",desc:"All access to patient data logged and reviewable. Required by GDPR and HDS.",markets:["CA","UK","FR"],regs:["GDPR","HDS"],owner:"Security",status:"prog",pri:"med"},
+  {id:"R16",name:"Encryption key mgmt per region",desc:"KMS keys scoped to each market. Cross-region key access blocked by policy.",markets:["CA","UK","FR"],regs:["GDPR","HDS"],owner:"Security",status:"done",pri:"high"},
+  {id:"R17",name:"Sub-processor DPAs",desc:"DPAs required with all sub-processors (analytics, support tools) per GDPR Art. 28.",markets:["UK","FR"],regs:["GDPR"],owner:"Legal",status:"prog",pri:"med"},
+  {id:"R18",name:"EU Data Act B2G obligations",desc:"Assess whether platform data falls under B2G sharing obligations under EU Data Act.",markets:["FR"],regs:["EU"],owner:"Legal",status:"todo",pri:"low"},
+];
+
+const TIMELINE = [
+  {label:"Canada",sub:"PIPEDA compliance + data residency live",status:"done",tags:["CA"]},
+  {label:"UK — data residency",sub:"Cloud UK region provisioned + ICO registration complete",status:"prog",tags:["UK","GDPR"]},
+  {label:"UK — GDPR compliance",sub:"DPIA complete · right to erasure API live · DPAs signed",status:"block",tags:["UK","GDPR"]},
+  {label:"UK go-live target",sub:"Q2 2026",status:"todo",tags:["UK"]},
+  {label:"France — HDS auditor engaged",sub:"RFP issued → shortlist → contract. Critical path item.",status:"block",tags:["FR","HDS"]},
+  {label:"France — data residency + CNIL reg",sub:"Cloud Paris region provisioned + CNIL registration",status:"todo",tags:["FR","GDPR","HDS"]},
+  {label:"France — HDS certification",sub:"~6 months post-auditor. Target Q4 2026.",status:"todo",tags:["FR","HDS"]},
+  {label:"EU Data Act compliance",sub:"Scanner data portability + B2G scope assessment",status:"todo",tags:["FR","EU"]},
+];
+
+const DEPS = [
+  {title:"Legal → PM",status:"prog",pct:60,links:[{a:"French legal counsel engagement",b:"todo"},{a:"CNIL registration scope definition",b:"todo"},{a:"Sub-processor DPA audit",b:"prog"}]},
+  {title:"Security → Engineering",status:"prog",pct:45,links:[{a:"DPIA sign-off (scan workflow)",b:"block"},{a:"KMS per-region policy",b:"done"},{a:"Audit log architecture",b:"prog"}]},
+  {title:"Engineering → PM",status:"todo",pct:35,links:[{a:"Right to erasure API — discovery",b:"todo"},{a:"Consent service API design",b:"todo"},{a:"UK data residency boundary",b:"prog"}]},
+];
+
+const ARCH = {
+  residency: [
+    {title:"CA — ca-central-1",desc:"PIPEDA compliant. Scan data, patient records, lab orders hosted in-region. Data transfer to US blocked at infra level.",status:"done"},
+    {title:"UK — eu-west-2",desc:"UK GDPR data residency. SCCs in place for EU–UK transfers. No automatic GDPR adequacy post-Brexit.",status:"prog"},
+    {title:"FR — eu-west-3 (Paris)",desc:"HDS-certified IaaS region. Health data physically in France. HDS software layer cert required separately.",status:"todo"},
+  ],
+  security: [
+    {title:"Encryption in transit + at rest",desc:"TLS 1.2+ enforced. AES-256 at rest. Key management via KMS per-region. HIPAA baseline extends to all markets.",status:"done"},
+    {title:"Audit logging + access control",desc:"GDPR Art. 30 requires Records of Processing Activities. Access logs per data subject. Role-based access scoped to market.",status:"prog"},
+    {title:"Consent + data subject rights",desc:"GDPR right to erasure, access, portability. HDS requires separate consent layer. API-driven consent service required.",status:"block"},
+  ],
+  privacy: [
+    {title:"GDPR (EU + UK)",desc:"Lawful basis per data type. DPIAs for high-risk processing. SCCs for cross-border transfer. DPA registration per country.",status:"prog"},
+    {title:"EU Data Act (2025)",desc:"Connected device data (scanner) sharing obligations. Data portability for practices. B2G data sharing obligations to be assessed.",status:"todo"},
+    {title:"French HDS certification",desc:"Mandatory to host French patient health data. Software layer cert separate from IaaS. ANSSI auditor required. ~6 month process.",status:"block"},
+  ],
+};
+
+const DECISIONS = [
+  {date:"Feb 2026",decision:"Use HDS-certified IaaS rather than self-certify infra layer",rationale:"Self-certifying IaaS adds 12+ months and significant cost. Using a certified cloud region reduces scope to software layer only.",owner:"PM · Security · Eng"},
+  {date:"Mar 2026",decision:"Unified consent service vs. per-market consent logic",rationale:"Per-market logic faster to ship but creates long-term tech debt. Decision: unified consent API with market-specific configuration layer.",owner:"PM · Legal · Eng"},
+  {date:"Mar 2026",decision:"UK GDPR treated as separate obligation from EU GDPR",rationale:"Post-Brexit UK GDPR is legally distinct. Adequacy decision exists but SCCs maintained as fallback per legal counsel advice.",owner:"Legal · PM"},
+];
+
+const RISKS = [
+  {name:"HDS auditor RFP not started",market:"FR",desc:"France launch is gated on HDS software certification. ANSSI-accredited auditors have 3–6 month lead times. No RFP is currently in flight.",impact:"France Q3 2026 target is at risk",mit:"PM to own RFP this sprint. Legal to provide scope. Target: 2 firms shortlisted by end of month.",pri:"high"},
+  {name:"Right to erasure — cross-system gap",market:"UK / FR",desc:"Patient data exists in three systems (scan, lab, order). No unified delete API exists. Engineering discovery has not started.",impact:"GDPR Art. 17 compliance blocker for both UK and France go-live",mit:"Schedule technical discovery with 3 engineering leads. PM to own the unified vs. federated architecture decision.",pri:"high"},
+  {name:"DPIA review timeline undefined",market:"UK",desc:"Security team is conducting DPIA for scanning workflow but no completion date has been set. GDPR requires DPIA before processing starts.",impact:"UK launch schedule at risk if DPIA is delayed past month-end",mit:"PM to align with Security on milestone date. Escalate to VP Security if no date set by EoW.",pri:"high"},
+  {name:"Sub-processor DPAs incomplete",market:"UK / FR",desc:"Several analytics and support tools do not have signed DPAs. GDPR Art. 28 requires DPAs with all sub-processors.",impact:"Technical GDPR violation risk at UK launch",mit:"Legal to audit full tool list. PM to flag any tools with no DPA path.",pri:"med"},
+  {name:"EU Data Act scanner obligations ambiguous",market:"FR",desc:"Legal has not scoped whether the intraoral scanner triggers EU Data Act connected device provisions. Low risk if scoped early.",impact:"Could require product changes post-launch if obligations are missed",mit:"Schedule legal briefing Q2. Low risk but should be resolved before FR go-live.",pri:"low"},
+];
+
+const VENDORS = [
+  {name:"ANSSI-accredited auditor",type:"HDS certification",market:"FR",scope:"Required for French HDS software certification. RFP not yet issued. Target: 2 firms shortlisted this month.",status:"block"},
+  {name:"French healthcare legal counsel",type:"Regulatory counsel",market:"FR",scope:"CNIL registration, HDS scope definition, EU Data Act French implementation guidance. Engagement TBD.",status:"todo"},
+  {name:"UK ICO legal counsel",type:"Regulatory counsel",market:"UK",scope:"DPA registration guidance, DPIA review support, UK GDPR interpretation. Engagement in discussion.",status:"prog"},
+  {name:"KPMG / Big 4 privacy practice",type:"GDPR audit partner",market:"UK/FR",scope:"DPA audit, sub-processor review, Records of Processing Activities documentation.",status:"prog"},
+  {name:"OneTrust / TrustArc",type:"Consent mgmt platform",market:"UK/FR",scope:"GDPR consent collection, preference management, data subject request portal. Evaluation in progress.",status:"prog"},
+  {name:"Cloud provider (certified IaaS)",type:"Cloud infrastructure",market:"CA/UK/FR",scope:"HDS-compliant architecture for Paris region. Data residency boundary design per market.",status:"done"},
+];
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+let activeMkt = "all";
+
+const STATUS_LABELS = {done:"done",prog:"in progress",block:"blocked",todo:"planned"};
+
+function badge(s) {
+  return `<span class="badge ${s}">${STATUS_LABELS[s]||s}</span>`;
+}
+function priBadge(p) {
+  return `<span class="badge ${p}">${p}</span>`;
+}
+function regTags(arr) {
+  const map = {GDPR:"rt-gdpr",HDS:"rt-hds",EU:"rt-eu"};
+  return arr.map(r=>`<span class="reg-tag ${map[r]||''}">${r}</span>`).join("");
+}
+function mktTags(arr) {
+  return arr.map(m=>`<span class="mkt-tag">${m}</span>`).join("");
+}
+
+// ── render functions ──────────────────────────────────────────────────────────
+function renderReqs() {
+  const st  = document.getElementById("f-status").value;
+  const own = document.getElementById("f-owner").value;
+  const reg = document.getElementById("f-reg").value;
+
+  let data = REQS;
+  if (activeMkt !== "all") data = data.filter(r => r.markets.includes(activeMkt));
+  if (st  !== "all") data = data.filter(r => r.status === st);
+  if (own !== "all") data = data.filter(r => r.owner === own);
+  if (reg !== "all") data = data.filter(r => r.regs.includes(reg));
+
+  const tbody = document.getElementById("req-tbody");
+  const empty = document.getElementById("req-empty");
+
+  if (!data.length) {
+    tbody.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+  tbody.innerHTML = data.map(r => `
+    <tr>
+      <td class="mono">${r.id}</td>
+      <td class="primary">${r.name}<br><span style="font-size:11px;color:var(--text3);font-weight:400">${r.desc}</span></td>
+      <td>${regTags(r.regs)}</td>
+      <td><span style="font-size:11px;color:var(--accent)">${r.owner}</span></td>
+      <td>${badge(r.status)}</td>
+    </tr>`).join("");
+}
+
+function renderTimeline() {
+  let data = TIMELINE;
+  if (activeMkt !== "all") data = data.filter(t => t.tags.some(tg => tg === activeMkt));
+  document.getElementById("timeline").innerHTML = data.map(t => `
+    <div class="tl-item">
+      <div class="tl-spine">
+        <span class="tl-dot ${t.status}"></span>
+        <span class="tl-line"></span>
+      </div>
+      <div class="tl-body">
+        <div class="tl-label">${t.label}</div>
+        <div class="tl-sub">${t.sub}</div>
+        <div class="tl-tags">${t.tags.map(tg=>`<span class="mkt-tag">${tg}</span>`).join("")}</div>
+      </div>
+    </div>`).join("");
+}
+
+function renderDeps() {
+  document.getElementById("deps").innerHTML = DEPS.map(d => `
+    <div class="dep-item">
+      <div class="dep-header">
+        <span class="dep-name">${d.title}</span>
+        ${badge(d.status)}
+      </div>
+      <div class="dep-links">
+        ${d.links.map(l=>`
+          <div class="dep-link">
+            <span>${l.a}</span>
+            ${badge(l.b)}
+          </div>`).join("")}
+      </div>
+      <div class="dep-progress">
+        <div class="dep-pct">${d.pct}% dependencies unblocked</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${d.pct}%"></div></div>
+      </div>
+    </div>`).join("");
+}
+
+function renderArch() {
+  ['residency','security','privacy'].forEach(key => {
+    document.getElementById('arch-'+key).innerHTML = ARCH[key].map(a => `
+      <div class="arch-card">
+        <div class="arch-card-title">${a.title}</div>
+        <div class="arch-card-desc">${a.desc}</div>
+        ${badge(a.status)}
+      </div>`).join("");
+  });
+  document.getElementById("decision-log").innerHTML = DECISIONS.map(d => `
+    <div class="decision-item">
+      <div class="decision-date">${d.date}</div>
+      <div class="decision-text">${d.decision}</div>
+      <div class="decision-rat">${d.rationale}</div>
+      <div class="decision-owner">${d.owner}</div>
+    </div>`).join("");
+}
+
+function renderRisks() {
+  let data = RISKS;
+  if (activeMkt !== "all") data = data.filter(r => r.market.includes(activeMkt));
+  document.getElementById("risk-list").innerHTML = data.length
+    ? data.map(r => `
+      <div class="risk-card ${r.pri}">
+        <div class="risk-top">
+          <div>
+            <div class="risk-name">${r.name}</div>
+            <div class="risk-mkt">${r.market}</div>
+          </div>
+          ${priBadge(r.pri)}
+        </div>
+        <div class="risk-desc">${r.desc}</div>
+        <div class="risk-impact">Impact: ${r.impact}</div>
+        <div class="risk-mit-label">Mitigation</div>
+        <div class="risk-mit">${r.mit}</div>
+      </div>`).join("")
+    : `<div class="empty">No risks match the current market filter.</div>`;
+}
+
+function renderVendors() {
+  let data = VENDORS;
+  if (activeMkt !== "all") data = data.filter(v => v.market.includes(activeMkt));
+  document.getElementById("vendor-tbody").innerHTML = data.map(v => `
+    <tr>
+      <td class="primary">${v.name}</td>
+      <td style="font-size:11px;color:var(--text3)">${v.type}</td>
+      <td>${mktTags([v.market])}</td>
+      <td style="font-size:11px;color:var(--text2)">${v.scope}</td>
+      <td>${badge(v.status)}</td>
+    </tr>`).join("");
+}
+
+// ── navigation ────────────────────────────────────────────────────────────────
+const PAGE_TITLES = {roadmap:"Roadmap",arch:"Architecture",risks:"Risks & Blockers",vendors:"Vendors"};
+
+function showPage(id, el) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.getElementById("page-" + id).classList.add("active");
+  el.classList.add("active");
+  document.getElementById("topbar-title").textContent = PAGE_TITLES[id] || id;
+}
+
+function filterMarket(mkt, el) {
+  activeMkt = mkt;
+  document.querySelectorAll(".mkt-pill").forEach(p => p.classList.remove("active"));
+  el.classList.add("active");
+  renderReqs();
+  renderTimeline();
+  renderRisks();
+  renderVendors();
+}
+
+function filterReqs() { renderReqs(); }
+
+// ── init ──────────────────────────────────────────────────────────────────────
+renderReqs();
+renderTimeline();
+renderDeps();
+renderArch();
+renderRisks();
+renderVendors();
+</script>
+</body>
+</html>
