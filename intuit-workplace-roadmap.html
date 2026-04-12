@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Workplace Intelligence Platform — FY26 Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0A1628;--navy:#0D2B5C;--blue:#1565C0;--teal:#00897B;--gold:#F9A825;
+    --hi:rgba(255,255,255,1);--mid:rgba(255,255,255,0.65);--lo:rgba(255,255,255,0.38);--xlo:rgba(255,255,255,0.2);
+    --s1:rgba(255,255,255,0.03);--s2:rgba(255,255,255,0.06);--s3:rgba(255,255,255,0.09);
+    --brd:rgba(255,255,255,0.08);--brd2:rgba(255,255,255,0.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--hi);min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background:
+    radial-gradient(ellipse 80% 60% at 8% 15%,rgba(21,101,192,0.2) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 92% 85%,rgba(0,137,123,0.15) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 50%,rgba(249,168,37,0.04) 0%,transparent 50%);
+    pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1;max-width:1340px;margin:0 auto;padding:0 36px 64px}
+
+  /* Header */
+  header{display:flex;align-items:flex-end;justify-content:space-between;padding:40px 0 28px;border-bottom:1px solid var(--brd);margin-bottom:28px;gap:24px;flex-wrap:wrap}
+  .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--teal);text-transform:uppercase;margin-bottom:10px}
+  header h1{font-size:clamp(26px,3.2vw,38px);font-weight:700;line-height:1.12;letter-spacing:-.025em}
+  header h1 span{color:var(--gold)}
+  .sub{margin-top:8px;font-size:15px;color:var(--lo)}
+  .pills{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid;white-space:nowrap}
+  .pill.teal{background:rgba(0,137,123,0.15);border-color:rgba(0,137,123,0.4);color:#4DB6AC}
+  .pill.blue{background:rgba(21,101,192,0.15);border-color:rgba(21,101,192,0.4);color:#64B5F6}
+  .pill.gold{background:rgba(249,168,37,0.15);border-color:rgba(249,168,37,0.4);color:#FFD54F}
+  .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+  /* North Star */
+  .ns{background:linear-gradient(135deg,rgba(13,43,92,0.75) 0%,rgba(21,101,192,0.45) 100%);border:1px solid rgba(21,101,192,0.3);border-radius:14px;padding:22px 30px;margin-bottom:28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .ns-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+  .ns-div{width:1px;height:36px;background:rgba(255,255,255,0.12);flex-shrink:0}
+  .ns-txt{font-size:14.5px;color:rgba(255,255,255,0.8);font-style:italic;line-height:1.55;flex:1}
+  .ns-m{background:rgba(0,137,123,0.2);border:1px solid rgba(0,137,123,0.35);border-radius:10px;padding:10px 18px;text-align:center;flex-shrink:0;min-width:88px}
+  .ns-m .n{font-size:24px;font-weight:700;color:#4DB6AC;display:block;line-height:1}
+  .ns-m .l{font-size:10px;color:var(--lo);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;display:block}
+
+  /* Filters */
+  .frow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .fnav{font-size:12px;color:var(--lo);font-weight:500;white-space:nowrap}
+  .qtab,.ltab{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .18s;background:var(--s1);color:var(--lo);font-family:'DM Sans',sans-serif}
+  .ltab{border-radius:20px;font-size:12px}
+  .qtab:hover,.ltab:hover{background:var(--s2);color:var(--hi)}
+  .qtab.on{color:var(--hi)}
+  .qtab[data-q="all"].on{background:var(--s2);border-color:var(--brd2)}
+  .qtab[data-q="Q1"].on{background:rgba(13,43,92,.6);border-color:rgba(93,138,204,.5);color:#90BAE0}
+  .qtab[data-q="Q2"].on{background:rgba(21,101,192,.45);border-color:rgba(100,181,246,.4);color:#90CAF9}
+  .qtab[data-q="Q3"].on{background:rgba(0,137,123,.45);border-color:rgba(77,182,172,.4);color:#80CBC4}
+  .qtab[data-q="Q4"].on{background:rgba(0,105,92,.45);border-color:rgba(77,182,172,.35);color:#80CBC4}
+  .ltab.on{background:var(--s2);color:var(--hi);border-color:var(--brd2)}
+
+  /* Detail panel */
+  .dp{background:linear-gradient(135deg,rgba(13,43,92,.92) 0%,rgba(10,22,40,.97) 100%);border:1px solid rgba(21,101,192,.28);border-radius:14px;padding:28px 32px;margin-bottom:24px;display:none;animation:fi .22s ease}
+  .dp.on{display:block}
+  @keyframes fi{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  .dp-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}
+  .dp-hdr .eyebrow{margin-bottom:6px}
+  .dp-hdr h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+  .xbtn{width:30px;height:30px;border-radius:50%;background:var(--s2);border:1px solid var(--brd);color:var(--lo);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0}
+  .xbtn:hover{background:var(--s3);color:var(--hi)}
+  .dp-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+  @media(max-width:860px){.dp-body{grid-template-columns:1fr 1fr}}
+  .ds h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--lo);text-transform:uppercase;margin-bottom:10px}
+  .ds ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .ds ul li{font-size:13.5px;color:var(--mid);padding-left:16px;position:relative;line-height:1.45}
+  .ds ul li::before{content:'→';position:absolute;left:0;color:var(--teal);font-size:12px}
+
+  /* Roadmap grid */
+  .rg{display:grid;grid-template-columns:170px repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.07);border-radius:14px;overflow:hidden;margin-bottom:36px}
+  .gh{padding:0}
+  .gh.lc{background:var(--s1);display:flex;align-items:center;padding:16px 18px}
+  .gh.lc span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--lo);text-transform:uppercase}
+  .qh{padding:16px 18px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
+  .qh[data-q="Q1"]{background:rgba(13,43,92,.75)}
+  .qh[data-q="Q2"]{background:rgba(21,101,192,.58)}
+  .qh[data-q="Q3"]{background:rgba(0,137,123,.58)}
+  .qh[data-q="Q4"]{background:rgba(0,105,92,.58)}
+  .qh .qn{font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .qh .qt{font-size:11.5px;font-style:italic;opacity:.7}
+  .qh .qg{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;margin-top:2px}
+  .rl{background:var(--s1);padding:18px;display:flex;flex-direction:column;gap:5px;border-right:1px solid rgba(255,255,255,.06)}
+  .rl .rn{font-weight:600;font-size:13px;color:var(--hi)}
+  .rl .rs{font-size:11px;color:var(--lo)}
+  .rl .rb{display:inline-block;padding:2px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;margin-top:4px;width:fit-content}
+  .cell{background:var(--s1);padding:18px;display:flex;flex-direction:column;gap:8px;transition:background .18s;cursor:pointer;position:relative}
+  .cell:hover{background:var(--s2)}
+  .cell:hover::after{content:'↗ details';position:absolute;bottom:10px;right:12px;font-size:9.5px;color:var(--teal);font-family:'DM Mono',monospace;letter-spacing:.06em;opacity:.8}
+  .cell.dim{opacity:.18;pointer-events:none}
+  .cell.hl{background:rgba(249,168,37,.05);border:1px solid rgba(249,168,37,.18)}
+  .tag{display:inline-flex;align-items:center;padding:2px 9px;border-radius:3px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.07em;text-transform:uppercase;width:fit-content}
+  .tag.bld{background:rgba(0,137,123,.2);color:#80CBC4;border:1px solid rgba(0,137,123,.35)}
+  .tag.lvg{background:rgba(21,101,192,.2);color:#90CAF9;border:1px solid rgba(21,101,192,.35)}
+  .tag.int{background:rgba(249,168,37,.15);color:#FFD54F;border:1px solid rgba(249,168,37,.3)}
+  .ct{font-size:14px;font-weight:600;color:var(--hi);line-height:1.35}
+  .ck{font-size:12.5px;color:var(--mid);line-height:1.4}
+
+  /* KPIs */
+  .stitle{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--lo);text-transform:uppercase;margin-bottom:16px}
+  .kg{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;margin-bottom:36px}
+  .kc{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:18px 20px;transition:all .18s}
+  .kc:hover{background:var(--s2);border-color:var(--brd2)}
+  .kl{font-size:12.5px;color:var(--lo);margin-bottom:7px;line-height:1.3}
+  .kv{font-size:28px;font-weight:700;letter-spacing:-.025em;line-height:1;margin-bottom:4px}
+  .ks{font-size:11px;color:var(--xlo)}
+
+  /* Principles */
+  .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-bottom:36px}
+  .pc{background:var(--s1);border:1px solid var(--brd);border-radius:12px;padding:18px 22px;display:flex;gap:16px;align-items:flex-start}
+  .pn{width:30px;height:30px;border-radius:50%;background:rgba(21,101,192,.2);border:1px solid rgba(21,101,192,.38);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#90CAF9;flex-shrink:0}
+  .pt strong{display:block;font-size:13.5px;font-weight:600;color:var(--hi);margin-bottom:4px}
+  .pt p{font-size:12px;color:var(--lo);line-height:1.5}
+
+  /* Footer */
+  footer{border-top:1px solid var(--brd);padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer p,footer .brand{font-size:12px;color:var(--xlo)}
+  footer .brand{font-family:'DM Mono',monospace;letter-spacing:.1em}
+
+  @media(max-width:820px){
+    .rg{grid-template-columns:110px repeat(4,1fr)}
+    .ck{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="eyebrow">Craft Case Study · Staff PM · Workplace Platform</div>
+      <h1>AI-Powered Workplace<br><span>Intelligence Platform</span></h1>
+      <div class="sub">FY26 Roadmap · 17,000+ Employees + 20K Contingent · Global Campuses</div>
+    </div>
+    <div class="pills">
+      <div class="pill teal"><span class="dot"></span>ServiceNow WSD</div>
+      <div class="pill blue"><span class="dot"></span>Swoogo Events</div>
+      <div class="pill gold"><span class="dot"></span>AI-First Build</div>
+    </div>
+  </header>
+
+  <div class="ns">
+    <div class="ns-lbl">North Star</div>
+    <div class="ns-div"></div>
+    <div class="ns-txt">"Every employee arrives at work — physically or virtually — and the environment anticipates their needs, connects them to the right people and spaces, and gets out of the way."</div>
+    <div class="ns-m"><span class="n">WPS</span><span class="l">Productivity Score</span></div>
+    <div class="ns-m" style="border-color:rgba(249,168,37,.35);background:rgba(249,168,37,.1)"><span class="n" style="color:var(--gold)">&lt;90s</span><span class="l">Time-to-Book</span></div>
+    <div class="ns-m"><span class="n" style="color:#90CAF9">80%</span><span class="l">Platform Adoption</span></div>
+  </div>
+
+  <div class="frow">
+    <span class="fnav">Quarter:</span>
+    <button class="qtab on" data-q="all">All</button>
+    <button class="qtab" data-q="Q1">Q1 · Foundation</button>
+    <button class="qtab" data-q="Q2">Q2 · Intelligence</button>
+    <button class="qtab" data-q="Q3">Q3 · Experience</button>
+    <button class="qtab" data-q="Q4">Q4 · Scale</button>
+  </div>
+  <div class="frow" style="margin-bottom:24px">
+    <span class="fnav">Layer:</span>
+    <button class="ltab on" data-l="all">All Layers</button>
+    <button class="ltab" data-l="bk">Workspace Booking</button>
+    <button class="ltab" data-l="ev">Events Tech</button>
+    <button class="ltab" data-l="dp">Data & Platform</button>
+  </div>
+
+  <div class="dp" id="dp">
+    <div class="dp-hdr">
+      <div><div class="eyebrow" id="dq"></div><h2 id="dt"></h2></div>
+      <button class="xbtn" onclick="close_()">✕</button>
+    </div>
+    <div class="dp-body" id="db"></div>
+  </div>
+
+  <div class="rg">
+    <div class="gh lc"><span>Layer</span></div>
+    <div class="gh"><div class="qh" data-q="Q1"><div class="qn">Q1 FY26</div><div class="qt">Foundation</div><div class="qg">Activate & Baseline</div></div></div>
+    <div class="gh"><div class="qh" data-q="Q2"><div class="qn">Q2 FY26</div><div class="qt">Intelligence</div><div class="qg">Automate & Connect</div></div></div>
+    <div class="gh"><div class="qh" data-q="Q3"><div class="qn">Q3 FY26</div><div class="qt">Experience</div><div class="qg">Unify & Personalize</div></div></div>
+    <div class="gh"><div class="qh" data-q="Q4"><div class="qn">Q4 FY26</div><div class="qt">Scale</div><div class="qg">Optimize & Expand</div></div></div>
+
+    <div class="rl" data-l="bk"><div class="rn">Workspace Booking</div><div class="rs">Desk · Room · Campus</div><div class="rb" style="background:rgba(0,137,123,.2);color:#80CBC4;border:1px solid rgba(0,137,123,.3)">ServiceNow WSD</div></div>
+    <div class="cell" data-q="Q1" data-l="bk" onclick="show('b1')"><div class="tag lvg">Leverage</div><div class="ct">ServiceNow WSD Full Deployment</div><div class="ck">Deploy across all campuses · establish occupancy baseline</div></div>
+    <div class="cell" data-q="Q2" data-l="bk" onclick="show('b2')"><div class="tag bld">Build</div><div class="ct">AI Desk Recommendations + Slack Booking</div><div class="ck">AI suggests desks by team proximity · book from Slack</div></div>
+    <div class="cell hl" data-q="Q3" data-l="bk" onclick="show('b3')"><div class="tag bld">Build</div><div class="ct">Predictive Availability + Mobile Wayfinding</div><div class="ck">48hr space forecasts · campus nav app launch</div></div>
+    <div class="cell" data-q="Q4" data-l="bk" onclick="show('b4')"><div class="tag lvg">Leverage</div><div class="ct">Facilities Optimization + Contingent Access</div><div class="ck">Space rightsizing reports · 20K contingent workers onboarded</div></div>
+
+    <div class="rl" data-l="ev"><div class="rn">Events Tech</div><div class="rs">Hackathons · Summits · Hybrid</div><div class="rb" style="background:rgba(21,101,192,.2);color:#90CAF9;border:1px solid rgba(21,101,192,.3)">Swoogo</div></div>
+    <div class="cell" data-q="Q1" data-l="ev" onclick="show('e1')"><div class="tag lvg">Leverage</div><div class="ct">Swoogo Audit + Calendar Integration</div><div class="ck">Google Cal/Outlook sync · standard event templates</div></div>
+    <div class="cell" data-q="Q2" data-l="ev" onclick="show('e2')"><div class="tag bld">Build</div><div class="ct">Hybrid Upgrades + AI Logistics</div><div class="ck">Hybrid parity · AI-assisted headcount and scheduling</div></div>
+    <div class="cell" data-q="Q3" data-l="ev" onclick="show('e3')"><div class="tag bld">Build</div><div class="ct">Personalized Recommendations + Analytics</div><div class="ck">AI session recs · post-event analytics dashboard</div></div>
+    <div class="cell" data-q="Q4" data-l="ev" onclick="show('e4')"><div class="tag bld">Build</div><div class="ct">Self-Service Events + Leadership Summit</div><div class="ck">Any team runs their own event · summit platform ready</div></div>
+
+    <div class="rl" data-l="dp"><div class="rn">Data & Platform</div><div class="rs">Integration · AI · Identity</div><div class="rb" style="background:rgba(249,168,37,.15);color:#FFD54F;border:1px solid rgba(249,168,37,.3)">Foundation</div></div>
+    <div class="cell hl" data-q="Q1" data-l="dp" onclick="show('d1')"><div class="tag bld">Build</div><div class="ct">Workplace Data Model v1 + SSO Unification</div><div class="ck">Unified schema · single login across all tools</div></div>
+    <div class="cell" data-q="Q2" data-l="dp" onclick="show('d2')"><div class="tag bld">Build</div><div class="ct">Real-Time Occupancy APIs + Facilities Dashboard</div><div class="ck">Live occupancy feeds · dashboard for campus leaders</div></div>
+    <div class="cell" data-q="Q3" data-l="dp" onclick="show('d3')"><div class="tag bld">Build</div><div class="ct">Cross-Platform Analytics + AI Training</div><div class="ck">Unified analytics layer · AI models trained on real data</div></div>
+    <div class="cell" data-q="Q4" data-l="dp" onclick="show('d4')"><div class="tag bld">Build</div><div class="ct">Predictive Capacity + Contingent Portal</div><div class="ck">3–6 month space forecasts · contingent workforce portal</div></div>
+  </div>
+
+  <div class="stitle">Key Performance Indicators</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Workspace Utilization</div><div class="kv" style="color:#80CBC4">&gt;75%</div><div class="ks">Desks/rooms booked vs. available</div></div>
+    <div class="kc"><div class="kl">Time-to-Book</div><div class="kv" style="color:#90CAF9">&lt;90s</div><div class="ks">Avg. booking completion time</div></div>
+    <div class="kc"><div class="kl">Event Satisfaction</div><div class="kv" style="color:#FFD54F">&gt;4.2/5</div><div class="ks">Post-event NPS, hybrid + in-person</div></div>
+    <div class="kc"><div class="kl">Platform Adoption</div><div class="kv" style="color:#80CBC4">&gt;80%</div><div class="ks">Employees using unified experience</div></div>
+    <div class="kc"><div class="kl">AI Acceptance Rate</div><div class="kv" style="color:#90CAF9">&gt;60%</div><div class="ks">AI-suggested spaces/times accepted</div></div>
+    <div class="kc"><div class="kl">ServiceNow Coverage</div><div class="kv" style="color:#FFD54F">100%</div><div class="ks">All bookings through ServiceNow WSD</div></div>
+  </div>
+
+  <div class="stitle">Prioritization Principles</div>
+  <div class="pg">
+    <div class="pc"><div class="pn">1</div><div class="pt"><strong>Leverage existing investments first</strong><p>ServiceNow WSD and Swoogo are already paid for — extract full value before buying anything new.</p></div></div>
+    <div class="pc"><div class="pn">2</div><div class="pt"><strong>High-impact, low-friction wins</strong><p>Prioritize what employees feel immediately — faster booking, less app-switching, better wayfinding.</p></div></div>
+    <div class="pc"><div class="pn">3</div><div class="pt"><strong>AI follows data, not promises</strong><p>No AI features in Q1. Recommendations launch in Q2 only after a full quarter of real occupancy signal.</p></div></div>
+    <div class="pc"><div class="pn">4</div><div class="pt"><strong>Contingent workforce parity</strong><p>20K+ contingent workers need the same seamless experience as FTEs. Inclusion drives platform ROI.</p></div></div>
+  </div>
+
+  <footer>
+    <p>Harikrishna Dave · Staff PM · Workplace Platform · April 2026</p>
+    <div class="brand">FY26 WORKPLACE INTELLIGENCE PLATFORM</div>
+  </footer>
+</div>
+
+<script>
+const D={
+  b1:{q:"Q1 FY26 · Workspace Booking",t:"ServiceNow WSD Full Deployment",
+    why:["ServiceNow WSD purchased in FY25 but underutilized across campuses","No consistent booking experience — employees use ad-hoc tools and email","Must establish occupancy baseline before any AI work can begin"],
+    what:["Deploy desk, room, and visitor flows across all US campuses","Enable occupancy sensor integration for real-time + historical data","Configure hoteling rules, booking windows, and cancellation policies","Train Facilities team on admin console and reporting"],
+    win:["100% of campuses live on ServiceNow WSD by end of Q1","Occupancy baseline captured for all buildings","Booking support tickets reduced vs. pre-deployment baseline"]},
+  b2:{q:"Q2 FY26 · Workspace Booking",t:"AI Desk Recommendations + Slack Booking",
+    why:["Employees waste time hunting for desks near their team on peak days","Booking requires leaving Slack — friction kills adoption","Q1 occupancy data is now sufficient to train a recommendation model"],
+    what:["Train model on Q1 occupancy + org chart proximity data","Build Slack-native /book-desk and /book-room commands","A/B test: 50% see AI suggestions, 50% use standard ServiceNow UI","High-demand day alerts pushed via Slack"],
+    win:["Time-to-book drops below 90 seconds","Slack booking completion rate >60%","Team co-location rate improves vs. Q1 baseline"]},
+  b3:{q:"Q3 FY26 · Workspace Booking",t:"Predictive Availability + Mobile Wayfinding",
+    why:["Employees need space availability before they commute — reactive booking fails","Visiting employees and new hires have no campus navigation at all","Team clustering requires forward-looking prediction, not just real-time data"],
+    what:["48-hour availability forecasting using Q1–Q2 occupancy trend data","Mobile wayfinding app: turn-by-turn campus navigation, indoor maps","Visitor QR-code check-in with guided routing to destination","Team booking: reserve a cluster of desks for a whole team in one action"],
+    win:["Forecast accuracy >80% for 48-hour predictions","Mobile app handles >50% of bookings within 60 days of launch","Visitor satisfaction score >4.0/5"]},
+  b4:{q:"Q4 FY26 · Workspace Booking",t:"Facilities Optimization + Contingent Access",
+    why:["Facilities needs data-driven tools to right-size spaces and reduce real estate costs","20K+ contingent workers have zero access to workplace booking tools","Q4 is the moment to prove platform ROI to CIO/CFO stakeholders"],
+    what:["Facilities dashboard: utilization trends, rightsizing recommendations, cost models","Extend platform access to contingent workforce with role-scoped permissions","Monthly optimization reports auto-delivered to Facilities and Real Estate leadership","Year 1 ROI report: compare pre/post friction, utilization, and cost metrics"],
+    win:[">5% real estate cost savings recommended in pilot buildings","Contingent worker booking NPS >3.8/5","Year 1 ROI report presented to CIO leadership"]},
+  e1:{q:"Q1 FY26 · Events Tech",t:"Swoogo Audit + Calendar Integration",
+    why:["Swoogo active but siloed — events don't auto-sync to employee calendars","No standard templates means every event is rebuilt from scratch","Calendar integration is the #1 employee request in Facilities feedback"],
+    what:["Full audit of current Swoogo config, event types, and integration gaps","Bidirectional Google Calendar and Outlook sync for all Swoogo events","Standard templates: All-Hands, Hackathon, Leadership Summit, Team Event","Automated registration confirmation with one-click calendar add"],
+    win:["100% of Swoogo events sync to employee calendars","Standard template adoption >80% of new events","Event no-show rate decreases vs. pre-integration baseline"]},
+  e2:{q:"Q2 FY26 · Events Tech",t:"Hybrid Upgrades + AI Logistics",
+    why:["Hybrid attendees rate events lower than in-person — experience is not equal","Event logistics managed manually in spreadsheets — error-prone and slow","AI can cut organizer logistics effort by 40–50%"],
+    what:["Hybrid-first templates with equal parity for remote and in-person attendees","AI logistics: headcount prediction, room sizing, catering auto-estimates","Automated pre-event comms with personalized agendas per attendee type","Real-time hybrid attendance dashboard for event organizers"],
+    win:["Hybrid attendee NPS within 0.3 points of in-person NPS","Organizer logistics time reduced by >40%","Event cancellation/no-show rate decreases"]},
+  e3:{q:"Q3 FY26 · Events Tech",t:"Personalized Recommendations + Analytics",
+    why:["Employees miss relevant internal events — discovery is broadcast-only","Post-event data isn't used to improve future events","Leadership needs ROI data to justify events investment"],
+    what:["AI session recommendation engine: matches events to role, team, past attendance","Post-event analytics: attendance, engagement, NPS, and follow-through rates","Event ROI calculator for leadership reporting","A/B test: personalized nudge vs. broadcast announcement"],
+    win:["Event attendance +20% YoY with same budget","Post-event analytics adopted by 80% of organizers","NPS >4.2/5 across company-wide events"]},
+  e4:{q:"Q4 FY26 · Events Tech",t:"Self-Service Events + Leadership Summit",
+    why:["Teams depend on central ops team even for small events — creates bottleneck","Annual Leadership Summit needs a purpose-built, polished experience","Self-service unlocks the long tail without scaling the central events team"],
+    what:["Self-service wizard for any team — no ops required for events under 50 people","Full Leadership Summit on Swoogo: registration, agenda, hybrid streaming, networking","Post-event survey automation with benchmark reporting","Playbook and training for distributed team event leads"],
+    win:["75% of small/medium events created self-service by Q4","Leadership Summit hybrid NPS >4.5/5","Central ops events load reduced by 40%"]},
+  d1:{q:"Q1 FY26 · Data & Platform",t:"Workplace Data Model v1 + SSO Unification",
+    why:["No unified data model — each tool has its own schema, making AI impossible","Separate logins for ServiceNow, Swoogo, Slack, Google — friction and security risk","Everything in Q2–Q4 depends on this foundation — non-negotiable Q1 priority"],
+    what:["Define Data Model v1: Space, Booking, Event, Employee, Occupancy entities","Implement SSO across ServiceNow WSD, Swoogo, and collaboration tools","Extend identity model to contingent workers with appropriate permission scoping","Data governance: PII handling, retention policy, access control matrix"],
+    win:["All workplace tools on single SSO","Workplace Data Model v1 shipped and approved","Zero PII policy violations in cross-tool data flows"]},
+  d2:{q:"Q2 FY26 · Data & Platform",t:"Real-Time Occupancy APIs + Facilities Dashboard",
+    why:["Occupancy data trapped inside ServiceNow — no other tool can consume it","Facilities makes space decisions from quarterly reports, not live signals","Real-time APIs are the prerequisite for all Q3 AI features"],
+    what:["Real-time occupancy API layer on top of ServiceNow WSD data","Streaming events (Pub/Sub or Kafka) for live dashboard and AI model feeds","Facilities Dashboard v1: live occupancy, trend lines, anomaly alerts, floor drill-down","API docs and internal developer onboarding"],
+    win:["Occupancy APIs with <5 second latency","Facilities dashboard adopted by all campus ops leads","3+ internal teams consuming occupancy APIs by end of Q2"]},
+  d3:{q:"Q3 FY26 · Data & Platform",t:"Cross-Platform Analytics + AI Training",
+    why:["No unified view of workplace usage across ServiceNow, Swoogo, and Slack","AI models for Q3 features need Q1–Q2 training data — this is the moment","Cross-platform analytics makes the Year 2 business case possible"],
+    what:["Unified analytics layer joining ServiceNow, Swoogo, and Slack data","Self-serve dashboards for HR, Facilities, and People Experience teams","Train Occupancy AI and Desk Recommendation models on two quarters of real data","Monthly Workplace Intelligence Digest delivered to Facilities + People Ops"],
+    win:["Unified analytics adopted by HR and Facilities leadership","AI models reach >80% accuracy on occupancy prediction holdout set","Monthly digest open rate >70%"]},
+  d4:{q:"Q4 FY26 · Data & Platform",t:"Predictive Capacity + Contingent Portal",
+    why:["Real estate is a top enterprise cost center — predictive planning drives savings","20K+ contingent workers still lack a proper workplace technology experience","Completes Year 1 foundation and sets up Year 2 expansion"],
+    what:["Predictive capacity model: forecast space needs 3–6 months ahead","Contingent Worker Portal: booking, events, wayfinding with role-appropriate access","Year 1 Platform ROI report: cost savings, productivity gains, adoption vs. targets","Year 2 roadmap proposal based on Q4 data and stakeholder feedback"],
+    win:["Capacity model within 10% accuracy for 90-day utilization forecast","Contingent worker portal NPS >3.8/5","Real estate savings recommendations accepted for 2+ buildings"]}
+};
+
+let aQ='all',aL='all';
+function filter(){
+  document.querySelectorAll('.cell').forEach(c=>c.classList.toggle('dim',!((aQ==='all'||c.dataset.q===aQ)&&(aL==='all'||c.dataset.l===aL))));
+  document.querySelectorAll('.rl').forEach(r=>r.style.opacity=(aL==='all'||r.dataset.l===aL)?'1':'0.2');
+}
+document.querySelectorAll('.qtab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.qtab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');aQ=b.dataset.q;filter();
+}));
+document.querySelectorAll('.ltab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.ltab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');aL=b.dataset.l;filter();
+}));
+
+function show(id){
+  const d=D[id];if(!d)return;
+  document.getElementById('dq').textContent=d.q;
+  document.getElementById('dt').textContent=d.t;
+  document.getElementById('db').innerHTML=`
+    <div class="ds"><h4>Why This, Why Now</h4><ul>${d.why.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="ds"><h4>What We're Building</h4><ul>${d.what.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="ds"><h4>Success Signals</h4><ul>${d.win.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+  const p=document.getElementById('dp');
+  p.classList.add('on');
+  p.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function close_(){document.getElementById('dp').classList.remove('on')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close_()});
+</script>
+</body>
+</html>
