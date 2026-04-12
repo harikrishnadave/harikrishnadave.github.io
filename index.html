@@ -1,50 +1,1210 @@
-<!--
-  ════════════════════════════════════════════════════════════════
-  STEP 1 — ADD THIS CARD TO index.html
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Harikrishna Dave – Sr. Product Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  Open index.html in your repo. Find this block (the last project card):
+    /* ── THEME TOKENS ─────────────────────────── */
+    [data-theme="dark"] {
+      --bg:           #06090f;
+      --bg2:          #0b1018;
+      --surface:      #101620;
+      --surface2:     #161e2e;
+      --border:       rgba(0, 212, 255, 0.12);
+      --border-hover: rgba(0, 212, 255, 0.35);
+      --text:         #dde6f0;
+      --text-strong:  #f0f6ff;
+      --text-muted:   #7a90a8;
+      --text-dim:     #3d5060;
+      --accent:       #00d4ff;
+      --accent2:      #7c3aed;
+      --accent-dim:   rgba(0, 212, 255, 0.10);
+      --accent-glow:  rgba(0, 212, 255, 0.20);
+      --green:        #00e5a0;
+      --green-dim:    rgba(0, 229, 160, 0.10);
+      --amber:        #fbbf24;
+      --amber-dim:    rgba(251,191,36,0.10);
+      --dot-color:    rgba(0, 212, 255, 0.06);
+      --sidebar-bg:   #080d14;
+      --sidebar-border: rgba(0,212,255,0.10);
+    }
+    [data-theme="light"] {
+      --bg:           #f2f4f8;
+      --bg2:          #eaecf2;
+      --surface:      #ffffff;
+      --surface2:     #f0f2f7;
+      --border:       rgba(30, 80, 200, 0.14);
+      --border-hover: rgba(30, 80, 200, 0.40);
+      --text:         #1a2030;
+      --text-strong:  #0a0f1a;
+      --text-muted:   #3e5070;
+      --text-dim:     #8a9ab8;
+      --accent:       #1060e0;
+      --accent2:      #7c3aed;
+      --accent-dim:   rgba(16, 96, 224, 0.09);
+      --accent-glow:  rgba(16, 96, 224, 0.15);
+      --green:        #059669;
+      --green-dim:    rgba(5,150,105,0.10);
+      --amber:        #d97706;
+      --amber-dim:    rgba(217,119,6,0.10);
+      --dot-color:    rgba(16, 96, 224, 0.06);
+      --sidebar-bg:   #ffffff;
+      --sidebar-border: rgba(30,80,200,0.12);
+    }
 
-      View Roadmap →
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      display: flex;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Dot grid */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1.5px);
+      background-size: 28px 28px;
+    }
+
+    /* ── SIDEBAR ───────────────────────────────── */
+    .sidebar {
+      position: fixed; top: 0; left: 0;
+      width: 240px; height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex; flex-direction: column;
+      z-index: 200; padding: 36px 0;
+      transition: transform 0.3s, background 0.3s;
+      overflow-y: auto;
+    }
+    .sidebar-top { padding: 0 28px 32px; border-bottom: 1px solid var(--border); }
+    .sidebar-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px; font-weight: 800; color: var(--text-strong);
+      letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 5px;
+    }
+    .sidebar-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px; color: var(--accent); font-weight: 500;
+      letter-spacing: 0.5px; opacity: 0.9;
+    }
+    .sidebar-nav { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      text-decoration: none; color: var(--text-muted);
+      font-size: 13px; font-weight: 500;
+      transition: all 0.2s; position: relative;
+    }
+    .sidebar-nav a .nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--text-muted); width: 20px; flex-shrink: 0;
+    }
+    .sidebar-nav a:hover { color: var(--text-strong); background: var(--accent-dim); }
+    .sidebar-nav a.active {
+      color: var(--accent); background: var(--accent-dim);
+      border-left: 2px solid var(--accent); padding-left: 10px;
+    }
+    .sidebar-nav a.active .nav-num { color: var(--accent); }
+    .sidebar-bottom {
+      padding: 20px 28px 0; border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none; color: var(--text-muted);
+      font-size: 12.5px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .sidebar-link:hover { color: var(--accent); }
+    .sidebar-link svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .theme-toggle {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 8px 16px; cursor: pointer;
+      color: var(--text-muted); font-size: 12.5px; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .theme-toggle:hover { border-color: var(--border-hover); color: var(--text-strong); }
+    .theme-toggle svg { width: 15px; height: 15px; }
+    .theme-toggle-fixed {
+      position: fixed; top: 18px; right: 24px; z-index: 500;
+    }
+
+    /* ── MAIN ──────────────────────────────────── */
+    .main-content {
+      margin-left: 240px; flex: 1; position: relative; z-index: 1;
+      min-height: 100vh;
+    }
+    section { padding: 88px 56px; border-bottom: 1px solid var(--border); }
+    .container { max-width: 820px; }
+    .sec-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sec-label::before { content: '//'; opacity: 0.5; }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 34px; font-weight: 800;
+      color: var(--text-strong); margin-bottom: 44px; letter-spacing: -0.8px;
+    }
+
+    /* ── HERO ──────────────────────────────────── */
+    #about { padding-top: 100px; padding-bottom: 100px; background: var(--bg); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px; color: var(--green);
+      background: var(--green-dim); border: 1px solid rgba(0,229,160,0.2);
+      padding: 5px 14px; border-radius: 999px; margin-bottom: 28px;
+    }
+    .hero-badge::before { content: '●'; font-size: 7px; animation: blink 1.8s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(42px, 5.5vw, 72px);
+      font-weight: 800; letter-spacing: -2.5px;
+      line-height: 1.02; color: var(--text-strong);
+      margin-bottom: 8px;
+    }
+    h1 .accent-word { color: var(--accent); }
+    .hero-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; color: var(--text-muted);
+      margin-bottom: 24px; letter-spacing: 0.3px;
+    }
+    .hero-subtitle span { color: var(--accent); }
+    .hero-bio {
+      font-size: 16px; color: var(--text); line-height: 1.8;
+      max-width: 600px; margin-bottom: 36px; font-weight: 400;
+    }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 40px; }
+    .hero-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px; font-weight: 500;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(0,212,255,0.18); padding: 5px 13px;
+      border-radius: 6px; letter-spacing: 0.3px;
+    }
+    [data-theme="light"] .hero-tag { border-color: rgba(16,96,224,0.18); }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 26px; border-radius: 8px; font-size: 13.5px;
+      font-weight: 600; text-decoration: none; font-family: 'Inter', sans-serif;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: var(--accent); color: #000;
+      box-shadow: 0 0 28px var(--accent-glow);
+    }
+    .btn-primary:hover { filter: brightness(1.1); box-shadow: 0 0 40px var(--accent-glow); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--border-hover); background: var(--accent-dim); color: var(--accent); }
+
+    /* ── EXPERIENCE ────────────────────────────── */
+    #experience { background: var(--bg2); }
+    .jobs { display: flex; flex-direction: column; gap: 12px; }
+    .job {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .job:hover { border-color: var(--border-hover); box-shadow: 0 0 24px var(--accent-glow); }
+    .job-trigger {
+      width: 100%; background: none; border: none; cursor: pointer;
+      padding: 22px 26px; display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px; text-align: left;
+      color: inherit; font-family: 'Inter', sans-serif;
+    }
+    .job-left { flex: 1; }
+    .job-top-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .job-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 700; color: var(--text-strong);
+    }
+    .badge-current {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px; font-weight: 600; padding: 2px 9px;
+      border-radius: 999px; background: var(--green-dim); color: var(--green);
+      border: 1px solid rgba(0,229,160,0.22); letter-spacing: 0.5px;
+    }
+    .job-company { font-size: 13.5px; color: var(--accent); font-weight: 500; margin-bottom: 8px; }
+    .job-meta { display: flex; gap: 18px; flex-wrap: wrap; }
+    .job-meta-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 5px;
+    }
+    .chevron-icon {
+      color: var(--text-dim); font-size: 20px; flex-shrink: 0;
+      margin-top: 2px; transition: transform 0.25s;
+    }
+    .job.open .chevron-icon { transform: rotate(180deg); }
+    .job-body {
+      display: none; padding: 0 26px 26px;
+      border-top: 1px solid var(--border);
+    }
+    .job.open .job-body { display: block; }
+    .job-section { margin-top: 20px; }
+    .job-sec-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 1.6px;
+      text-transform: uppercase; color: var(--text-muted);
+      padding-bottom: 10px; margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .job-sec-title::before { content: '>'; color: var(--accent); }
+    .job-body ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .job-body li {
+      font-size: 14px; color: var(--text); line-height: 1.7;
+      padding-left: 18px; position: relative;
+    }
+    .job-body li::before {
+      content: '—'; position: absolute; left: 0;
+      color: var(--accent); font-size: 12px; top: 4px;
+    }
+    .job-body li strong { color: var(--text-strong); font-weight: 600; }
+
+    /* ── SKILLS ────────────────────────────────── */
+    #skills { background: var(--bg); }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;
+    }
+    .skill-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .skill-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%; background: var(--accent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .skill-card:hover { border-color: var(--border-hover); }
+    .skill-card:hover::before { opacity: 1; }
+    .skill-icon { font-size: 22px; margin-bottom: 14px; }
+    .skill-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14.5px; font-weight: 700; color: var(--text-strong); margin-bottom: 14px;
+    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500; padding: 4px 10px;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border); border-radius: 5px;
+      transition: all 0.2s;
+    }
+    .tag:hover { border-color: var(--border-hover); color: var(--text); }
+
+    /* ── AI TOOLS ──────────────────────────────── */
+    #ai-tools { background: var(--bg2); }
+    .ai-intro {
+      font-size: 0.95rem; color: var(--text-muted); max-width: 640px;
+      line-height: 1.75; margin-bottom: 28px;
+    }
+    .ai-intro strong { color: var(--text-strong); }
+    .ai-tools-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;
+      margin-bottom: 28px;
+    }
+    .ai-tool-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 22px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .ai-tool-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .ai-tool-card:hover { border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 6px 24px var(--accent-glow); }
+    .ai-tool-card:hover::before { opacity: 1; }
+    .ai-tool-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .ai-tool-logo {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; overflow: hidden; flex-shrink: 0;
+    }
+    .ai-tool-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+    .ai-tool-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem; font-weight: 700; color: var(--text-strong);
+    }
+    .ai-tool-category {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent);
+    }
+    .ai-tool-desc {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 12px;
+    }
+    .ai-use-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .ai-use-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.60rem; font-weight: 500;
+      padding: 2px 8px; border-radius: 4px;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--accent-glow);
+    }
+    .ai-context-strip {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      border-radius: 10px; padding: 16px 20px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .ai-context-strip p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; }
+    .ai-context-strip strong { color: var(--text-strong); }
+
+    /* ── EDUCATION ─────────────────────────────── */
+    #education { background: var(--bg2); }
+    .edu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .edu-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .edu-card:hover { border-color: var(--border-hover); box-shadow: 0 0 20px var(--accent-glow); }
+    .edu-icon { font-size: 24px; margin-bottom: 16px; }
+    .edu-degree {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 700; color: var(--text-strong); margin-bottom: 6px;
+    }
+    .edu-school { font-size: 13.5px; color: var(--accent); font-weight: 500; }
+    .edu-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px; color: var(--text-muted); margin-top: 8px;
+    }
+
+    /* ── PERSONAL ──────────────────────────────── */
+    #personal { background: var(--bg); }
+    .personal-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px;
+    }
+    .personal-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+      transition: border-color 0.2s;
+    }
+    .personal-card:hover { border-color: var(--border-hover); }
+    .personal-icon { font-size: 26px; margin-bottom: 14px; }
+    .personal-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px; font-weight: 700; color: var(--text-strong); margin-bottom: 10px;
+    }
+    .personal-card p { font-size: 13.5px; color: var(--text); line-height: 1.7; }
+    .pill-soon {
+      display: inline-block; margin-top: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--amber);
+      background: var(--amber-dim); border: 1px solid rgba(251,191,36,0.2);
+      padding: 3px 10px; border-radius: 999px;
+    }
+
+    /* ── PROJECTS ──────────────────────────────── */
+    #projects { background: var(--bg2); }
+    .project-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px;
+    }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      text-decoration: none; display: block; color: inherit;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+    .project-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .project-card h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem; font-weight: 700; color: var(--text-strong); margin-bottom: 10px;
+    }
+    .project-card p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+    .project-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+    .proj-badge {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+      font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border);
+      color: var(--text-muted); background: var(--bg2);
+    }
+    .project-link-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--border-hover); padding: 5px 14px; border-radius: 999px;
+    }
+    .project-empty {
+      border: 1px dashed var(--border); border-radius: 12px;
+      padding: 48px 32px; text-align: center;
+    }
+    .project-empty .big { font-size: 38px; margin-bottom: 18px; }
+    .project-empty h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px; font-weight: 700; color: var(--text-strong); margin-bottom: 8px;
+    }
+    .project-empty p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    .ai-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(0,212,255,0.2); padding: 7px 16px; border-radius: 999px;
+    }
+
+    /* ── CONTACT ───────────────────────────────── */
+    #contact { background: var(--bg); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;
+    }
+    .contact-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px; font-weight: 800; letter-spacing: -0.8px;
+      color: var(--text-strong); margin-bottom: 12px;
+    }
+    .contact-sub { font-size: 14.5px; color: var(--text); line-height: 1.75; margin-bottom: 30px; }
+    .contact-items { display: flex; flex-direction: column; gap: 10px; }
+    .c-item {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px;
+      text-decoration: none; color: var(--text);
+      transition: all 0.2s;
+    }
+    .c-item:hover { border-color: var(--border-hover); background: var(--accent-dim); color: var(--accent); }
+    .c-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--surface2); display: flex; align-items: center;
+      justify-content: center; font-size: 15px; flex-shrink: 0;
+    }
+    .c-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--text-dim); margin-bottom: 2px; letter-spacing: 0.5px;
+    }
+    .c-value { font-size: 13.5px; font-weight: 500; color: var(--text); }
+    .c-item:hover .c-value { color: var(--accent); }
+    .contact-cta {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 36px;
+    }
+    .contact-cta h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px; font-weight: 700; color: var(--text-strong); margin-bottom: 10px;
+    }
+    .contact-cta p { font-size: 14px; color: var(--text); line-height: 1.75; margin-bottom: 28px; }
+    .btn-full {
+      display: block; text-align: center;
+      background: var(--accent); color: #000; font-weight: 700;
+      padding: 13px; border-radius: 8px; text-decoration: none;
+      font-size: 14px; font-family: 'Inter', sans-serif;
+      transition: all 0.2s; box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .btn-full:hover { filter: brightness(1.12); box-shadow: 0 0 40px var(--accent-glow); }
+
+    /* ── FOOTER ────────────────────────────────── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 28px 56px; color: var(--text-dim); font-size: 12.5px;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ── MOBILE TOPBAR ─────────────────────────── */
+    .mobile-bar {
+      display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      background: var(--sidebar-bg); border-bottom: 1px solid var(--sidebar-border);
+      padding: 0 20px; height: 56px; align-items: center; justify-content: space-between;
+    }
+    .mobile-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px; font-weight: 800; color: var(--text-strong);
+    }
+    .mobile-hamburger {
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .mobile-hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); border-radius: 2px; transition: 0.3s;
+    }
+    .mobile-drawer {
+      display: none; position: fixed; top: 56px; left: 0; right: 0; z-index: 290;
+      background: var(--sidebar-bg); border-bottom: 1px solid var(--sidebar-border);
+      padding: 16px 24px;
+      flex-direction: column; gap: 4px;
+    }
+    .mobile-drawer.open { display: flex; }
+    .mobile-drawer a {
+      padding: 10px 12px; text-decoration: none;
+      color: var(--text-muted); font-size: 14px; font-weight: 500;
+      border-radius: 8px; transition: all 0.2s;
+    }
+    .mobile-drawer a:hover { background: var(--accent-dim); color: var(--accent); }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .mobile-bar { display: flex; }
+      .main-content { margin-left: 0; padding-top: 56px; }
+      section { padding: 56px 24px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 6px; padding: 24px; text-align: center; }
+      h2 { font-size: 26px; margin-bottom: 32px; }
+      h1 { letter-spacing: -1.5px; }
+    }
+
+    /* ── ANIMATIONS ────────────────────────────── */
+    .fade-up { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .stagger-1 { transition-delay: 0.08s; }
+    .stagger-2 { transition-delay: 0.16s; }
+    .stagger-3 { transition-delay: 0.24s; }
+    .stagger-4 { transition-delay: 0.32s; }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-name">Harikrishna<br>Dave</div>
+    <div class="sidebar-role">SR. PRODUCT MANAGER</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#about" class="active"><span class="nav-num">01</span> About</a>
+    <a href="#experience"><span class="nav-num">02</span> Experience</a>
+    <a href="#skills"><span class="nav-num">03</span> Skills</a>
+    <a href="#ai-tools"><span class="nav-num">04</span> AI Tools</a>
+    <a href="#education"><span class="nav-num">05</span> Education</a>
+    <a href="#personal"><span class="nav-num">06</span> Personal</a>
+    <a href="#projects"><span class="nav-num">07</span> Projects</a>
+    <a href="#contact"><span class="nav-num">08</span> Contact</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="mailto:harikrishnadave@gmail.com" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      harikrishnadave@gmail.com
     </a>
+    <a href="https://www.linkedin.com/in/harikrishnadave/" target="_blank" rel="noopener" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn Profile
+    </a>
+  </div>
+</aside>
 
-  Paste the <a> block below immediately after that closing </a>,
-  still inside the projects grid wrapper div.
-  ════════════════════════════════════════════════════════════════
--->
+<!-- Fixed top-right theme toggle -->
+<button class="theme-toggle theme-toggle-fixed" onclick="toggleTheme()" id="themeBtn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="themeIcon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <span id="themeLabel">Dark Mode</span>
+</button>
 
-<a href="./claim-narrative-generator.html">
-  🏥 AI Claim Narrative Generator
+<!-- ── MOBILE BAR ──────────────────────────────── -->
+<div class="mobile-bar">
+  <span class="mobile-name">HK Dave</span>
+  <button class="mobile-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="#about" onclick="closeDrawer()">About</a>
+  <a href="#experience" onclick="closeDrawer()">Experience</a>
+  <a href="#skills" onclick="closeDrawer()">Skills</a>
+  <a href="#ai-tools" onclick="closeDrawer()">AI Tools</a>
+  <a href="#education" onclick="closeDrawer()">Education</a>
+  <a href="#personal" onclick="closeDrawer()">Personal</a>
+  <a href="#projects" onclick="closeDrawer()">Projects</a>
+  <a href="#contact" onclick="closeDrawer()">Contact</a>
+</div>
 
-  ### AI Claim Narrative Generator
+<!-- ── MAIN CONTENT ───────────────────────────── -->
+<main class="main-content">
 
-  Speak or type clinical progress notes — AI instantly generates a
-  structured, payer-ready insurance claim narrative. Includes voice
-  dictation (Wispr-style) and adapts output by CDT code, carrier,
-  tone, and clinical signals detected in the notes.
+  <!-- ABOUT / HERO -->
+  <section id="about">
+    <div class="container">
+      <div class="hero-badge fade-up">Available · San Diego, CA</div>
+      <h1 class="fade-up stagger-1">Harikrishna<br><span class="accent-word">Dave.</span></h1>
+      <p class="hero-subtitle fade-up stagger-2">
+        <span>$</span> role="Senior Product Manager" · domain=<span>Fintech + Identity + SaaS + B2B + B2C</span>
+      </p>
+      <p class="hero-bio fade-up stagger-2">
+        10+ years of professional experience across product management, fintech, and SaaS — from KYC identity verification and AML watchlist screening to digital identity wallets and low-code orchestration platforms. Driving roadmaps from 0→1 across global markets.
+      </p>
+      <div class="hero-tags fade-up stagger-3">
+        <span class="hero-tag">Product Strategy</span>
+        <span class="hero-tag">KYC / Identity</span>
+        <span class="hero-tag">AML / Compliance</span>
+        <span class="hero-tag">Fintech</span>
+        <span class="hero-tag">Identity</span>
+        <span class="hero-tag">SaaS</span>
+        <span class="hero-tag">B2B</span>
+        <span class="hero-tag">B2C</span>
+        <span class="hero-tag">Agile</span>
+      </div>
+      <div class="hero-cta fade-up stagger-4">
+        <a href="#experience" class="btn btn-primary">View Experience →</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+  </section>
 
-  AI / LLM
-  Voice Input
-  Dental RCM
-  Prototype
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <p class="sec-label fade-up">02 Career</p>
+      <h2 class="fade-up">Work Experience</h2>
+      <div class="jobs">
 
-  View Tool →
-</a>
+        <!-- Trulioo -->
+        <div class="job open fade-up">
+          <button class="job-trigger" onclick="toggleJob(this)">
+            <div class="job-left">
+              <div class="job-top-row">
+                <span class="job-title">Senior Product Manager</span>
+                <span class="badge-current">CURRENT</span>
+              </div>
+              <div class="job-company">Trulioo Inc</div>
+              <div class="job-meta">
+                <span class="job-meta-item">📅 Feb 2022 – Present</span>
+                <span class="job-meta-item">📍 San Diego, CA</span>
+              </div>
+            </div>
+            <span class="chevron-icon">⌄</span>
+          </button>
+          <div class="job-body">
+            <div class="job-section">
+              <div class="job-sec-title">Product Innovation</div>
+              <ul>
+                <li>Spearheaded 0→1 <strong>electronic identification product</strong> scaling across 20+ countries, including eIDAS, mDL, BankIDs, and Government ID Wallets — leveraging AI and <strong>Lovable</strong> for rapid prototyping to accelerate product validation.</li>
+                <li>Launched <strong>AML Watchlist product</strong> monitoring individuals and businesses via 6,000+ watchlist and 20,000+ Adverse Media sources.</li>
+                <li>Led migration of KYC product 'Person Match' to <strong>OAuth 2.0</strong>, increasing enterprise customer adoption by 15%.</li>
+                <li>Led post-acquisition onboarding for 'Hello-flow', driving a <strong>24% growth</strong> in transaction volume (55M → 68M transactions).</li>
+                <li>Built in-house data hosting solution reducing operational costs from <strong>$2.5M → $600K</strong>.</li>
+              </ul>
+            </div>
+            <div class="job-section">
+              <div class="job-sec-title">Product Strategy &amp; Expansion</div>
+              <ul>
+                <li>Spearheading the integration of <strong>Trulioo's full product suite</strong> into a unified low-code orchestration platform via a single account model, making all products and services seamlessly accessible to customers.</li>
+                <li>Drove product expansion by collaborating with data partners to onboard over <strong>450 data sources</strong>, targeting identification coverage for 70% of the global population.</li>
+                <li>Scaled product reach from <strong>70 → 110+ countries</strong> through continuous customer and market engagement.</li>
+              </ul>
+            </div>
+            <div class="job-section">
+              <div class="job-sec-title">Compliance &amp; Cross-Functional Leadership</div>
+              <ul>
+                <li>Ensured compliance with international regulations including <strong>FinTRAC, FCA, GDPR, and FINRA</strong>.</li>
+                <li>Collaborated cross-functionally to relay PII from KYC to document verification and KYB products seamlessly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-<!--
-  ════════════════════════════════════════════════════════════════
-  STEP 2 — FILE TO ADD TO YOUR REPO
+        <!-- Alpha Ori -->
+        <div class="job open fade-up">
+          <button class="job-trigger" onclick="toggleJob(this)">
+            <div class="job-left">
+              <div class="job-top-row"><span class="job-title">Senior Product Manager</span></div>
+              <div class="job-company">Alpha Ori Technologies</div>
+              <div class="job-meta">
+                <span class="job-meta-item">📅 Nov 2020 – Feb 2022</span>
+                <span class="job-meta-item">📍 San Diego, CA</span>
+              </div>
+            </div>
+            <span class="chevron-icon">⌄</span>
+          </button>
+          <div class="job-body">
+            <div class="job-section">
+              <ul>
+                <li>Led onboarding of one of the largest ship owners in the Middle East (Bahri), end-to-end from requirements to delivery.</li>
+                <li>Defined, built, and measured <strong>Product Engagement KPIs</strong> (User Retention, Adoption, Stickiness) in Google Analytics.</li>
+                <li>Owned the successful launch of <strong>SMARTShip Go mobile application</strong> on iOS and Android.</li>
+                <li>Led migration of user management to <strong>Keycloak</strong> (IAM) with custom APIs for SSO, MFA, and permissions management.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-  Take the file:  claim_narrative_generator.html
-  Rename it to:   claim-narrative-generator.html
-  Drop it in the ROOT of harikrishnadave.github.io
-  Push to main.
+        <!-- Cisco -->
+        <div class="job open fade-up">
+          <button class="job-trigger" onclick="toggleJob(this)">
+            <div class="job-left">
+              <div class="job-top-row"><span class="job-title">Technical Product Manager</span></div>
+              <div class="job-company">Cisco Inc <span style="font-weight:400;font-size:12px;color:var(--text-dim)">· Formerly MaintenanceNet (Acquired 2015)</span></div>
+              <div class="job-meta">
+                <span class="job-meta-item">📅 Aug 2012 – Nov 2020</span>
+                <span class="job-meta-item">📍 San Diego, CA</span>
+              </div>
+            </div>
+            <span class="chevron-icon">⌄</span>
+          </button>
+          <div class="job-body">
+            <div class="job-section">
+              <ul>
+                <li>Defined the product roadmap for <strong>Cisco Impact®</strong> — the primary platform transforming customer data into actionable business intelligence.</li>
+                <li>Primary POC for client onboarding, providing 360° visibility into customer lifecycle and install base.</li>
+                <li>Managed UAT, release communications, and end-to-end technical support across Distributors, Resellers, and End-clients.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-  Live at: https://harikrishnadave.github.io/claim-narrative-generator.html
+        <!-- Esurance -->
+        <div class="job open fade-up">
+          <button class="job-trigger" onclick="toggleJob(this)">
+            <div class="job-left">
+              <div class="job-top-row"><span class="job-title">Senior QA Analyst</span></div>
+              <div class="job-company">Esurance Inc</div>
+              <div class="job-meta">
+                <span class="job-meta-item">📅 Dec 2011 – Aug 2012</span>
+                <span class="job-meta-item">📍 San Francisco, CA</span>
+              </div>
+            </div>
+            <span class="chevron-icon">⌄</span>
+          </button>
+          <div class="job-body">
+            <div class="job-section">
+              <ul>
+                <li>Led QA team on functional test plans for billing applications, managing interns through requirement reviews, risk assessments, and post-release support.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-  ════════════════════════════════════════════════════════════════
-  STEP 3 — PASSWORD
+        <!-- Progressive -->
+        <div class="job open fade-up">
+          <button class="job-trigger" onclick="toggleJob(this)">
+            <div class="job-left">
+              <div class="job-top-row"><span class="job-title">QA Analyst</span></div>
+              <div class="job-company">Progressive Insurance</div>
+              <div class="job-meta">
+                <span class="job-meta-item">📅 Mar 2009 – Dec 2011</span>
+                <span class="job-meta-item">📍 Cleveland, OH</span>
+              </div>
+            </div>
+            <span class="chevron-icon">⌄</span>
+          </button>
+          <div class="job-body">
+            <div class="job-section">
+              <ul>
+                <li>Worked on the "Integrated Product" initiative — merging Agency and Direct business units for real-time speed-to-market delivery.</li>
+                <li>Provided UI design recommendations for <strong>Usage Based Insurance</strong>, a mobile-driven insurance rate platform.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-  Password:  Planet$dds
-  (works as-is — sessionStorage so no re-prompt on refresh)
-  ════════════════════════════════════════════════════════════════
--->
+        <!-- VMware -->
+        <div class="job open fade-up">
+          <button class="job-trigger" onclick="toggleJob(this)">
+            <div class="job-left">
+              <div class="job-top-row"><span class="job-title">Intern</span></div>
+              <div class="job-company">VMware Inc</div>
+              <div class="job-meta">
+                <span class="job-meta-item">📅 May 2008 – Sep 2008</span>
+                <span class="job-meta-item">📍 Palo Alto, CA</span>
+              </div>
+            </div>
+            <span class="chevron-icon">⌄</span>
+          </button>
+          <div class="job-body">
+            <div class="job-section">
+              <ul><li>Engineering internship at VMware Inc, Palo Alto.</li></ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <p class="sec-label fade-up">03 Expertise</p>
+      <h2 class="fade-up">Areas of Skill</h2>
+      <div class="skills-grid">
+        <div class="skill-card fade-up">
+          <div class="skill-icon">🗺️</div>
+          <h3>Product &amp; Strategy</h3>
+          <div class="tag-list">
+            <span class="tag">Product Roadmap</span>
+            <span class="tag">Go-to-Market</span>
+            <span class="tag">Agile / Scrum</span>
+            <span class="tag">0→1 Development</span>
+            <span class="tag">Thinking at Scale</span>
+            <span class="tag">SDLC</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up stagger-1">
+          <div class="skill-icon">🔐</div>
+          <h3>Domain Expertise</h3>
+          <div class="tag-list">
+            <span class="tag">Fintech</span>
+            <span class="tag">Identity</span>
+            <span class="tag">SaaS</span>
+            <span class="tag">B2B</span>
+            <span class="tag">B2C</span>
+            <span class="tag">KYC / Identity</span>
+            <span class="tag">AML Watchlist</span>
+            <span class="tag">eIDAS / mDL</span>
+            <span class="tag">Digital Wallets</span>
+            <span class="tag">IAM / OAuth 2.0</span>
+            <span class="tag">KYB</span>
+            <span class="tag">Doc Verification</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up stagger-2">
+          <div class="skill-icon">⚖️</div>
+          <h3>Compliance &amp; Regulation</h3>
+          <div class="tag-list">
+            <span class="tag">GDPR</span>
+            <span class="tag">FinTRAC</span>
+            <span class="tag">FCA</span>
+            <span class="tag">FINRA</span>
+            <span class="tag">PII Handling</span>
+            <span class="tag">Data Security</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-icon">📊</div>
+          <h3>Customer &amp; Business</h3>
+          <div class="tag-list">
+            <span class="tag">Value Optimization</span>
+            <span class="tag">Customer Onboarding</span>
+            <span class="tag">KPI Tracking</span>
+            <span class="tag">Cross-functional</span>
+            <span class="tag">Data-Driven</span>
+            <span class="tag">UAT</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up stagger-1">
+          <div class="skill-icon">🛠️</div>
+          <h3>Technical</h3>
+          <div class="tag-list">
+            <span class="tag">API Integration</span>
+            <span class="tag">Low-code / No-code</span>
+            <span class="tag">Keycloak / SSO / MFA</span>
+            <span class="tag">Google Analytics</span>
+            <span class="tag">Mobile (iOS &amp; Android)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI TOOLS -->
+  <section id="ai-tools">
+    <div class="container">
+      <p class="sec-label fade-up">04 AI-Augmented</p>
+      <h2 class="fade-up">AI Tools & Skills</h2>
+      <p class="ai-intro fade-up">
+        I actively use AI tools in my day-to-day work — from building internal tools and side projects to drafting PRDs, automating workflows, and accelerating research. <strong>This website itself was built using AI.</strong> Below are the tools I work with regularly.
+      </p>
+
+      <div class="ai-tools-grid">
+
+        <div class="ai-tool-card fade-up">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo">
+              <img src="https://logo.clearbit.com/anthropic.com" alt="Claude" onerror="this.parentElement.innerHTML='🤖'">
+            </div>
+            <div>
+              <div class="ai-tool-name">Claude &amp; Claude Code</div>
+              <div class="ai-tool-category">Anthropic · Coding &amp; Writing</div>
+            </div>
+          </div>
+          <p class="ai-tool-desc">Used to build and iterate on this entire portfolio site, write Pine Script indicators, create trading tools, and draft structured content. Claude Code enables agentic, multi-file coding tasks directly from chat.</p>
+          <div class="ai-use-tags">
+            <span class="ai-use-tag">Site Building</span>
+            <span class="ai-use-tag">Code Gen</span>
+            <span class="ai-use-tag">Content</span>
+          </div>
+        </div>
+
+        <div class="ai-tool-card fade-up stagger-1">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo">
+              <img src="https://logo.clearbit.com/lovable.dev" alt="Lovable" onerror="this.parentElement.innerHTML='💜'">
+            </div>
+            <div>
+              <div class="ai-tool-name">Lovable</div>
+              <div class="ai-tool-category">AI App Builder · Prototyping</div>
+            </div>
+          </div>
+          <p class="ai-tool-desc">Rapid UI prototyping and full-stack web app scaffolding using natural language. Great for quickly validating product ideas and producing working demos without a dedicated engineering team.</p>
+          <div class="ai-use-tags">
+            <span class="ai-use-tag">Prototyping</span>
+            <span class="ai-use-tag">UI Scaffolding</span>
+            <span class="ai-use-tag">MVP</span>
+          </div>
+        </div>
+
+        <div class="ai-tool-card fade-up stagger-2">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo">
+              <img src="https://logo.clearbit.com/google.com" alt="Google Gemini" onerror="this.parentElement.innerHTML='✨'">
+            </div>
+            <div>
+              <div class="ai-tool-name">Google Gemini</div>
+              <div class="ai-tool-category">Google · Research &amp; Analysis</div>
+            </div>
+          </div>
+          <p class="ai-tool-desc">Multimodal AI assistant used for deep research, data analysis, and summarising large documents. Especially useful for synthesising competitive intelligence and market research at scale.</p>
+          <div class="ai-use-tags">
+            <span class="ai-use-tag">Research</span>
+            <span class="ai-use-tag">Analysis</span>
+            <span class="ai-use-tag">Summarisation</span>
+          </div>
+        </div>
+
+        <div class="ai-tool-card fade-up stagger-2">
+          <div class="ai-tool-header">
+            <div class="ai-tool-logo">
+              <img src="https://logo.clearbit.com/notion.so" alt="Notion AI" onerror="this.parentElement.innerHTML='📝'">
+            </div>
+            <div>
+              <div class="ai-tool-name">Notion AI</div>
+              <div class="ai-tool-category">Notion · PM Workflows</div>
+            </div>
+          </div>
+          <p class="ai-tool-desc">AI-assisted writing and summarisation within Notion for PRDs, meeting notes, sprint planning docs, and stakeholder briefs. Cuts document drafting time significantly.</p>
+          <div class="ai-use-tags">
+            <span class="ai-use-tag">PRDs</span>
+            <span class="ai-use-tag">Sprint Docs</span>
+            <span class="ai-use-tag">Summarisation</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ai-context-strip fade-up">
+        <span style="font-size:1.2rem;flex-shrink:0;margin-top:2px;">💡</span>
+        <p>As a PM I use AI to move faster — not to replace thinking, but to eliminate the time spent on the mechanical parts of the work: drafting, formatting, boilerplate, and research. The result is more time for strategy, customer conversations, and building things that matter.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="container">
+      <p class="sec-label fade-up">05 Academic</p>
+      <h2 class="fade-up">Education</h2>
+      <div class="edu-grid">
+        <div class="edu-card fade-up">
+          <div class="edu-icon">🎓</div>
+          <div class="edu-degree">MS — Computer Science</div>
+          <div class="edu-school">SUNY Binghamton, New York</div>
+          <div class="edu-detail">// software systems + engineering</div>
+        </div>
+        <div class="edu-card fade-up stagger-1">
+          <div class="edu-icon">📚</div>
+          <div class="edu-degree">MBA — Operations Management</div>
+          <div class="edu-school">CSUSM, San Marcos</div>
+          <div class="edu-detail">// strategy + operations + leadership</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONAL -->
+  <section id="personal">
+    <div class="container">
+      <p class="sec-label fade-up">06 Beyond Work</p>
+      <h2 class="fade-up">Personal Life</h2>
+      <div class="personal-grid">
+        <div class="personal-card fade-up">
+          <div class="personal-icon">🏡</div>
+          <h3>Family</h3>
+          <p>Proud family person based in sunny San Diego, CA. Life outside of product is about quality time and making memories.</p>
+          <span class="pill-soon">More soon</span>
+        </div>
+        <a href="community.html" class="personal-card fade-up stagger-1" style="text-decoration:none;display:block;">
+          <div class="personal-icon">🌍</div>
+          <h3>Community Service</h3>
+          <p>Active member of BAPS Charities San Diego — involved in walk/run events, health awareness programs, donation drives, and cultural celebrations.</p>
+          <span class="pill-soon" style="background:var(--accent-dim);color:var(--accent);border-color:var(--border-hover);">View Gallery →</span>
+        </a>
+        <a href="interests.html" class="personal-card fade-up stagger-2" style="text-decoration:none;display:block;">
+          <div class="personal-icon">💡</div>
+          <h3>Interests &amp; Favorites</h3>
+          <p>Apps I live in, tools I trade with, sports I follow, food I love, and places I want to explore.</p>
+          <span class="pill-soon" style="background:var(--accent-dim);color:var(--accent);border-color:var(--border-hover);">Explore →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <p class="sec-label fade-up">07 Side Work</p>
+      <h2 class="fade-up">Projects</h2>
+      <div class="project-grid">
+        <a href="finance-projects.html" class="project-card fade-up">
+          <div class="project-tag">💹 Finance Projects</div>
+          <h3>Finance Projects</h3>
+          <p>Custom trading tools, screeners, and indicators built to support smarter options and equity trading decisions.</p>
+          <div class="project-badges">
+            <span class="proj-badge">TradingView</span>
+            <span class="proj-badge">Finviz</span>
+            <span class="proj-badge">Pine Script</span>
+            <span class="proj-badge">2 Projects</span>
+          </div>
+          <span class="project-link-pill">View Category →</span>
+        </a>
+        <a href="shopping-tools.html" class="project-card fade-up">
+          <div class="project-tag">🛍️ Shopping Tools</div>
+          <h3>Shopping Tools</h3>
+          <p>Deal trackers, price analyzers, and smart shopping utilities — including a live coupon and discount code finder.</p>
+          <div class="project-badges">
+            <span class="proj-badge">Slickdeals</span>
+            <span class="proj-badge">Coupon Finder</span>
+            <span class="proj-badge">1 Live</span>
+          </div>
+          <span class="project-link-pill">View Category →</span>
+        </a>
+        <a href="compliance-tracker.html" class="project-card fade-up">
+          <div class="project-tag">🌐 Compliance Tools</div>
+          <h3>International Compliance Tracker</h3>
+          <p>Dashboard for tracking regulatory compliance across international jurisdictions — covering KYC, AML, data privacy, and digital identity frameworks.</p>
+          <div class="project-badges">
+            <span class="proj-badge">KYC / AML</span>
+            <span class="proj-badge">eIDAS</span>
+            <span class="proj-badge">Data Privacy</span>
+            <span class="proj-badge">Dashboard</span>
+          </div>
+          <span class="project-link-pill">View Tool →</span>
+        </a>
+        <a href="intuit-workplace-roadmap.html" class="project-card fade-up">
+          <div class="project-tag">🤖 AI Product Strategy</div>
+          <h3>AI-Powered Workplace Intelligence</h3>
+          <p>FY26 product roadmap for an AI-driven workplace intelligence platform — covering smart facilities, workforce analytics, and employee experience automation.</p>
+          <div class="project-badges">
+            <span class="proj-badge">AI / ML</span>
+            <span class="proj-badge">Product Roadmap</span>
+            <span class="proj-badge">Workplace Tech</span>
+            <span class="proj-badge">FY26</span>
+          </div>
+          <span class="project-link-pill">View Roadmap →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <p class="sec-label fade-up">08 Get In Touch</p>
+      <h2 class="fade-up">Let's Connect</h2>
+      <div class="contact-grid">
+        <div class="fade-up">
+          <p class="contact-sub">Open to conversations about product strategy, identity tech, fintech, or just connecting with fellow builders.</p>
+          <div class="contact-items">
+            <a href="mailto:harikrishnadave@gmail.com" class="c-item">
+              <div class="c-icon">✉️</div>
+              <div>
+                <div class="c-label">EMAIL</div>
+                <div class="c-value">harikrishnadave@gmail.com</div>
+              </div>
+            </a>
+            <a href="https://www.linkedin.com/in/harikrishnadave/" target="_blank" rel="noopener" class="c-item">
+              <div class="c-icon">💼</div>
+              <div>
+                <div class="c-label">LINKEDIN</div>
+                <div class="c-value" style="text-decoration:underline;text-underline-offset:3px;">linkedin.com/in/harikrishnadave</div>
+              </div>
+            </a>
+            <span class="c-item">
+              <div class="c-icon">📍</div>
+              <div>
+                <div class="c-label">LOCATION</div>
+                <div class="c-value">San Diego, CA</div>
+              </div>
+            </span>
+          </div>
+        </div>
+        <div class="contact-cta fade-up stagger-1">
+          <h3>Open to Opportunities</h3>
+          <p>Whether it's a product challenge, an identity/fintech discussion, or a new opportunity — I'd love to hear from you.</p>
+          <a href="mailto:harikrishnadave@gmail.com" class="btn-full">Send a Message →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Harikrishna Dave</span>
+    <span>Built with Claude · San Diego, CA</span>
+  </footer>
+
+</main>
+
+<script>
+  /* ── Theme toggle ── */
+  const sunSVG = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  const moonSVG = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('themeLabel').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+    document.getElementById('themeIcon').innerHTML = isDark ? moonSVG : sunSVG;
+  }
+
+  /* ── Mobile drawer ── */
+  function toggleDrawer() { document.getElementById('mobileDrawer').classList.toggle('open'); }
+  function closeDrawer() { document.getElementById('mobileDrawer').classList.remove('open'); }
+
+  /* ── Collapsible jobs ── */
+  function toggleJob(btn) { btn.closest('.job').classList.toggle('open'); }
+
+  /* ── Fade-up on scroll ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  /* ── Active sidebar nav ── */
+  const secs = document.querySelectorAll('section[id]');
+  const navAs = document.querySelectorAll('.sidebar-nav a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+    navAs.forEach(a => {
+      const active = a.getAttribute('href') === '#' + cur;
+      a.classList.toggle('active', active);
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
