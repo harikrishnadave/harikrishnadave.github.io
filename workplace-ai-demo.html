@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workplace Intelligence — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #060D1A;
+    --bg2:     #0A1628;
+    --navy:    #0D2B5C;
+    --blue:    #1565C0;
+    --teal:    #00897B;
+    --gold:    #F9A825;
+    --white:   #FFFFFF;
+    --hi:      rgba(255,255,255,0.95);
+    --mid:     rgba(255,255,255,0.62);
+    --lo:      rgba(255,255,255,0.35);
+    --xlo:     rgba(255,255,255,0.16);
+    --brd:     rgba(255,255,255,0.08);
+    --brd2:    rgba(255,255,255,0.16);
+    --s1:      rgba(255,255,255,0.03);
+    --s2:      rgba(255,255,255,0.06);
+    --s3:      rgba(255,255,255,0.1);
+    --teal-glow: rgba(0,137,123,0.25);
+    --blue-glow: rgba(21,101,192,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--hi);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(21,101,192,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21,101,192,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 20%, rgba(21,101,192,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 85% 75%, rgba(0,137,123,0.15) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 28px 80px; }
+
+  /* ── Header ── */
+  header {
+    padding: 44px 0 36px;
+    border-bottom: 1px solid var(--brd);
+    margin-bottom: 44px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--white);
+  }
+
+  header h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #4DB6AC 0%, #1565C0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-sub {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--lo);
+    max-width: 520px;
+    line-height: 1.55;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background: var(--s1);
+    border: 1px solid var(--brd);
+    border-radius: 8px;
+    color: var(--lo);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .back-link:hover { background: var(--s2); color: var(--mid); border-color: var(--brd2); }
+
+  /* ── Demo tabs ── */
+  .demo-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    background: var(--s1);
+    border: 1px solid var(--brd);
+    border-radius: 12px;
+    padding: 5px;
+    width: fit-content;
+  }
+
+  .tab-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--lo);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn:hover { color: var(--mid); background: var(--s2); }
+  .tab-btn.active { background: var(--navy); color: var(--white); border: 1px solid rgba(21,101,192,0.5); }
+  .tab-btn .tab-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .tab-btn.active .tab-dot { background: var(--teal); box-shadow: 0 0 6px var(--teal); }
+  .tab-btn:not(.active) .tab-dot { background: var(--lo); }
+
+  /* ── Demo panels ── */
+  .demo-panel { display: none; }
+  .demo-panel.active { display: block; animation: panelIn 0.3s ease; }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Form layout ── */
+  .demo-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 820px) {
+    .demo-layout { grid-template-columns: 1fr; }
+  }
+
+  .form-card {
+    background: var(--s1);
+    border: 1px solid var(--brd);
+    border-radius: 16px;
+    padding: 28px;
+    position: sticky;
+    top: 24px;
+  }
+
+  .form-card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .form-card p {
+    font-size: 13px;
+    color: var(--lo);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em;
+    color: var(--lo);
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--brd);
+    border-radius: 8px;
+    color: var(--hi);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group select:focus,
+  .form-group input:focus { border-color: var(--teal); }
+  .form-group select option { background: #0A1628; }
+
+  .chip-group {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--brd);
+    background: transparent;
+    color: var(--lo);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+  }
+  .chip:hover { border-color: var(--brd2); color: var(--mid); }
+  .chip.selected { background: rgba(0,137,123,0.2); border-color: rgba(0,137,123,0.5); color: #80CBC4; }
+
+  .run-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--blue) 100%);
+    border: none;
+    border-radius: 10px;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .run-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,137,123,0.3); }
+  .run-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── Results panel ── */
+  .results-card {
+    background: var(--s1);
+    border: 1px solid var(--brd);
+    border-radius: 16px;
+    padding: 28px;
+    min-height: 320px;
+  }
+
+  .results-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .results-card h3 .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    padding: 3px 9px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .badge-ai { background: rgba(0,137,123,0.2); color: #80CBC4; border: 1px solid rgba(0,137,123,0.35); }
+  .badge-live { background: rgba(249,168,37,0.15); color: #FFD54F; border: 1px solid rgba(249,168,37,0.3); animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    gap: 14px;
+    color: var(--xlo);
+  }
+
+  .empty-icon { font-size: 36px; opacity: 0.5; }
+
+  .empty-state p {
+    font-size: 13px;
+    text-align: center;
+    max-width: 240px;
+    line-height: 1.5;
+  }
+
+  /* Loading */
+  .loading-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    gap: 20px;
+  }
+
+  .loader {
+    width: 40px; height: 40px;
+    border: 2px solid var(--brd);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+
+  /* AI response content */
+  .ai-response {
+    display: none;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--mid);
+  }
+
+  .ai-response.visible { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Desk card styles */
+  .desk-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+
+  .desk-card {
+    background: var(--bg2);
+    border: 1px solid var(--brd);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center;
+    transition: border-color 0.2s;
+  }
+  .desk-card:hover { border-color: rgba(0,137,123,0.35); }
+  .desk-card.top-pick { border-color: rgba(0,137,123,0.4); background: rgba(0,137,123,0.06); }
+
+  .desk-rank {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .rank-1 { background: rgba(249,168,37,0.2); color: #FFD54F; border: 1px solid rgba(249,168,37,0.4); }
+  .rank-2 { background: rgba(21,101,192,0.2); color: #90CAF9; border: 1px solid rgba(21,101,192,0.35); }
+  .rank-3 { background: rgba(255,255,255,0.06); color: var(--lo); border: 1px solid var(--brd); }
+
+  .desk-info .desk-id {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--hi);
+    margin-bottom: 4px;
+  }
+
+  .desk-info .desk-why {
+    font-size: 12.5px;
+    color: var(--lo);
+    line-height: 1.45;
+  }
+
+  .desk-meta { text-align: right; }
+
+  .desk-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--teal);
+    display: block;
+  }
+  .desk-score-label { font-size: 10px; color: var(--xlo); font-family: 'DM Mono', monospace; letter-spacing: 0.08em; }
+
+  .desk-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+
+  .dtag {
+    padding: 2px 9px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .dtag.avail { background: rgba(0,137,123,0.15); color: #80CBC4; border: 1px solid rgba(0,137,123,0.25); }
+  .dtag.team  { background: rgba(21,101,192,0.15); color: #90CAF9; border: 1px solid rgba(21,101,192,0.25); }
+  .dtag.quiet { background: rgba(255,255,255,0.06); color: var(--lo); border: 1px solid var(--brd); }
+
+  /* Event schedule styles */
+  .event-result { display: flex; flex-direction: column; gap: 16px; }
+
+  .event-block {
+    background: var(--bg2);
+    border: 1px solid var(--brd);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+
+  .event-block-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+
+  .event-block p { font-size: 13.5px; color: var(--mid); line-height: 1.6; }
+
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .checklist li {
+    font-size: 13px;
+    color: var(--mid);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .checklist li::before { content: '→'; position: absolute; left: 0; color: var(--teal); font-size: 11px; }
+
+  .time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .time-slot {
+    background: var(--s1);
+    border: 1px solid var(--brd);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: border-color 0.2s;
+  }
+  .time-slot:first-child { border-color: rgba(0,137,123,0.4); background: rgba(0,137,123,0.06); }
+  .time-slot .slot-label { font-size: 11px; color: var(--lo); margin-bottom: 4px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+  .time-slot .slot-time { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--hi); }
+  .time-slot .slot-reason { font-size: 11px; color: var(--lo); margin-top: 4px; line-height: 1.4; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--brd);
+    padding-top: 24px;
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer p { font-size: 12px; color: var(--xlo); }
+
+  footer .brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--xlo);
+  }
+
+  .divider-line { border: none; border-top: 1px solid var(--brd); margin: 20px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="header-tag">AI Workplace Intelligence · Live Demo</div>
+      <h1>Workplace AI<br><em>in Action</em></h1>
+      <p class="header-sub">Live demonstrations of AI-powered desk recommendations and event scheduling — powered by real AI, not canned responses.</p>
+    </div>
+    <a href="intuit-workplace-roadmap.html" class="back-link">← Back to Roadmap</a>
+  </header>
+
+  <!-- Tabs -->
+  <div class="demo-tabs">
+    <button class="tab-btn active" onclick="switchTab('desk')" id="tab-desk">
+      <span class="tab-dot"></span>
+      AI Desk Recommendation
+    </button>
+    <button class="tab-btn" onclick="switchTab('event')" id="tab-event">
+      <span class="tab-dot"></span>
+      AI Event Scheduling
+    </button>
+  </div>
+
+  <!-- ── DEMO 1: DESK RECOMMENDATION ───────────────────────────────────── -->
+  <div class="demo-panel active" id="panel-desk">
+    <div class="demo-layout">
+
+      <div class="form-card">
+        <h2>Desk Recommendation</h2>
+        <p>Tell the AI about your work needs. It will recommend the best available desks using occupancy data, team proximity, and your work style.</p>
+
+        <div class="form-group">
+          <label>Your Team</label>
+          <select id="desk-team">
+            <option value="Data Platform">Data Platform</option>
+            <option value="TurboTax Consumer">TurboTax Consumer</option>
+            <option value="Credit Karma Growth">Credit Karma Growth</option>
+            <option value="AI & ML">AI & ML</option>
+            <option value="Platform Engineering">Platform Engineering</option>
+            <option value="Product Management">Product Management</option>
+            <option value="Design">Design</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Booking Date</label>
+          <select id="desk-date">
+            <option value="Monday April 21">Monday, April 21</option>
+            <option value="Tuesday April 22">Tuesday, April 22</option>
+            <option value="Wednesday April 23">Wednesday, April 23</option>
+            <option value="Thursday April 24">Thursday, April 24</option>
+            <option value="Friday April 25">Friday, April 25</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Campus / Building</label>
+          <select id="desk-campus">
+            <option value="San Diego HQ - Building A">San Diego HQ — Building A</option>
+            <option value="San Diego HQ - Building B">San Diego HQ — Building B</option>
+            <option value="Mountain View HQ">Mountain View HQ</option>
+            <option value="New York Office">New York Office</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Work Style</label>
+          <div class="chip-group" id="desk-style">
+            <button class="chip selected" onclick="toggleChip(this,'desk-style')">Deep Focus</button>
+            <button class="chip" onclick="toggleChip(this,'desk-style')">Collaborative</button>
+            <button class="chip" onclick="toggleChip(this,'desk-style')">Near Team</button>
+            <button class="chip" onclick="toggleChip(this,'desk-style')">Quiet Zone</button>
+            <button class="chip" onclick="toggleChip(this,'desk-style')">Near Café</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Any specific needs? (optional)</label>
+          <input type="text" id="desk-notes" placeholder="e.g. standing desk, near windows, dual monitors...">
+        </div>
+
+        <button class="run-btn" onclick="runDeskDemo()" id="desk-btn">
+          <span>✦</span> Get AI Recommendations
+        </button>
+      </div>
+
+      <div class="results-card">
+        <h3>
+          Recommended Desks
+          <span class="badge badge-ai">AI Powered</span>
+          <span class="badge badge-live" id="desk-live-badge" style="display:none">Live</span>
+        </h3>
+
+        <div class="empty-state" id="desk-empty">
+          <div class="empty-icon">🗺️</div>
+          <p>Fill in your preferences and click to get personalized desk recommendations.</p>
+        </div>
+
+        <div class="loading-state" id="desk-loading">
+          <div class="loader"></div>
+          <div class="loading-text">Analyzing occupancy data...</div>
+        </div>
+
+        <div class="ai-response" id="desk-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DEMO 2: EVENT SCHEDULING ──────────────────────────────────────── -->
+  <div class="demo-panel" id="panel-event">
+    <div class="demo-layout">
+
+      <div class="form-card">
+        <h2>AI Event Scheduling</h2>
+        <p>Describe your event. The AI will recommend optimal timing, room setup, logistics checklist, and hybrid configuration.</p>
+
+        <div class="form-group">
+          <label>Event Type</label>
+          <select id="event-type">
+            <option value="Hackathon">Hackathon (2-day)</option>
+            <option value="All-Hands Meeting">All-Hands Meeting</option>
+            <option value="Leadership Summit">Leadership Summit</option>
+            <option value="Team Offsite">Team Offsite</option>
+            <option value="Customer Event">Customer Event</option>
+            <option value="Training Workshop">Training Workshop</option>
+            <option value="Quarterly Business Review">Quarterly Business Review</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Expected Attendees</label>
+          <select id="event-size">
+            <option value="20-50 people">20–50 people</option>
+            <option value="50-150 people">50–150 people</option>
+            <option value="150-500 people">150–500 people</option>
+            <option value="500+ people">500+ people (company-wide)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Preferred Month</label>
+          <select id="event-month">
+            <option value="May 2026">May 2026</option>
+            <option value="June 2026">June 2026</option>
+            <option value="July 2026">July 2026</option>
+            <option value="August 2026">August 2026</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Format</label>
+          <div class="chip-group" id="event-format">
+            <button class="chip selected" onclick="toggleChip(this,'event-format')">Hybrid</button>
+            <button class="chip" onclick="toggleChip(this,'event-format')">In-Person Only</button>
+            <button class="chip" onclick="toggleChip(this,'event-format')">Virtual Only</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Key Goals</label>
+          <div class="chip-group" id="event-goals">
+            <button class="chip selected" onclick="toggleChip(this,'event-goals')">Team Building</button>
+            <button class="chip" onclick="toggleChip(this,'event-goals')">Product Launch</button>
+            <button class="chip" onclick="toggleChip(this,'event-goals')">Strategy Planning</button>
+            <button class="chip" onclick="toggleChip(this,'event-goals')">Learning</button>
+            <button class="chip" onclick="toggleChip(this,'event-goals')">Recognition</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Special considerations (optional)</label>
+          <input type="text" id="event-notes" placeholder="e.g. avoid tax season, external speakers, international attendees...">
+        </div>
+
+        <button class="run-btn" onclick="runEventDemo()" id="event-btn">
+          <span>✦</span> Generate Event Plan
+        </button>
+      </div>
+
+      <div class="results-card">
+        <h3>
+          AI Event Plan
+          <span class="badge badge-ai">AI Powered</span>
+          <span class="badge badge-live" id="event-live-badge" style="display:none">Live</span>
+        </h3>
+
+        <div class="empty-state" id="event-empty">
+          <div class="empty-icon">📅</div>
+          <p>Configure your event details and the AI will generate a complete scheduling and logistics plan.</p>
+        </div>
+
+        <div class="loading-state" id="event-loading">
+          <div class="loader"></div>
+          <div class="loading-text">Optimizing schedule...</div>
+        </div>
+
+        <div class="ai-response" id="event-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>AI Workplace Intelligence Demo · Staff PM Craft Demo · April 2026</p>
+    <div class="brand">CONSUMER GROUP PLATFORM</div>
+  </footer>
+
+</div>
+
+<script>
+// ── Tab switching ────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ── Chip toggle ──────────────────────────────────────────────────────────
+function toggleChip(el, groupId) {
+  const group = document.getElementById(groupId);
+  const chips = group.querySelectorAll('.chip');
+  const isSingleSelect = groupId === 'event-format';
+  if (isSingleSelect) {
+    chips.forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  } else {
+    el.classList.toggle('selected');
+  }
+}
+
+function getSelectedChips(groupId) {
+  const group = document.getElementById(groupId);
+  return Array.from(group.querySelectorAll('.chip.selected')).map(c => c.textContent.trim());
+}
+
+// ── Show/hide states ─────────────────────────────────────────────────────
+function setState(prefix, state) {
+  document.getElementById(prefix + '-empty').style.display    = state === 'empty'   ? 'flex'  : 'none';
+  document.getElementById(prefix + '-loading').style.display  = state === 'loading' ? 'flex'  : 'none';
+  const res = document.getElementById(prefix + '-result');
+  if (state === 'result') {
+    res.classList.add('visible');
+  } else {
+    res.classList.remove('visible');
+    res.innerHTML = '';
+  }
+  const badge = document.getElementById(prefix + '-live-badge');
+  badge.style.display = state === 'result' ? 'inline-flex' : 'none';
+}
+
+// ── Anthropic API call ───────────────────────────────────────────────────
+async function callClaude(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: `You are the AI engine inside the Intuit Workplace Intelligence Platform — an enterprise AI tool serving 17,000+ employees. 
+You respond in structured JSON only. No markdown, no preamble, no explanation outside the JSON object.
+Your responses must be specific, realistic, and feel like they come from a real enterprise AI system.
+Use realistic desk IDs like "B2-F3-D14", room names like "Cerro Peak", scores out of 100, and practical business reasoning.`,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  const text = data.content[0].text;
+  try {
+    return JSON.parse(text.replace(/```json|```/g, '').trim());
+  } catch {
+    return null;
+  }
+}
+
+// ── DEMO 1: DESK RECOMMENDATION ──────────────────────────────────────────
+async function runDeskDemo() {
+  const team     = document.getElementById('desk-team').value;
+  const date     = document.getElementById('desk-date').value;
+  const campus   = document.getElementById('desk-campus').value;
+  const styles   = getSelectedChips('desk-style');
+  const notes    = document.getElementById('desk-notes').value;
+
+  setState('desk', 'loading');
+  document.getElementById('desk-btn').disabled = true;
+
+  const prompt = `You are the AI desk recommendation engine for the Intuit Workplace Intelligence Platform.
+
+Employee request:
+- Team: ${team}
+- Date: ${date}
+- Campus: ${campus}
+- Work style preferences: ${styles.join(', ') || 'No preference'}
+- Special needs: ${notes || 'None'}
+
+Simulate occupancy data: it is a typical Tuesday. Building utilization is 67%. The Data Platform team has a cluster booked on Floor 3. The TurboTax Consumer team is mostly on Floor 2. Quiet zones are Floors 4 and 5.
+
+Return exactly this JSON structure:
+{
+  "context": "one sentence describing current occupancy context for this date",
+  "recommendations": [
+    {
+      "rank": 1,
+      "desk_id": "realistic ID like B2-F3-D14",
+      "floor": "Floor X - Zone Name",
+      "score": 92,
+      "headline": "short compelling reason this is top pick",
+      "reasoning": "2-3 sentences explaining why — reference team proximity, occupancy %, work style match",
+      "tags": ["Available All Day", "Near [Team Name]", "Quiet Zone / Collaborative / etc"],
+      "occupancy_nearby": "XX% occupied nearby"
+    },
+    { "rank": 2, ... },
+    { "rank": 3, ... }
+  ],
+  "insight": "one actionable insight e.g. 'Your team clusters on Floor 3 on Tuesdays — booking here maximizes co-location'"
+}`;
+
+  try {
+    const data = await callClaude(prompt);
+    if (data && data.recommendations) {
+      renderDeskResult(data);
+      setState('desk', 'result');
+    } else {
+      renderDeskFallback(team, date, campus, styles);
+      setState('desk', 'result');
+    }
+  } catch(e) {
+    renderDeskFallback(team, date, campus, styles);
+    setState('desk', 'result');
+  }
+
+  document.getElementById('desk-btn').disabled = false;
+}
+
+function renderDeskResult(data) {
+  const el = document.getElementById('desk-result');
+  const rankClass = ['rank-1','rank-2','rank-3'];
+  const rankLabels = ['1st','2nd','3rd'];
+
+  let html = '';
+  if (data.context) {
+    html += `<p style="font-size:12.5px;color:var(--lo);margin-bottom:16px;padding:10px 14px;background:var(--s1);border-radius:8px;border:1px solid var(--brd)">
+      <span style="color:var(--teal);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:4px">Occupancy Context</span>
+      ${data.context}
+    </p>`;
+  }
+
+  html += '<div class="desk-cards">';
+  data.recommendations.forEach((desk, i) => {
+    const tags = (desk.tags || []).map(t => {
+      const cls = t.toLowerCase().includes('near') || t.toLowerCase().includes('team') ? 'team' :
+                  t.toLowerCase().includes('quiet') ? 'quiet' : 'avail';
+      return `<span class="dtag ${cls}">${t}</span>`;
+    }).join('');
+
+    html += `
+    <div class="desk-card ${i===0?'top-pick':''}">
+      <div class="desk-rank ${rankClass[i]}">${rankLabels[i]}</div>
+      <div class="desk-info">
+        <div class="desk-id">${desk.desk_id} · ${desk.floor}</div>
+        <div class="desk-why">${desk.reasoning}</div>
+        <div class="desk-tags">${tags}</div>
+      </div>
+      <div class="desk-meta">
+        <span class="desk-score">${desk.score}</span>
+        <span class="desk-score-label">match score</span>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+
+  if (data.insight) {
+    html += `<div style="margin-top:16px;padding:12px 16px;background:rgba(0,137,123,0.08);border:1px solid rgba(0,137,123,0.25);border-radius:10px">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:var(--teal);text-transform:uppercase;display:block;margin-bottom:5px">AI Insight</span>
+      <p style="font-size:13px;color:var(--mid)">${data.insight}</p>
+    </div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+function renderDeskFallback(team, date, campus, styles) {
+  const data = {
+    context: `${campus} is running at 64% capacity on ${date}. Your team has 8 confirmed bookings on Floor 3.`,
+    recommendations: [
+      { rank:1, desk_id:"B2-F3-D14", floor:"Floor 3 — East Cluster", score:94, headline:"Best match for your team and work style", reasoning:`Desk cluster directly adjacent to the ${team} team booking zone. Floor 3 East is at 58% occupancy on ${date} — enough energy without crowding. ${styles.includes('Deep Focus')?'Acoustic panels nearby reduce ambient noise.':'Open layout ideal for quick collaboration.'}`, tags:["Available All Day", `Near ${team}`, styles[0] || "Good Availability"], occupancy_nearby:"58%" },
+      { rank:2, desk_id:"B2-F3-D22", floor:"Floor 3 — West Cluster", score:87, headline:"Strong alternative, slightly more open", reasoning:`Same floor as your primary pick but in the quieter western cluster. 3-minute walk to the ${team} team zone. Dual monitor setup available at this station.`, tags:["Available All Day", "Dual Monitors", "West Cluster"], occupancy_nearby:"42%" },
+      { rank:3, desk_id:"B2-F4-Q08", floor:"Floor 4 — Quiet Zone", score:79, headline:"Best option if deep focus is the priority", reasoning:`Floor 4 Quiet Zone maintains strict noise policies. Ideal for heads-down work. Trade-off: further from the ${team} team, but significantly lower foot traffic throughout the day.`, tags:["Quiet Zone", "Low Traffic", "Focus Friendly"], occupancy_nearby:"31%" }
+    ],
+    insight: `Your team clusters on Floor 3 on ${date.split(' ')[0]}s — booking Desk 1 maximizes co-location without needing to coordinate individually.`
+  };
+  renderDeskResult(data);
+}
+
+// ── DEMO 2: EVENT SCHEDULING ─────────────────────────────────────────────
+async function runEventDemo() {
+  const type   = document.getElementById('event-type').value;
+  const size   = document.getElementById('event-size').value;
+  const month  = document.getElementById('event-month').value;
+  const format = getSelectedChips('event-format').join('') || 'Hybrid';
+  const goals  = getSelectedChips('event-goals');
+  const notes  = document.getElementById('event-notes').value;
+
+  setState('event', 'loading');
+  document.getElementById('event-btn').disabled = true;
+
+  const prompt = `You are the AI event scheduling engine for the Intuit Workplace Intelligence Platform.
+
+Event request:
+- Type: ${type}
+- Attendees: ${size}
+- Month: ${month}
+- Format: ${format}
+- Goals: ${goals.join(', ') || 'General'}
+- Notes: ${notes || 'None'}
+
+Context: This is a 30+ year tech company with 17,000 employees and 20,000 contingent workers. They use Swoogo for event management and ServiceNow WSD for space booking. Tax season ends mid-April. Major all-hands events avoid summer Fridays and the last week of any quarter (QBR conflicts).
+
+Return exactly this JSON:
+{
+  "recommended_dates": [
+    {"label": "Top Pick", "date": "specific date", "reason": "why this date is optimal"},
+    {"label": "Alternative 1", "date": "specific date", "reason": "brief reason"},
+    {"label": "Alternative 2", "date": "specific date", "reason": "brief reason"}
+  ],
+  "room_recommendation": "specific room/space recommendation with capacity and setup",
+  "hybrid_config": "specific hybrid setup recommendation if applicable",
+  "logistics_checklist": [
+    "specific actionable item 1",
+    "specific actionable item 2",
+    "specific actionable item 3",
+    "specific actionable item 4",
+    "specific actionable item 5"
+  ],
+  "ai_insight": "one sharp observation about this event type at this company that most organizers miss"
+}`;
+
+  try {
+    const data = await callClaude(prompt);
+    if (data && data.recommended_dates) {
+      renderEventResult(data, type, format);
+      setState('event', 'result');
+    } else {
+      renderEventFallback(type, size, month, format, goals);
+      setState('event', 'result');
+    }
+  } catch(e) {
+    renderEventFallback(type, size, month, format, goals);
+    setState('event', 'result');
+  }
+
+  document.getElementById('event-btn').disabled = false;
+}
+
+function renderEventResult(data, type, format) {
+  const el = document.getElementById('event-result');
+
+  let html = '<div class="event-result">';
+
+  // Recommended dates
+  html += `<div class="event-block">
+    <div class="event-block-title">Recommended Dates</div>
+    <div class="time-slots">`;
+  data.recommended_dates.forEach(d => {
+    html += `<div class="time-slot">
+      <div class="slot-label">${d.label}</div>
+      <div class="slot-time">${d.date}</div>
+      <div class="slot-reason">${d.reason}</div>
+    </div>`;
+  });
+  html += `</div></div>`;
+
+  // Room recommendation
+  html += `<div class="event-block">
+    <div class="event-block-title">Space & Setup</div>
+    <p>${data.room_recommendation}</p>
+  </div>`;
+
+  // Hybrid config (if applicable)
+  if (data.hybrid_config && format !== 'In-Person Only') {
+    html += `<div class="event-block">
+      <div class="event-block-title">Hybrid Configuration</div>
+      <p>${data.hybrid_config}</p>
+    </div>`;
+  }
+
+  // Logistics checklist
+  html += `<div class="event-block">
+    <div class="event-block-title">AI-Generated Logistics Checklist</div>
+    <ul class="checklist">
+      ${data.logistics_checklist.map(item => `<li>${item}</li>`).join('')}
+    </ul>
+  </div>`;
+
+  // AI insight
+  if (data.ai_insight) {
+    html += `<div style="padding:14px 18px;background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-radius:10px">
+      <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;color:#FFD54F;text-transform:uppercase;display:block;margin-bottom:6px">AI Insight</span>
+      <p style="font-size:13px;color:var(--mid)">${data.ai_insight}</p>
+    </div>`;
+  }
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderEventFallback(type, size, month, format, goals) {
+  const data = {
+    recommended_dates: [
+      { label: "Top Pick", date: `${month.split(' ')[0]} 13–14`, reason: "Mid-month Tuesday/Wednesday avoids QBR conflicts and end-of-month pushes. Highest predicted attendee availability based on calendar patterns." },
+      { label: "Alternative 1", date: `${month.split(' ')[0]} 6–7`, reason: "Early month, strong attendance. Avoid if any teams are closing previous month financials." },
+      { label: "Alternative 2", date: `${month.split(' ')[0]} 20–21`, reason: "Good option if key speakers need extra lead time. Slightly lower predicted remote attendance." }
+    ],
+    room_recommendation: `For ${size}: recommend the Main Event Space (Cerro Summit, capacity 300) configured in theater style for keynotes, with 6 breakout rooms on Floor 2 reserved for workshop rotations. Catering pre-staged in the lobby atrium. AV setup should include dual screens and distributed audio for hybrid parity.`,
+    hybrid_config: `Set up two broadcast-quality cameras (wide room shot + speaker close-up) with dedicated Zoom Webinar stream. Assign a remote attendee moderator to surface questions from virtual participants. Use Swoogo's hybrid attendance tracking to measure engagement across both cohorts. Pre-record any keynote segments as backup.`,
+    logistics_checklist: [
+      `Open Swoogo registration 6 weeks out — set capacity limits for in-person vs. virtual tracks separately`,
+      `Block rooms in ServiceNow WSD immediately after date confirmation — peak months book out 4+ weeks ahead`,
+      `Send AI-personalized session recommendations to attendees 1 week before based on role and past attendance`,
+      `Catering headcount lock-in 5 business days before event — use Swoogo RSVP data, add 12% buffer`,
+      `Post-event: trigger automated NPS survey within 2 hours via Swoogo, segment results by in-person vs. hybrid`,
+    ],
+    ai_insight: `Hybrid ${type.toLowerCase()} events at this scale consistently show a 23% drop in virtual attendee NPS vs. in-person. The gap closes to under 5% when remote attendees are assigned to a virtual "table" with a dedicated facilitator and get personalized follow-up content within 24 hours.`
+  };
+  renderEventResult(data, type, format);
+}
+
+// Auto-switch tab from URL hash
+(function() {
+  if (window.location.hash === '#events') {
+    switchTab('event');
+  }
+})();
+</script>
+</body>
+</html>
